@@ -95,6 +95,63 @@ def git_sha(root: Path) -> str | None:
         return None
 
 
+def git_changes(root: Path) -> list[dict] | None:
+    """Uncommitted changes as [{"path", "status"}], or None when git is unavailable."""
+    try:
+        out = subprocess.run(["git", "status", "--porcelain", "--untracked-files=all"],
+                             cwd=root, capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if out.returncode != 0:
+        return None
+    changes = []
+    for line in out.stdout.splitlines():
+        if len(line) > 3:
+            path = line[3:].split(" -> ")[-1].strip().strip('"')
+            changes.append({"path": path, "status": line[:2].strip() or "?"})
+    return changes
+
+
+def git_show_head(root: Path, path: str) -> str | None:
+    """The committed (HEAD) text of a file, or None if it is not in HEAD."""
+    try:
+        out = subprocess.run(["git", "show", f"HEAD:{path}"], cwd=root, capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return out.stdout if out.returncode == 0 else None
+
+
+_SECRET_NAME = re.compile(r"(token|secret|password|passwd|api[_-]?key|private[_-]?key|cookie|session)", re.I)
+_REDACT_PATTERNS = [
+    (re.compile(r"(?i)\b(authorization|proxy-authorization|cookie|set-cookie|x-api-key)(\"?\s*[:=]\s*\"?)[^\"\r\n]+"),
+     r"\1\2[REDACTED]"),
+    (re.compile(r"(?i)\b(bearer|basic)\s+[A-Za-z0-9._~+/=-]{8,}"), r"\1 [REDACTED]"),
+    (re.compile(r"(?i)([?&](?:access_token|token|api_?key|apikey|key|password|secret|sig)=)[^&\s\"']+"),
+     r"\1[REDACTED]"),
+    (re.compile(r"(?i)(\"?(?:api[_-]?key|token|secret|password|passwd|client[_-]?secret)\"?\s*[:=]\s*\"?)"
+                r"(?!\$\{)[^\"\s,&}]{4,}"), r"\1[REDACTED]"),
+]
+_ANSI = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
+
+
+def redact(text: str, environ: dict | None = None) -> str:
+    """Remove secrets from text that will be stored as evidence.
+
+    Values of environment variables with secret-like names are removed wherever
+    they appear, then common header, query and key=value shapes are masked.
+    """
+    if not text:
+        return text
+    text = _ANSI.sub("", text)
+    env = os.environ if environ is None else environ
+    for name, value in env.items():
+        if _SECRET_NAME.search(name) and isinstance(value, str) and len(value) >= 6:
+            text = text.replace(value, "[REDACTED]")
+    for pat, repl in _REDACT_PATTERNS:
+        text = pat.sub(repl, text)
+    return text
+
+
 def rel(path: Path, root: Path) -> str:
     try:
         return str(Path(path).resolve().relative_to(root.resolve())).replace("\\", "/")

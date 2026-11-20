@@ -1,0 +1,84 @@
+{
+  "run_id": "20261120T051304Z",
+  "story": "SHOP-142",
+  "mode": "pipeline",
+  "environment": "local",
+  "target": {
+    "BASE_URL": ""
+  },
+  "git_sha": "8ebc563",
+  "working_tree": {
+    "clean": true,
+    "changed": [],
+    "protected_source_changed": [],
+    "committed_tests_changed": []
+  },
+  "started": "2026-11-20T05:13:04Z",
+  "suites": [
+    {
+      "name": "api",
+      "framework": "node-test",
+      "command": "npm run test:api",
+      "cwd": "demo-app",
+      "status": "ran",
+      "reason": "",
+      "exit_code": 1,
+      "duration_s": 0.49,
+      "log": "verification/SHOP-142/runs/20261120T051304Z/api.log",
+      "junit": [
+        "verification/SHOP-142/runs/20261120T051304Z/api/junit/api-junit.xml"
+      ],
+      "artifacts": [],
+      "report_base": "demo-app",
+      "unpromoted": [],
+      "withheld": [],
+      "env": {
+        "BASE_URL": ""
+      }
+    },
+    {
+      "name": "e2e",
+      "framework": "playwright",
+      "command": "npx playwright test",
+      "cwd": "demo-app",
+      "status": "ran",
+      "reason": "",
+      "exit_code": 0,
+      "duration_s": 9.02,
+      "log": "verification/SHOP-142/runs/20261120T051304Z/e2e.log",
+      "junit": [
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/junit/e2e-junit.xml"
+      ],
+      "artifacts": [
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--0c5bb--with-no-sideways-scrolling-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--0c5bb--with-no-sideways-scrolling-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--bc510--with-no-sideways-scrolling-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051304Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--bc510--with-no-sideways-scrolling-mobile/test-finished-1.png"
+      ],
+      "report_base": "demo-app",
+      "unpromoted": [],
+      "withheld": [],
+      "env": {
+        "BASE_URL": "",
+        "PW_CHANNEL": ""
+      }
+    }
+  ],
+  "unpromoted": {
+    "policy": "withheld",
+    "files": []
+  },
+  "finished": "2026-11-20T05:13:14Z"
+}

@@ -1,0 +1,57 @@
+
+▶ [api] npm run test:api  (cwd=demo-app, env=local, mode=interactive)
+
+> shop-demo@1.0.0 pretest:api
+> node -e "require('fs').mkdirSync('reports',{recursive:true})"
+
+
+> shop-demo@1.0.0 test:api
+> node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/api-junit.xml "tests/api/**/*.test.mjs"
+
+✔ GET /api/cart returns the items and subtotal (24.26592ms)
+✔ GET /api/health reports ok (4.57626ms)
+✔ SHOP-142 AC-2 SAVE10 takes 10% off the $120 cart, total 108 (24.918752ms)
+✔ SHOP-142 AC-2 FLAT20 takes $20 off the $120 cart, total 100 (4.442486ms)
+✔ SHOP-142 AC-2 FLAT20 is refused below a $50 subtotal and applies at exactly $50 (0.866643ms)
+✔ SHOP-142 AC-3 an empty code is rejected with "Enter a discount code." (4.037955ms)
+✔ SHOP-142 AC-3 an unknown code is rejected with "That code is not valid." (5.444214ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 272.74838
+◀ [api] ok in 0.44s · 1 report(s), 0 artifact(s)
+
+▶ [e2e] npx playwright test  (cwd=demo-app, env=local, mode=interactive)
+
+Running 16 tests using 1 worker
+
+  ✓   1 [desktop] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (262ms)
+  ✓   2 [desktop] › tests/e2e/discount.spec.js:22:1 › SHOP-142 AC-1 the cart has a discount code field and Apply button (257ms)
+  ✓   3 [desktop] › tests/e2e/discount.spec.js:32:1 › SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it (422ms)
+  ✓   4 [desktop] › tests/e2e/discount.spec.js:46:1 › SHOP-142 AC-3 an empty code shows "Enter a discount code." and the total stays $120.00 (300ms)
+  ✓   5 [desktop] › tests/e2e/discount.spec.js:53:1 › SHOP-142 AC-3 an unknown code shows "That code is not valid." and the total stays $120.00 (278ms)
+  ✓   6 [desktop] › tests/e2e/discount.spec.js:61:1 › SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount (480ms)
+  -   7 [desktop] › tests/e2e/discount.spec.js:71:1 › SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling
+  -   8 [desktop] › tests/e2e/discount.spec.js:79:1 › SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling
+  ✓   9 [mobile] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (345ms)
+  ✓  10 [mobile] › tests/e2e/discount.spec.js:22:1 › SHOP-142 AC-1 the cart has a discount code field and Apply button (305ms)
+  ✓  11 [mobile] › tests/e2e/discount.spec.js:32:1 › SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it (457ms)
+  ✓  12 [mobile] › tests/e2e/discount.spec.js:46:1 › SHOP-142 AC-3 an empty code shows "Enter a discount code." and the total stays $120.00 (343ms)
+  ✓  13 [mobile] › tests/e2e/discount.spec.js:53:1 › SHOP-142 AC-3 an unknown code shows "That code is not valid." and the total stays $120.00 (328ms)
+  ✓  14 [mobile] › tests/e2e/discount.spec.js:61:1 › SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount (465ms)
+  ✓  15 [mobile] › tests/e2e/discount.spec.js:71:1 › SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling (348ms)
+  ✓  16 [mobile] › tests/e2e/discount.spec.js:79:1 › SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling (337ms)
+
+  2 skipped
+  14 passed (8.2s)
+◀ [e2e] ok in 8.91s · 1 report(s), 16 artifact(s)
+
+Run 20261120T051155Z finished. Suites with non-zero exit: none
+Verdict: INCOMPLETE
+  - Not verifiable as written: AC-4
+  - 4 test file(s) still @ai-proposed (Gate 2 open)
+  - Evidence is from interactive mode; re-run in pipeline mode before approval

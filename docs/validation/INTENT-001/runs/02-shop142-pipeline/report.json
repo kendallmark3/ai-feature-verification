@@ -1,0 +1,99 @@
+{
+  "story": "SHOP-142",
+  "summary": "Discount codes at checkout",
+  "verdict": "INCOMPLETE",
+  "reasons": [
+    "No evidence because planned tests were blocked or withheld: AC-1, AC-2, AC-3, AC-5",
+    "Not verifiable as written: AC-4",
+    "2 test file(s) still @ai-proposed (Gate 2 open); withheld from this pipeline run"
+  ],
+  "generated": "2026-11-20T05:12:09Z",
+  "run_id": "20261120T051205Z",
+  "mode": "pipeline",
+  "environment": "local",
+  "git_sha": "0e8e357",
+  "working_tree_clean": true,
+  "gates": {
+    "gate1_clarify": "passed",
+    "gate2_promote": "open (2 file(s))",
+    "gate3_approve": "pending human decision"
+  },
+  "tests": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "suites_not_run": []
+  },
+  "not_run": {},
+  "withheld": [
+    "demo-app/tests/api/discount.test.mjs",
+    "demo-app/tests/e2e/discount.spec.js"
+  ],
+  "open_questions": [],
+  "findings": {
+    "total": 0,
+    "by_classification": {}
+  },
+  "coverage": [
+    {
+      "id": "AC-1",
+      "status": "blocked",
+      "text": "User can enter a discount code in the cart",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 0,
+      "passed": 0,
+      "open_questions": [],
+      "evidence_basis": "none"
+    },
+    {
+      "id": "AC-2",
+      "status": "blocked",
+      "text": "Valid codes apply the discount to the total",
+      "clarified_as": "Valid codes are SAVE10 (10% off) and FLAT20 ($20 off, only when subtotal >= $50, otherwise refused with 'This code needs a subtotal of at least $50.'). On the $120 cart: SAVE10 -> $108.00, FLAT20 -> $100.00. One code at a time: a second code replaces the first. Showing the discount line and new total in the cart is enough; reload/checkout out of scope. Expiry not checked for this story; letter case is accepted risk and not tested. (Q-1, Q-6, Q-AI-1, Q-AI-2, Q-AI-3, Q-AI-4, Q-AI-6)",
+      "reason": "",
+      "tests": 0,
+      "passed": 0,
+      "open_questions": [],
+      "evidence_basis": "none"
+    },
+    {
+      "id": "AC-3",
+      "status": "blocked",
+      "text": "Invalid codes show an error",
+      "clarified_as": "Empty code shows exactly 'Enter a discount code.'; unknown code shows exactly 'That code is not valid.'; the total stays $120.00. A bad code entered after SAVE10 removes the SAVE10 discount. (Q-2, Q-AI-5)",
+      "reason": "",
+      "tests": 0,
+      "passed": 0,
+      "open_questions": [],
+      "evidence_basis": "none"
+    },
+    {
+      "id": "AC-4",
+      "status": "not-verifiable",
+      "text": "Should be fast",
+      "clarified_as": "",
+      "reason": "Product owner recorded accepted risk at Gate 1 (Q-3): no speed threshold was set, so there is no pass/fail line to test against.",
+      "tests": 0,
+      "passed": 0,
+      "open_questions": [],
+      "evidence_basis": ""
+    },
+    {
+      "id": "AC-5",
+      "status": "blocked",
+      "text": "Works on mobile",
+      "clarified_as": "On a Pixel 7 (Chrome) a shopper can enter a code, apply it, see the new total and see errors, with no sideways scrolling. (Q-4, Q-5)",
+      "reason": "",
+      "tests": 0,
+      "passed": 0,
+      "open_questions": [],
+      "evidence_basis": "none"
+    }
+  ],
+  "regression": {
+    "total": 4,
+    "passed": 4,
+    "failed": []
+  }
+}

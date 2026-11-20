@@ -13,6 +13,7 @@ Respect architecture (docs/architecture.md).
 - To verify a story, use the `verify-feature` skill. Gate 1 is `clarify-story`, Gate 2 is `promote-tests`.
 - The engine is `.claude/skills/verify-feature/scripts/verify.py` (stdlib Python). Run it from the repo root.
 - The demo app is `demo-app/` (React + Node, Playwright + node:test). Story: `jira/SHOP-142.json`.
+- Run verification end to end without asking for approvals; record exceptions instead (INTENT-001).
 - Never answer Gate 1 questions, promote tests or approve a story on your own. People do that.
 - Don't change product code in `demo-app/server` or `demo-app/web` while verifying; report defects instead.
 
@@ -48,12 +49,13 @@ Engine CLI (`V=.claude/skills/verify-feature/scripts/verify.py`): `story`, `insp
 
 The core split: **Claude plans and writes; deterministic stdlib Python executes and judges; people decide at gates.** Same story + plan + commit must give the same verdict without the model.
 
-- `verify.py` is a thin argparse front end over `scripts/verifykit/`: `jira.py`/`story.py` pull the story and assign AC IDs; `gaps.py` produces rule-based Gate 1 questions; `plan.py` validates `plan.json` (schema in `references/plan-schema.md`); `guardrails.py` + `runner.py` run the suites from `verify.config.json`; `evidence.py` parses JUnit XML and maps tests to ACs; `report.py` computes the verdict; `promote.py` handles Gate 2.
+- `verify.py` is a thin argparse front end over `scripts/verifykit/`: `jira.py`/`story.py` pull the story and assign AC IDs; `gaps.py` produces rule-based Gate 1 questions and maps open ones to the ACs they leave UNRESOLVED; `plan.py` validates `plan.json` (schema in `references/plan-schema.md`); `guardrails.py` + `runner.py` run the suites from `verify.config.json`; `evidence.py` parses JUnit XML and maps tests to ACs; `report.py` computes the verdict and writes `findings.json`; `promote.py` handles Gate 2.
 - `verify.config.json` (repo root) is the contract between the engine and the app: each suite is a command, a cwd, and JUnit output paths. The engine never knows the framework beyond that; JUnit XML is the common format.
 - Tests are linked to criteria **only by title**: `SHOP-142 AC-3 ...`. Tests carrying no AC ID are treated as regression tests, and a failure there still makes the verdict NOT VERIFIED. A different story key in a title makes the test ignored for this story.
-- New/changed test files carry `@ai-proposed <KEY>` in a header comment until a person promotes them; pipeline mode refuses to run while any remain. Only pipeline evidence can produce `VERIFIED`.
+- New test files carry `@ai-proposed <KEY>` in a header comment until a person promotes them. Interactive runs execute them (labelled unreviewed); pipeline runs withhold them and restore them afterwards. Only pipeline evidence from reviewed tests on a clean revision can produce `VERIFIED`.
+- Clarification is exception-based: an open Gate 1 question leaves only its own ACs UNRESOLVED (never PASS); other ACs are tested normally.
 - Verdict exit codes from `report`/`all`: 0 VERIFIED, 3 INCOMPLETE, 4 NOT VERIFIED.
-- Guardrails (`references/guardrails.md`): commands run without a shell and must start with an allow-listed word; URLs matching `prod`/`production` are refused; secret-like config keys must be `${ENV_VAR}`. Don't edit guardrails or CI workflows without asking.
+- Guardrails (`references/guardrails.md`): commands run without a shell and must start with an allow-listed word; URLs matching `prod`/`production` are refused; secret-like config keys must be `${ENV_VAR}`; `writes_shared_data` suites need `allow_shared_data_writes` on the environment. A per-suite violation BLOCKS that suite only and the rest still run. Don't edit guardrails or CI workflows without asking.
 - Output goes to `verification/<KEY>/` (commit plan, Gate 1 file, report; `runs/` is gitignored). `docs/sample-run/SHOP-142/` is a complete reference run.
 - The engine must stay Python standard library only (no pip). Never add a test framework to a target repo; use the one it has.
 

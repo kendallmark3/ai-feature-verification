@@ -1,0 +1,41 @@
+{
+  "story": "SHOP-142",
+  "run_id": "20261120T051304Z",
+  "verdict": "NOT VERIFIED",
+  "findings": [
+    {
+      "id": "F-1",
+      "story": "SHOP-142",
+      "suite": "api",
+      "environment": "local",
+      "target": {
+        "BASE_URL": ""
+      },
+      "revision": "8ebc563",
+      "run_id": "20261120T051304Z",
+      "timestamp": "2026-11-20T05:13:14Z",
+      "log": "verification/SHOP-142/runs/20261120T051304Z/api.log",
+      "reproduce": {
+        "suite_command": "cd demo-app && npm run test:api",
+        "focus_command": "cd demo-app && node --test --test-name-pattern='SHOP\\-142\\ AC\\-2\\ DELIBERATE\\ SAVE10\\ on\\ the\\ \\$120\\ cart\\ totals\\ 100' 'tests/api/**/*.test.*'"
+      },
+      "kind": "acceptance",
+      "classification": "requirement ambiguity",
+      "acceptance_criteria": [
+        "AC-2"
+      ],
+      "open_questions": [
+        "Q-AI-4"
+      ],
+      "test": "SHOP-142 AC-2 DELIBERATE SAVE10 on the $120 cart totals 100",
+      "project": "",
+      "origin": "committed",
+      "expected": "100",
+      "observed": "108",
+      "message": "Expected values to be strictly equal: \u2014 108 !== 100",
+      "details": "[Error [ERR_TEST_FAILURE]: Expected values to be strictly equal:\n\n108 !== 100\n] {\n  code: 'ERR_TEST_FAILURE',\n  failureType: 'testCodeFailure',\n  cause: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  108 !== 100\n  \n      at TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/[REDACTED]/scratchpad/val2/repo/demo-app/tests/api/deliberate-reviewed.test.mjs:10:10)\n      at Test.runInAsyncScope (node:async_hooks:214:14)\n      at Test.run (node:internal/test_runner/test:1047:25)\n      at Test.start (node:internal/test_runner/test:944:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 108,\n    expected: 100,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n}",
+      "screenshots": [],
+      "traces": []
+    }
+  ]
+}

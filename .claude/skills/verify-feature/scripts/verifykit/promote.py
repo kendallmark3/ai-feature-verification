@@ -4,14 +4,14 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from .inspect_repo import scan_tests
 from .util import VerifyError, now_iso, out_dir, read_json, today, write_json
 
 MARKER = re.compile(r"@ai-proposed\b")
 
 
 def proposed(cfg: dict) -> list[str]:
-    return [t["path"] for t in scan_tests(Path(cfg["_root"])) if t["ai_proposed"]]
+    from .report import unpromoted_in_suites  # same scope as the verdict uses
+    return unpromoted_in_suites(cfg)
 
 
 def promote(cfg: dict, file: str, by: str, story: str | None) -> dict:

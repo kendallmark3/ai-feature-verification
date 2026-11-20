@@ -1,0 +1,160 @@
+
+▶ [api] npm run test:api  (cwd=demo-app, env=local, mode=interactive)
+
+> shop-demo@1.0.0 pretest:api
+> node -e "require('fs').mkdirSync('reports',{recursive:true})"
+
+
+> shop-demo@1.0.0 test:api
+> node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/api-junit.xml "tests/api/**/*.test.mjs"
+
+✔ GET /api/cart returns the items and subtotal (17.799788ms)
+✔ GET /api/health reports ok (3.602394ms)
+✖ SHOP-142 AC-2 DELIBERATE SAVE10 on the $120 cart totals 100 (0.966633ms)
+✔ SHOP-142 AC-2 SAVE10 takes 10% off the $120 cart, total 108 (24.259458ms)
+✔ SHOP-142 AC-2 FLAT20 takes $20 off the $120 cart, total 100 (4.249698ms)
+✔ SHOP-142 AC-2 FLAT20 is refused below a $50 subtotal and applies at exactly $50 (0.793368ms)
+✔ SHOP-142 AC-3 an empty code is rejected with "Enter a discount code." (3.400091ms)
+✔ SHOP-142 AC-3 an unknown code is rejected with "That code is not valid." (4.576476ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 282.768466
+
+✖ failing tests:
+
+test at tests/api/deliberate-reviewed.test.mjs:8:1
+✖ SHOP-142 AC-2 DELIBERATE SAVE10 on the $120 cart totals 100 (0.966633ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  108 !== 100
+  
+      at TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/1e0854ec-8553-5ba9-956f-36ad6ba6decd/scratchpad/val2/repo/demo-app/tests/api/deliberate-reviewed.test.mjs:10:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 108,
+    expected: 100,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+◀ [api] exit 1 in 0.43s · 1 report(s), 0 artifact(s)
+
+▶ [e2e] npx playwright test  (cwd=demo-app, env=local, mode=interactive)
+
+Running 18 tests using 1 worker
+
+  ✓   1 [desktop] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (268ms)
+  ✘   2 [desktop] › tests/e2e/deliberate-proposed.spec.js:6:1 › SHOP-142 AC-3 DELIBERATE an unknown code shows "Code rejected." (3.3s)
+  ✓   3 [desktop] › tests/e2e/discount.spec.js:22:1 › SHOP-142 AC-1 the cart has a discount code field and Apply button (304ms)
+  ✓   4 [desktop] › tests/e2e/discount.spec.js:32:1 › SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it (425ms)
+  ✓   5 [desktop] › tests/e2e/discount.spec.js:46:1 › SHOP-142 AC-3 an empty code shows "Enter a discount code." and the total stays $120.00 (282ms)
+  ✓   6 [desktop] › tests/e2e/discount.spec.js:53:1 › SHOP-142 AC-3 an unknown code shows "That code is not valid." and the total stays $120.00 (282ms)
+  ✓   7 [desktop] › tests/e2e/discount.spec.js:61:1 › SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount (359ms)
+  -   8 [desktop] › tests/e2e/discount.spec.js:71:1 › SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling
+  -   9 [desktop] › tests/e2e/discount.spec.js:79:1 › SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling
+  ✓  10 [mobile] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (291ms)
+  ✘  11 [mobile] › tests/e2e/deliberate-proposed.spec.js:6:1 › SHOP-142 AC-3 DELIBERATE an unknown code shows "Code rejected." (3.3s)
+  ✓  12 [mobile] › tests/e2e/discount.spec.js:22:1 › SHOP-142 AC-1 the cart has a discount code field and Apply button (333ms)
+  ✓  13 [mobile] › tests/e2e/discount.spec.js:32:1 › SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it (445ms)
+  ✓  14 [mobile] › tests/e2e/discount.spec.js:46:1 › SHOP-142 AC-3 an empty code shows "Enter a discount code." and the total stays $120.00 (304ms)
+  ✓  15 [mobile] › tests/e2e/discount.spec.js:53:1 › SHOP-142 AC-3 an unknown code shows "That code is not valid." and the total stays $120.00 (376ms)
+  ✓  16 [mobile] › tests/e2e/discount.spec.js:61:1 › SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount (412ms)
+  ✓  17 [mobile] › tests/e2e/discount.spec.js:71:1 › SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling (309ms)
+  ✓  18 [mobile] › tests/e2e/discount.spec.js:79:1 › SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling (319ms)
+
+
+  1) [desktop] › tests/e2e/deliberate-proposed.spec.js:6:1 › SHOP-142 AC-3 DELIBERATE an unknown code shows "Code rejected." 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByRole('alert')
+    Expected: "Code rejected."
+    Received: "That code is not valid."
+    Timeout:  3000ms
+
+    Call log:
+      - Expect "toHaveText" getByRole('alert') with timeout 3000ms
+      - waiting for getByRole('alert')
+        10 × locator resolved to <p role="alert" class="error">That code is not valid.</p>
+           - unexpected value "That code is not valid."
+
+
+       8 |   await page.getByLabel('Discount code').fill('NOPE');
+       9 |   await page.getByRole('button', { name: 'Apply' }).click();
+    > 10 |   await expect(page.getByRole('alert')).toHaveText('Code rejected.', { timeout: 3000 });
+         |                                         ^
+      11 | });
+      12 |
+        at /tmp/claude-0/-home-claude/1e0854ec-8553-5ba9-956f-36ad6ba6decd/scratchpad/val2/repo/demo-app/tests/e2e/deliberate-proposed.spec.js:10:41
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › tests/e2e/deliberate-proposed.spec.js:6:1 › SHOP-142 AC-3 DELIBERATE an unknown code shows "Code rejected." 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByRole('alert')
+    Expected: "Code rejected."
+    Received: "That code is not valid."
+    Timeout:  3000ms
+
+    Call log:
+      - Expect "toHaveText" getByRole('alert') with timeout 3000ms
+      - waiting for getByRole('alert')
+        10 × locator resolved to <p role="alert" class="error">That code is not valid.</p>
+           - unexpected value "That code is not valid."
+
+
+       8 |   await page.getByLabel('Discount code').fill('NOPE');
+       9 |   await page.getByRole('button', { name: 'Apply' }).click();
+    > 10 |   await expect(page.getByRole('alert')).toHaveText('Code rejected.', { timeout: 3000 });
+         |                                         ^
+      11 | });
+      12 |
+        at /tmp/claude-0/-home-claude/1e0854ec-8553-5ba9-956f-36ad6ba6decd/scratchpad/val2/repo/demo-app/tests/e2e/deliberate-proposed.spec.js:10:41
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › tests/e2e/deliberate-proposed.spec.js:6:1 › SHOP-142 AC-3 DELIBERATE an unknown code shows "Code rejected." 
+    [mobile] › tests/e2e/deliberate-proposed.spec.js:6:1 › SHOP-142 AC-3 DELIBERATE an unknown code shows "Code rejected." 
+  2 skipped
+  14 passed (15.7s)
+◀ [e2e] exit 1 in 16.49s · 1 report(s), 20 artifact(s)
+
+Run 20261120T051219Z finished. Suites with non-zero exit: ['api', 'e2e']
+Verdict: NOT VERIFIED
+  - Failing criteria: AC-2, AC-3
+Findings: {'suspected defect (unreviewed test)': 3} (verification/SHOP-142/findings.json)

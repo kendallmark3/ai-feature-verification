@@ -1,12 +1,25 @@
 ---
 name: verify-feature
-description: Verify that a Jira story is actually done by planning against its acceptance criteria, writing tests in the repo's own framework, running them deterministically, and reporting evidence per criterion with three human gates. Use when asked to verify, test, QA or check a story, ticket or feature ("verify SHOP-142", "is this story done?", "test this ticket").
+description: Verify that a Jira story is actually done by planning against its acceptance criteria, writing tests in the repo's own framework, running every authorised test deterministically, and reporting evidence per criterion. Runs without stopping for approvals; open questions, blocked operations and unreviewed tests become recorded exceptions for the right person. Use when asked to verify, test, QA or check a story, ticket or feature ("verify SHOP-142", "is this story done?", "test this ticket").
 ---
 
 # Verify Feature
 
-AI plans; the repository's own test frameworks execute; people decide at three gates.
-Every acceptance criterion (AC) ends with traced evidence or an explicit reason it has none.
+AI plans; the repository's own test frameworks execute; people decide only what needs human
+authority. Every acceptance criterion (AC) ends with traced evidence or an explicit reason it
+has none.
+
+**Run the whole loop without waiting for approval.** Your job is to produce evidence, not to
+make product or business decisions. Escalate only genuine exceptions, as records the right
+person can act on:
+
+| Exception | What you do | Who resolves it |
+|---|---|---|
+| An AC is ambiguous | Record the question (Gate 1 file). Test everything else. Don't invent the expected behaviour. | Story owner answers |
+| A suite is blocked by a guardrail | Nothing: the engine skips it, records why, runs the rest | A person changes config, through review |
+| A test you wrote is unpromoted | Run it interactively (it is labelled unreviewed). Pipeline withholds it. | Reviewer promotes (Gate 2) |
+| A test fails | Triage it. Report product defects; fix only your own test bugs | Developer |
+| The story is ready to accept | Present the evidence | Accountable person approves (Gate 3) |
 
 The engine is `scripts/verify.py` (Python standard library only). It never decides
 anything: it pulls the story, runs the commands in `verify.config.json`, parses JUnit
@@ -29,41 +42,55 @@ V=.claude/skills/verify-feature/scripts/verify.py
 
 ## The loop
 
-Work through these in order. Track them in the task list.
+Work through these in order without pausing for confirmation. Track them in the task list.
 
 1. **Pull the story.** `python3 $V story <KEY>`. Check the AC IDs it assigned look right.
 2. **Inspect the repo.** `python3 $V inspect <KEY>`. Then read the existing tests for the
    area the story touches and the code they exercise, so new tests follow the team's
    conventions (file layout, helpers, selectors, fixtures).
-3. **Gate 1 · Clarify.** Load the `clarify-story` skill and follow it. Do not plan or write
-   tests until `python3 $V gate1 <KEY> --check` passes. Answers come from people only.
-4. **Plan.** `python3 $V plan <KEY> --init`, then edit `verification/<KEY>/plan.json`
-   (schema: `references/plan-schema.md`): copy each Gate 1 answer into `clarified_as`, add
-   checks with a configured `suite` and `expected_evidence`, and mark anything that still
-   can't be tested `not-verifiable` with a reason. Run `plan <KEY> --check` until clean,
-   then `plan <KEY> --render` and show the person `VERIFICATION_PLAN.md`.
+3. **Clarify (exception-based).** Load the `clarify-story` skill and follow it: record the
+   questions and who owns each answer, then **carry on**. Don't wait for answers.
+   `python3 $V gate1 <KEY> --check` exits 2 while questions are open; that is information,
+   not a stop. An open question leaves only its own criteria UNRESOLVED.
+4. **Plan.** `python3 $V plan <KEY> --init` (skip if `plan.json` exists), then edit
+   `verification/<KEY>/plan.json` (schema: `references/plan-schema.md`). Copy each Gate 1
+   answer into `clarified_as` and add checks with a configured `suite` and
+   `expected_evidence`. For an AC with an open question, plan checks only for the parts that
+   don't depend on the answer; if nothing can be tested without guessing, leave `checks`
+   empty (allowed while the question is open). Mark anything that can't be tested
+   `not-verifiable` with a reason. Run `plan <KEY> --check` until clean, then
+   `plan <KEY> --render`.
 5. **Write tests.** In the repo's existing framework only (`references/framework-adapters.md`).
    Tag every test title with the story key and AC (`SHOP-142 AC-3 ...`, see
-   `references/ac-tagging.md`) and put `@ai-proposed <KEY>` in a header comment of each file
-   you create or change. Tests encode the *clarified* intent. Never weaken an assertion to
-   match current behaviour, and never change product code to make a test pass.
-6. **Interactive run.** `python3 $V run <KEY> --mode interactive`, then
-   `python3 $V evidence <KEY>` and `python3 $V report <KEY>`. Triage each failure with
-   `references/triage.md`: fix your own test bugs and re-run; report product defects, don't fix them.
-7. **Gate 2 · Promote.** Load the `promote-tests` skill. Pipeline mode refuses to run while
-   any file is still `@ai-proposed`.
-8. **Pipeline run.** `python3 $V all <KEY> --mode pipeline` (or the `verify` GitHub Actions
-   workflow). Only pipeline evidence can reach a `VERIFIED` verdict.
-9. **Close the loop.** `python3 $V post <KEY>` posts the summary to Jira. Show the person the
-   verdict, the per-AC table, and any defects in plain words.
+   `references/ac-tagging.md`). Put generated tests in **new files** with `@ai-proposed <KEY>`
+   in a header comment. Never edit or overwrite a reviewed test file (one without the marker):
+   the engine flags edited reviewed tests and the run can't verify. Tests encode the
+   *clarified* intent. Never weaken an assertion to match current behaviour, and never change
+   product code to make a test pass.
+6. **Run.** `python3 $V all <KEY> --mode interactive` runs every authorised suite, including
+   your unpromoted tests (labelled *unreviewed* in the evidence). Suites the guardrails block
+   are skipped with a reason; the rest run. Triage each failure with `references/triage.md`:
+   fix your own test bugs and re-run; report product defects, don't fix them.
+7. **Pipeline run.** `python3 $V all <KEY> --mode pipeline` (or the `verify` GitHub Actions
+   workflow). It runs reviewed tests only: unpromoted files are withheld for the run and put
+   back afterwards, and their criteria show BLOCKED. Only pipeline evidence from reviewed
+   tests can reach `VERIFIED`. Never needs a person at the keyboard.
+8. **Report.** Show the person the verdict, the per-AC table, `findings.json` in plain words
+   (confirmed failures, suspected defects, requirement ambiguities), and the exceptions with
+   their owners: open questions, blocked suites, tests awaiting review.
+9. **Gate 2 · Promote** (when the person wants unreviewed tests in the regression suite):
+   load the `promote-tests` skill to prepare the review. Promotion is theirs.
 10. **Gate 3 · Approve.** The person decides. Give them the `approve` command from the
     report. Don't run it unless they tell you to in this conversation, with their name and
-    decision.
+    decision. `python3 $V post <KEY>` posts the summary to Jira when they want it there.
 
 ## Rules that hold throughout
 
-- Report only what `evidence.json` and `report.json` say. Never describe a test as passing
-  that the evidence doesn't show, and never round "mostly passing" up to done.
+- Report only what `evidence.json`, `report.json` and `findings.json` say. Never describe a
+  test as passing that the evidence doesn't show, and never round "mostly passing" up to done.
+  Skipped, blocked, withheld and unresolved are not passes.
+- A missing answer or permission is never permission. Don't answer Gate 1 questions, promote
+  tests, accept risk or approve the story yourself, and don't change guardrails to unblock a suite.
 - The three verdicts are `VERIFIED`, `INCOMPLETE` and `NOT VERIFIED`; their exact meaning is
   in `references/gates.md`. Don't soften them.
 - A story with failing or unverifiable criteria is a useful result, not a failure of the skill.
@@ -72,11 +99,11 @@ Work through these in order. Track them in the task list.
 
 ## References
 
-- `references/gates.md` — what each gate checks, who acts, and the verdict rules
+- `references/gates.md` — what runs automatically, what each gate checks, who acts, and the verdict rules
 - `references/plan-schema.md` — `plan.json` fields with an example
 - `references/ac-tagging.md` — how tests are linked to criteria
 - `references/framework-adapters.md` — getting JUnit XML from each framework
 - `references/triage.md` — test bug or product defect
-- `references/guardrails.md` — what the runner refuses and why
+- `references/guardrails.md` — what the runner blocks, withholds or refuses, and why
 - `references/jira.md` — local (simulated) and cloud adapters
 - `assets/verify.config.example.json`, `assets/plan.example.json`, `assets/test-headers.md`

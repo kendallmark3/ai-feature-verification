@@ -1,0 +1,60 @@
+{
+  "run_id": "20261120T051155Z",
+  "story": "SHOP-142",
+  "mode": "interactive",
+  "environment": "local",
+  "target": {
+    "BASE_URL": "",
+    "allow_shared_data_writes": "True"
+  },
+  "git_sha": "0e8e357",
+  "started": "2026-11-20T05:11:55Z",
+  "suites": [
+    {
+      "name": "api",
+      "framework": "node-test",
+      "command": "npm run test:api",
+      "cwd": "demo-app",
+      "exit_code": 0,
+      "duration_s": 0.44,
+      "log": "verification/SHOP-142/runs/20261120T051155Z/api.log",
+      "junit": [
+        "verification/SHOP-142/runs/20261120T051155Z/api/junit/api-junit.xml"
+      ],
+      "artifacts": [],
+      "report_base": "demo-app"
+    },
+    {
+      "name": "e2e",
+      "framework": "playwright",
+      "command": "npx playwright test",
+      "cwd": "demo-app",
+      "exit_code": 0,
+      "duration_s": 8.91,
+      "log": "verification/SHOP-142/runs/20261120T051155Z/e2e.log",
+      "junit": [
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/junit/e2e-junit.xml"
+      ],
+      "artifacts": [
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--0c5bb--with-no-sideways-scrolling-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--0c5bb--with-no-sideways-scrolling-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--bc510--with-no-sideways-scrolling-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051155Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--bc510--with-no-sideways-scrolling-mobile/test-finished-1.png"
+      ],
+      "report_base": "demo-app"
+    }
+  ],
+  "finished": "2026-11-20T05:12:05Z"
+}

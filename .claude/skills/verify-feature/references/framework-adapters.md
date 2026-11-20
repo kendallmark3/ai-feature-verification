@@ -17,7 +17,15 @@ verify.py does not ship a test framework and never installs one. A suite in
 
 `junit` and `artifacts` are globs relative to `cwd`. Old reports matching `junit` are
 deleted before each run so stale results can't count. `test_paths` (relative to the repo
-root) is where Gate 2 looks for `@ai-proposed` markers.
+root) is where Gate 2 looks for `@ai-proposed` markers, which files pipeline mode withholds,
+and which reviewed tests are checked for uncommitted edits.
+
+Optional per suite: `"writes_shared_data": true` for suites that create or delete shared
+data (blocked unless the environment sets `"allow_shared_data_writes": true`).
+
+For findings, `framework` also picks a focused re-run command: `playwright`, `node-test` (when
+the command is `npm run <script>`) and `pytest` are known. Others get the suite command and
+the test name.
 
 ## Getting JUnit XML
 

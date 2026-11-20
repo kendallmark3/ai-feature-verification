@@ -1,0 +1,67 @@
+
+▶ [api] npm run test:api  (cwd=demo-app, env=dev, mode=interactive)
+
+> shop-demo@1.0.0 pretest:api
+> node -e "require('fs').mkdirSync('reports',{recursive:true})"
+
+
+> shop-demo@1.0.0 test:api
+> node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/api-junit.xml "tests/api/**/*.test.mjs"
+
+✔ GET /api/cart returns the items and subtotal (22.585711ms)
+✔ GET /api/health reports ok (5.343014ms)
+✔ SHOP-142 AC-2 SAVE10 takes 10% off the $120 cart, total 108 (25.108553ms)
+✔ SHOP-142 AC-2 FLAT20 takes $20 off the $120 cart, total 100 (4.333924ms)
+✔ SHOP-142 AC-2 FLAT20 is refused below a $50 subtotal and applies at exactly $50 (0.834724ms)
+✔ SHOP-142 AC-3 an empty code is rejected with "Enter a discount code." (6.924848ms)
+✔ SHOP-142 AC-3 an unknown code is rejected with "That code is not valid." (8.777826ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 276.658114
+◀ [api] ok in 0.43s · 1 report(s), 0 artifact(s)
+
+▶ [e2e] npx playwright test  (cwd=demo-app, env=dev, mode=interactive)
+
+Running 16 tests using 1 worker
+
+  ✓   1 [desktop] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (272ms)
+  ✓   2 [desktop] › tests/e2e/discount.spec.js:22:1 › SHOP-142 AC-1 the cart has a discount code field and Apply button (249ms)
+  ✓   3 [desktop] › tests/e2e/discount.spec.js:32:1 › SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it (396ms)
+  ✓   4 [desktop] › tests/e2e/discount.spec.js:46:1 › SHOP-142 AC-3 an empty code shows "Enter a discount code." and the total stays $120.00 (289ms)
+  ✓   5 [desktop] › tests/e2e/discount.spec.js:53:1 › SHOP-142 AC-3 an unknown code shows "That code is not valid." and the total stays $120.00 (351ms)
+  ✓   6 [desktop] › tests/e2e/discount.spec.js:61:1 › SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount (381ms)
+  -   7 [desktop] › tests/e2e/discount.spec.js:71:1 › SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling
+  -   8 [desktop] › tests/e2e/discount.spec.js:79:1 › SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling
+  ✓   9 [mobile] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (355ms)
+  ✓  10 [mobile] › tests/e2e/discount.spec.js:22:1 › SHOP-142 AC-1 the cart has a discount code field and Apply button (304ms)
+  ✓  11 [mobile] › tests/e2e/discount.spec.js:32:1 › SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it (406ms)
+  ✓  12 [mobile] › tests/e2e/discount.spec.js:46:1 › SHOP-142 AC-3 an empty code shows "Enter a discount code." and the total stays $120.00 (297ms)
+  ✓  13 [mobile] › tests/e2e/discount.spec.js:53:1 › SHOP-142 AC-3 an unknown code shows "That code is not valid." and the total stays $120.00 (381ms)
+  ✓  14 [mobile] › tests/e2e/discount.spec.js:61:1 › SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount (473ms)
+  ✓  15 [mobile] › tests/e2e/discount.spec.js:71:1 › SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling (353ms)
+  ✓  16 [mobile] › tests/e2e/discount.spec.js:79:1 › SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling (352ms)
+
+  2 skipped
+  14 passed (8.4s)
+◀ [e2e] ok in 9.14s · 1 report(s), 16 artifact(s)
+
+⊘ [load] BLOCKED, not run: 'curl' is not in guardrails.allowed_commands ['npm', 'npx', 'node', 'pytest', 'python3', 'mvn', 'gradle', './gradlew', 'go', 'gotestsum', 'dotnet'].
+
+⊘ [smoke-prod] BLOCKED, not run: BASE_URL=https://shop.production.example.com matches production pattern 'production'. Verification never runs against prod.
+
+⊘ [seed-shared-data] BLOCKED, not run: suite writes shared data and environment 'dev' does not set allow_shared_data_writes: true
+
+Run 20261120T051324Z finished. Suites with non-zero exit: none
+Suites not run: load (blocked: 'curl' is not in guardrails.allowed_commands ['npm', 'npx', 'node', 'pytest', 'python3', 'mvn', 'gradle', './gradlew', 'go', 'gotestsum', 'dotnet'].); smoke-prod (blocked: BASE_URL=https://shop.production.example.com matches production pattern 'production'. Verification never runs against prod.); seed-shared-data (blocked: suite writes shared data and environment 'dev' does not set allow_shared_data_writes: true)
+Verdict: INCOMPLETE
+  - Suite 'load' blocked, not run: 'curl' is not in guardrails.allowed_commands ['npm', 'npx', 'node', 'pytest', 'python3', 'mvn', 'gradle', './gradlew', 'go', 'gotestsum', 'dotnet'].
+  - Suite 'smoke-prod' blocked, not run: BASE_URL=https://shop.production.example.com matches production pattern 'production'. Verification never runs against prod.
+  - Suite 'seed-shared-data' blocked, not run: suite writes shared data and environment 'dev' does not set allow_shared_data_writes: true
+  - Not verifiable as written: AC-4
+  - 2 test file(s) still @ai-proposed (Gate 2 open)
+  - Evidence is from interactive mode; re-run in pipeline mode before approval

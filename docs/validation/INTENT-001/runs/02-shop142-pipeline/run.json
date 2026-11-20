@@ -1,0 +1,78 @@
+{
+  "run_id": "20261120T051205Z",
+  "story": "SHOP-142",
+  "mode": "pipeline",
+  "environment": "local",
+  "target": {
+    "BASE_URL": ""
+  },
+  "git_sha": "0e8e357",
+  "working_tree": {
+    "clean": true,
+    "changed": [],
+    "protected_source_changed": [],
+    "committed_tests_changed": []
+  },
+  "started": "2026-11-20T05:12:05Z",
+  "suites": [
+    {
+      "name": "api",
+      "framework": "node-test",
+      "command": "npm run test:api",
+      "cwd": "demo-app",
+      "status": "ran",
+      "reason": "",
+      "exit_code": 0,
+      "duration_s": 0.28,
+      "log": "verification/SHOP-142/runs/20261120T051205Z/api.log",
+      "junit": [
+        "verification/SHOP-142/runs/20261120T051205Z/api/junit/api-junit.xml"
+      ],
+      "artifacts": [],
+      "report_base": "demo-app",
+      "unpromoted": [],
+      "withheld": [
+        "demo-app/tests/api/discount.test.mjs"
+      ],
+      "env": {
+        "BASE_URL": ""
+      }
+    },
+    {
+      "name": "e2e",
+      "framework": "playwright",
+      "command": "npx playwright test",
+      "cwd": "demo-app",
+      "status": "ran",
+      "reason": "",
+      "exit_code": 0,
+      "duration_s": 4.17,
+      "log": "verification/SHOP-142/runs/20261120T051205Z/e2e.log",
+      "junit": [
+        "verification/SHOP-142/runs/20261120T051205Z/e2e/junit/e2e-junit.xml"
+      ],
+      "artifacts": [
+        "verification/SHOP-142/runs/20261120T051205Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051205Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-mobile/test-finished-1.png"
+      ],
+      "report_base": "demo-app",
+      "unpromoted": [],
+      "withheld": [
+        "demo-app/tests/e2e/discount.spec.js"
+      ],
+      "env": {
+        "BASE_URL": "",
+        "PW_CHANNEL": ""
+      }
+    }
+  ],
+  "unpromoted": {
+    "policy": "withheld",
+    "files": [
+      "demo-app/tests/api/discount.test.mjs",
+      "demo-app/tests/e2e/discount.spec.js"
+    ],
+    "restore_problems": []
+  },
+  "finished": "2026-11-20T05:12:09Z"
+}

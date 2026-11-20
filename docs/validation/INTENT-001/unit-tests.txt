@@ -1,0 +1,56 @@
+test_command_not_allow_listed (test_intent001.BlockedOperations.test_command_not_allow_listed) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_missing_tool_is_not_started_not_failed (test_intent001.BlockedOperations.test_missing_tool_is_not_started_not_failed) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_production_environment_still_refuses_the_whole_run (test_intent001.BlockedOperations.test_production_environment_still_refuses_the_whole_run) ... ok
+test_report_distinguishes_pass_fail_skip_blocked_unresolved (test_intent001.BlockedOperations.test_report_distinguishes_pass_fail_skip_blocked_unresolved) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_shared_data_writes_need_explicit_permission (test_intent001.BlockedOperations.test_shared_data_writes_need_explicit_permission) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_shell_chaining (test_intent001.BlockedOperations.test_shell_chaining) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_suite_env_pointing_at_production (test_intent001.BlockedOperations.test_suite_env_pointing_at_production) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_exit_codes_unchanged (test_intent001.Compatibility.test_exit_codes_unchanged) ... ok
+test_old_evidence_shape_still_gets_a_verdict (test_intent001.Compatibility.test_old_evidence_shape_still_gets_a_verdict) ... ok
+test_redaction (test_intent001.Compatibility.test_redaction) ... ok
+test_ambiguous_criterion_does_not_stop_unrelated_tests (test_intent001.ExceptionBasedClarification.test_ambiguous_criterion_does_not_stop_unrelated_tests) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_answering_later_resolves_without_rerunning (test_intent001.ExceptionBasedClarification.test_answering_later_resolves_without_rerunning) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_failure_on_ambiguous_criterion_is_still_not_verified_and_classed_as_ambiguity (test_intent001.ExceptionBasedClarification.test_failure_on_ambiguous_criterion_is_still_not_verified_and_classed_as_ambiguity) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_gaps_file_names_the_owner_and_does_not_say_testing_must_wait (test_intent001.ExceptionBasedClarification.test_gaps_file_names_the_owner_and_does_not_say_testing_must_wait) ... ok
+test_gate1_maps_open_questions_to_their_criteria_and_owner (test_intent001.ExceptionBasedClarification.test_gate1_maps_open_questions_to_their_criteria_and_owner) ... ok
+test_no_gate1_file_is_incomplete_not_approval (test_intent001.ExceptionBasedClarification.test_no_gate1_file_is_incomplete_not_approval) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_unresolved_criterion_is_never_reported_as_passing (test_intent001.ExceptionBasedClarification.test_unresolved_criterion_is_never_reported_as_passing) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_unresolved_criterion_may_have_no_checks_yet (test_intent001.ExceptionBasedClarification.test_unresolved_criterion_may_have_no_checks_yet) ... ok
+test_expected_and_observed_are_never_invented (test_intent001.Findings.test_expected_and_observed_are_never_invented) ... ok
+test_failure_finding_has_what_a_developer_needs (test_intent001.Findings.test_failure_finding_has_what_a_developer_needs) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_suite_that_errors_without_results_stays_not_verified (test_intent001.Findings.test_suite_that_errors_without_results_stays_not_verified) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_unknown_origin_is_treated_as_unreviewed (test_intent001.Findings.test_unknown_origin_is_treated_as_unreviewed) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_unreviewed_failure_is_suspected_not_confirmed (test_intent001.Findings.test_unreviewed_failure_is_suspected_not_confirmed) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_interactive_runs_unpromoted_tests_and_labels_them (test_intent001.UnpromotedTests.test_interactive_runs_unpromoted_tests_and_labels_them) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_interrupted_run_is_recovered_on_the_next_run (test_intent001.UnpromotedTests.test_interrupted_run_is_recovered_on_the_next_run) ... ok
+test_marker_text_outside_suite_test_paths_is_not_pending_promotion (test_intent001.UnpromotedTests.test_marker_text_outside_suite_test_paths_is_not_pending_promotion) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_pipeline_does_not_read_stdin (test_intent001.UnpromotedTests.test_pipeline_does_not_read_stdin) ... ok
+test_pipeline_withholds_unpromoted_instead_of_refusing (test_intent001.UnpromotedTests.test_pipeline_withholds_unpromoted_instead_of_refusing) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_promoted_tests_reach_verified_in_pipeline (test_intent001.UnpromotedTests.test_promoted_tests_reach_verified_in_pipeline) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_restore_never_overwrites (test_intent001.UnpromotedTests.test_restore_never_overwrites) ... ok
+test_unpromoted_evidence_never_reaches_verified (test_intent001.UnpromotedTests.test_unpromoted_evidence_never_reaches_verified) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_withheld_file_is_restored_even_when_the_suite_fails (test_intent001.UnpromotedTests.test_withheld_file_is_restored_even_when_the_suite_fails) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_clean_tree_verifies (test_intent001.WorkingTree.test_clean_tree_verifies) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_edited_reviewed_test_is_flagged (test_intent001.WorkingTree.test_edited_reviewed_test_is_flagged) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_uncommitted_application_change_cannot_verify_in_pipeline (test_intent001.WorkingTree.test_uncommitted_application_change_cannot_verify_in_pipeline) ... /home/claude/ai-feature-verification/.claude/skills/verify-feature/scripts/verifykit/runner.py:157: ResourceWarning: unclosed file <_io.TextIOWrapper name=5 encoding='utf-8'>
+test_measured_performance_is_not_flagged (test_verifykit.GapRules.test_measured_performance_is_not_flagged) ... ok
+test_same_story_same_questions (test_verifykit.GapRules.test_same_story_same_questions) ... ok
+test_story_without_error_path (test_verifykit.GapRules.test_story_without_error_path) ... ok
+test_unmeasured_performance_is_flagged (test_verifykit.GapRules.test_unmeasured_performance_is_flagged) ... ok
+test_literal_secret_refused (test_verifykit.Guardrails.test_literal_secret_refused) ... ok
+test_prod_url_refused (test_verifykit.Guardrails.test_prod_url_refused) ... ok
+test_shell_syntax_refused (test_verifykit.Guardrails.test_shell_syntax_refused) ... ok
+test_uat_url_allowed (test_verifykit.Guardrails.test_uat_url_allowed) ... ok
+test_unlisted_command_refused (test_verifykit.Guardrails.test_unlisted_command_refused) ... ok
+test_parse_and_tag (test_verifykit.JUnitParsing.test_parse_and_tag) ... ok
+test_ac_block_from_description (test_verifykit.StoryParsing.test_ac_block_from_description) ... ok
+test_continuation_lines_join_previous (test_verifykit.StoryParsing.test_continuation_lines_join_previous) ... ok
+test_explicit_ids_are_kept_and_numbering_skips_them (test_verifykit.StoryParsing.test_explicit_ids_are_kept_and_numbering_skips_them) ... ok
+test_list_items_become_separate_acs (test_verifykit.StoryParsing.test_list_items_become_separate_acs) ... ok
+test_all_green_in_pipeline_is_verified (test_verifykit.Verdict.test_all_green_in_pipeline_is_verified) ... ok
+test_any_failure_is_not_verified (test_verifykit.Verdict.test_any_failure_is_not_verified) ... ok
+test_interactive_mode_cannot_be_verified (test_verifykit.Verdict.test_interactive_mode_cannot_be_verified) ... ok
+test_missing_coverage_is_incomplete (test_verifykit.Verdict.test_missing_coverage_is_incomplete) ... ok
+Ran 53 tests in 3.039s
+OK
+all tests passed

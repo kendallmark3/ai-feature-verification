@@ -1,0 +1,1 @@
+verify: BASE_URL=https://prod.shop.example.com matches production pattern '(^|[./-])prod([./-]|$)'. Verification never runs against prod.

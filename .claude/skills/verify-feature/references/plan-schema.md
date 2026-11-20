@@ -43,6 +43,7 @@ review it; `--check` validates it; `--render` writes `VERIFICATION_PLAN.md`.
 | `reason` | Required unless `verify`. Written so a reviewer can accept or reject it. |
 | `checks[].suite` | A suite name from `verify.config.json`. Coverage needs at least one tagged test per planned suite. |
 | `checks[].expected_evidence` | What will prove it: junit result, screenshot, response values, metric, log line. |
+| `checks` (empty) | Allowed for a `verify` AC only while a Gate 1 question on it is open, so expected behaviour is never guessed. The AC is reported UNRESOLVED; once answered, it needs checks like any other. |
 
 Coverage is counted per AC and suite, from test titles (see `ac-tagging.md`). Check IDs
 (`AC-2.a`) are for people reading the plan; tests only need the AC ID.
