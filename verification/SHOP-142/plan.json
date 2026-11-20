@@ -1,0 +1,132 @@
+{
+  "story": "SHOP-142",
+  "summary": "Discount codes at checkout",
+  "created": "2026-11-20T04:23:52Z",
+  "tagging": "Every test that verifies a criterion names it in its title, e.g. 'SHOP-142 AC-1 ...'",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "User can enter a discount code in the cart",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-1.a",
+          "description": "Cart page has a labelled 'Discount code' input and an Apply button; a typed code is kept in the input",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e (desktop + mobile)",
+            "screenshot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-2",
+      "text": "Valid codes apply the discount to the total",
+      "clarified_as": "Valid codes are SAVE10 (10% off) and FLAT20 ($20 off, only when subtotal >= $50, otherwise refused with 'This code needs a subtotal of at least $50.'). On the $120 cart: SAVE10 -> $108.00, FLAT20 -> $100.00. One code at a time: a second code replaces the first. Showing the discount line and new total in the cart is enough; reload/checkout out of scope. Expiry not checked for this story; letter case is accepted risk and not tested. (Q-1, Q-6, Q-AI-1, Q-AI-2, Q-AI-3, Q-AI-4, Q-AI-6)",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-2.a",
+          "description": "POST /api/cart/discount with SAVE10 returns discount 12 and total 108; with FLAT20 returns discount 20 and total 100",
+          "suite": "api",
+          "expected_evidence": [
+            "junit: api",
+            "response body values"
+          ]
+        },
+        {
+          "id": "AC-2.b",
+          "description": "FLAT20 below a $50 subtotal is refused with 'This code needs a subtotal of at least $50.'; at exactly $50 it applies (discount rules called directly, since the demo cart is fixed at $120)",
+          "suite": "api",
+          "expected_evidence": [
+            "junit: api"
+          ]
+        },
+        {
+          "id": "AC-2.c",
+          "description": "In the browser, applying SAVE10 shows 'Discount (SAVE10) −$12.00' and Total $108.00; then applying FLAT20 replaces it with −$20.00 and Total $100.00",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e",
+            "screenshot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-3",
+      "text": "Invalid codes show an error",
+      "clarified_as": "Empty code shows exactly 'Enter a discount code.'; unknown code shows exactly 'That code is not valid.'; the total stays $120.00. A bad code entered after SAVE10 removes the SAVE10 discount. (Q-2, Q-AI-5)",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-3.a",
+          "description": "API returns 400 with the exact error text for an empty code and an unknown code",
+          "suite": "api",
+          "expected_evidence": [
+            "junit: api",
+            "response body values"
+          ]
+        },
+        {
+          "id": "AC-3.b",
+          "description": "In the browser, empty and unknown codes show the exact error in an alert and Total stays $120.00",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e",
+            "screenshot"
+          ]
+        },
+        {
+          "id": "AC-3.c",
+          "description": "After SAVE10 is applied, an unknown code shows the error, removes the discount line and Total returns to $120.00",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e",
+            "screenshot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-4",
+      "text": "Should be fast",
+      "clarified_as": "",
+      "disposition": "not-verifiable",
+      "reason": "Product owner recorded accepted risk at Gate 1 (Q-3): no speed threshold was set, so there is no pass/fail line to test against.",
+      "checks": []
+    },
+    {
+      "id": "AC-5",
+      "text": "Works on mobile",
+      "clarified_as": "On a Pixel 7 (Chrome) a shopper can enter a code, apply it, see the new total and see errors, with no sideways scrolling. (Q-4, Q-5)",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-5.a",
+          "description": "Playwright 'mobile' project (Pixel 7): apply SAVE10 -> Total $108.00, page has no horizontal overflow",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e (mobile)",
+            "screenshot"
+          ]
+        },
+        {
+          "id": "AC-5.b",
+          "description": "Playwright 'mobile' project (Pixel 7): unknown code shows 'That code is not valid.', no horizontal overflow",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e (mobile)",
+            "screenshot"
+          ]
+        }
+      ]
+    }
+  ]
+}

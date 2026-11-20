@@ -1,0 +1,44 @@
+[
+  {
+    "ac": "AC-2",
+    "rule": "UNDEFINED_RULE",
+    "quote": "Valid codes apply the discount to the total",
+    "question": "What makes something 'valid'? List the rules or give concrete examples of each case.",
+    "id": "Q-1"
+  },
+  {
+    "ac": "AC-3",
+    "rule": "UNDEFINED_RULE",
+    "quote": "Invalid codes show an error",
+    "question": "What makes something 'invalid'? List the rules or give concrete examples of each case.",
+    "id": "Q-2"
+  },
+  {
+    "ac": "AC-4",
+    "rule": "UNMEASURED_NFR",
+    "quote": "Should be fast",
+    "question": "'fast' has no number. What threshold, measured where (API, page load, click-to-result), at what percentile, under what load?",
+    "id": "Q-3"
+  },
+  {
+    "ac": "AC-5",
+    "rule": "VAGUE_TERM",
+    "quote": "Works on mobile",
+    "question": "'works' can't be tested as written. What exact, observable result counts as passing?",
+    "id": "Q-4"
+  },
+  {
+    "ac": "AC-5",
+    "rule": "UNSPECIFIED_ENVIRONMENT",
+    "quote": "Works on mobile",
+    "question": "'mobile' \u2014 which devices, browsers or viewport widths must pass?",
+    "id": "Q-5"
+  },
+  {
+    "ac": "STORY",
+    "rule": "NO_EXAMPLES",
+    "quote": "",
+    "question": "No criterion has a concrete value or example. Can you give at least one worked example?",
+    "id": "Q-6"
+  }
+]

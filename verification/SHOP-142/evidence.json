@@ -1,0 +1,579 @@
+{
+  "story": "SHOP-142",
+  "run_id": "20261120T042459Z",
+  "mode": "interactive",
+  "environment": "dev",
+  "git_sha": "d57a68c",
+  "suites": {
+    "api": {
+      "exit_code": 0,
+      "cases": 7,
+      "log": "verification/SHOP-142/runs/20261120T042459Z/api.log",
+      "error": false
+    },
+    "e2e": {
+      "exit_code": 0,
+      "cases": 16,
+      "log": "verification/SHOP-142/runs/20261120T042459Z/e2e.log",
+      "error": false
+    }
+  },
+  "coverage": [
+    {
+      "id": "AC-1",
+      "text": "User can enter a discount code in the cart",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "tests": [
+        {
+          "suite": "e2e",
+          "project": "desktop",
+          "name": "SHOP-142 AC-1 the cart has a discount code field and Apply button",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-desktop/test-finished-1.png"
+          ]
+        },
+        {
+          "suite": "e2e",
+          "project": "mobile",
+          "name": "SHOP-142 AC-1 the cart has a discount code field and Apply button",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-mobile/test-finished-1.png"
+          ]
+        }
+      ],
+      "missing_suites": [],
+      "status": "pass"
+    },
+    {
+      "id": "AC-2",
+      "text": "Valid codes apply the discount to the total",
+      "clarified_as": "Valid codes are SAVE10 (10% off) and FLAT20 ($20 off, only when subtotal >= $50, otherwise refused with 'This code needs a subtotal of at least $50.'). On the $120 cart: SAVE10 -> $108.00, FLAT20 -> $100.00. One code at a time: a second code replaces the first. Showing the discount line and new total in the cart is enough; reload/checkout out of scope. Expiry not checked for this story; letter case is accepted risk and not tested. (Q-1, Q-6, Q-AI-1, Q-AI-2, Q-AI-3, Q-AI-4, Q-AI-6)",
+      "disposition": "verify",
+      "reason": "",
+      "tests": [
+        {
+          "suite": "api",
+          "project": "",
+          "name": "SHOP-142 AC-2 SAVE10 takes 10% off the $120 cart, total 108",
+          "status": "pass",
+          "message": "",
+          "attachments": []
+        },
+        {
+          "suite": "api",
+          "project": "",
+          "name": "SHOP-142 AC-2 FLAT20 takes $20 off the $120 cart, total 100",
+          "status": "pass",
+          "message": "",
+          "attachments": []
+        },
+        {
+          "suite": "api",
+          "project": "",
+          "name": "SHOP-142 AC-2 FLAT20 is refused below a $50 subtotal and applies at exactly $50",
+          "status": "pass",
+          "message": "",
+          "attachments": []
+        },
+        {
+          "suite": "e2e",
+          "project": "desktop",
+          "name": "SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-desktop/test-finished-1.png"
+          ]
+        },
+        {
+          "suite": "e2e",
+          "project": "mobile",
+          "name": "SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-mobile/test-finished-1.png"
+          ]
+        }
+      ],
+      "missing_suites": [],
+      "status": "pass"
+    },
+    {
+      "id": "AC-3",
+      "text": "Invalid codes show an error",
+      "clarified_as": "Empty code shows exactly 'Enter a discount code.'; unknown code shows exactly 'That code is not valid.'; the total stays $120.00. A bad code entered after SAVE10 removes the SAVE10 discount. (Q-2, Q-AI-5)",
+      "disposition": "verify",
+      "reason": "",
+      "tests": [
+        {
+          "suite": "api",
+          "project": "",
+          "name": "SHOP-142 AC-3 an empty code is rejected with &quot;Enter a discount code.&quot;",
+          "status": "pass",
+          "message": "",
+          "attachments": []
+        },
+        {
+          "suite": "api",
+          "project": "",
+          "name": "SHOP-142 AC-3 an unknown code is rejected with &quot;That code is not valid.&quot;",
+          "status": "pass",
+          "message": "",
+          "attachments": []
+        },
+        {
+          "suite": "e2e",
+          "project": "desktop",
+          "name": "SHOP-142 AC-3 an empty code shows \"Enter a discount code.\" and the total stays $120.00",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-desktop/test-finished-1.png"
+          ]
+        },
+        {
+          "suite": "e2e",
+          "project": "desktop",
+          "name": "SHOP-142 AC-3 an unknown code shows \"That code is not valid.\" and the total stays $120.00",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-desktop/test-finished-1.png"
+          ]
+        },
+        {
+          "suite": "e2e",
+          "project": "desktop",
+          "name": "SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-desktop/test-finished-1.png"
+          ]
+        },
+        {
+          "suite": "e2e",
+          "project": "mobile",
+          "name": "SHOP-142 AC-3 an empty code shows \"Enter a discount code.\" and the total stays $120.00",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-mobile/test-finished-1.png"
+          ]
+        },
+        {
+          "suite": "e2e",
+          "project": "mobile",
+          "name": "SHOP-142 AC-3 an unknown code shows \"That code is not valid.\" and the total stays $120.00",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-mobile/test-finished-1.png"
+          ]
+        },
+        {
+          "suite": "e2e",
+          "project": "mobile",
+          "name": "SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-mobile/test-finished-1.png"
+          ]
+        }
+      ],
+      "missing_suites": [],
+      "status": "pass"
+    },
+    {
+      "id": "AC-4",
+      "text": "Should be fast",
+      "clarified_as": "",
+      "disposition": "not-verifiable",
+      "reason": "Product owner recorded accepted risk at Gate 1 (Q-3): no speed threshold was set, so there is no pass/fail line to test against.",
+      "tests": [],
+      "status": "not-verifiable"
+    },
+    {
+      "id": "AC-5",
+      "text": "Works on mobile",
+      "clarified_as": "On a Pixel 7 (Chrome) a shopper can enter a code, apply it, see the new total and see errors, with no sideways scrolling. (Q-4, Q-5)",
+      "disposition": "verify",
+      "reason": "",
+      "tests": [
+        {
+          "suite": "e2e",
+          "project": "desktop",
+          "name": "SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling",
+          "status": "skip",
+          "message": "",
+          "attachments": []
+        },
+        {
+          "suite": "e2e",
+          "project": "desktop",
+          "name": "SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling",
+          "status": "skip",
+          "message": "",
+          "attachments": []
+        },
+        {
+          "suite": "e2e",
+          "project": "mobile",
+          "name": "SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--bc510--with-no-sideways-scrolling-mobile/test-finished-1.png"
+          ]
+        },
+        {
+          "suite": "e2e",
+          "project": "mobile",
+          "name": "SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--0c5bb--with-no-sideways-scrolling-mobile/test-finished-1.png"
+          ]
+        }
+      ],
+      "missing_suites": [],
+      "status": "pass"
+    }
+  ],
+  "unplanned_ac_tags": [],
+  "regression": {
+    "total": 4,
+    "passed": 4,
+    "failed": []
+  },
+  "cases": [
+    {
+      "suite": "api",
+      "project": "",
+      "name": "GET /api/cart returns the items and subtotal",
+      "classname": "test",
+      "time_s": 0.009681,
+      "status": "pass",
+      "message": "",
+      "attachments": [],
+      "ac": []
+    },
+    {
+      "suite": "api",
+      "project": "",
+      "name": "GET /api/health reports ok",
+      "classname": "test",
+      "time_s": 0.001869,
+      "status": "pass",
+      "message": "",
+      "attachments": [],
+      "ac": []
+    },
+    {
+      "suite": "api",
+      "project": "",
+      "name": "SHOP-142 AC-2 SAVE10 takes 10% off the $120 cart, total 108",
+      "classname": "test",
+      "time_s": 0.011039,
+      "status": "pass",
+      "message": "",
+      "attachments": [],
+      "ac": [
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "api",
+      "project": "",
+      "name": "SHOP-142 AC-2 FLAT20 takes $20 off the $120 cart, total 100",
+      "classname": "test",
+      "time_s": 0.001787,
+      "status": "pass",
+      "message": "",
+      "attachments": [],
+      "ac": [
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "api",
+      "project": "",
+      "name": "SHOP-142 AC-2 FLAT20 is refused below a $50 subtotal and applies at exactly $50",
+      "classname": "test",
+      "time_s": 0.000303,
+      "status": "pass",
+      "message": "",
+      "attachments": [],
+      "ac": [
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "api",
+      "project": "",
+      "name": "SHOP-142 AC-3 an empty code is rejected with &quot;Enter a discount code.&quot;",
+      "classname": "test",
+      "time_s": 0.001311,
+      "status": "pass",
+      "message": "",
+      "attachments": [],
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "api",
+      "project": "",
+      "name": "SHOP-142 AC-3 an unknown code is rejected with &quot;That code is not valid.&quot;",
+      "classname": "test",
+      "time_s": 0.001653,
+      "status": "pass",
+      "message": "",
+      "attachments": [],
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "desktop",
+      "name": "cart page lists items and shows the subtotal",
+      "classname": "cart.spec.js",
+      "time_s": 0.407,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-desktop/test-finished-1.png"
+      ],
+      "ac": []
+    },
+    {
+      "suite": "e2e",
+      "project": "desktop",
+      "name": "SHOP-142 AC-1 the cart has a discount code field and Apply button",
+      "classname": "discount.spec.js",
+      "time_s": 0.185,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-desktop/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-1"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "desktop",
+      "name": "SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it",
+      "classname": "discount.spec.js",
+      "time_s": 0.262,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-desktop/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "desktop",
+      "name": "SHOP-142 AC-3 an empty code shows \"Enter a discount code.\" and the total stays $120.00",
+      "classname": "discount.spec.js",
+      "time_s": 0.203,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-desktop/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "desktop",
+      "name": "SHOP-142 AC-3 an unknown code shows \"That code is not valid.\" and the total stays $120.00",
+      "classname": "discount.spec.js",
+      "time_s": 0.218,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-desktop/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "desktop",
+      "name": "SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount",
+      "classname": "discount.spec.js",
+      "time_s": 0.264,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-desktop/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "desktop",
+      "name": "SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling",
+      "classname": "discount.spec.js",
+      "time_s": 0.0,
+      "status": "skip",
+      "message": "",
+      "attachments": [],
+      "ac": [
+        "AC-5"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "desktop",
+      "name": "SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling",
+      "classname": "discount.spec.js",
+      "time_s": 0.0,
+      "status": "skip",
+      "message": "",
+      "attachments": [],
+      "ac": [
+        "AC-5"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "mobile",
+      "name": "cart page lists items and shows the subtotal",
+      "classname": "cart.spec.js",
+      "time_s": 0.44,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-mobile/test-finished-1.png"
+      ],
+      "ac": []
+    },
+    {
+      "suite": "e2e",
+      "project": "mobile",
+      "name": "SHOP-142 AC-1 the cart has a discount code field and Apply button",
+      "classname": "discount.spec.js",
+      "time_s": 0.351,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-mobile/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-1"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "mobile",
+      "name": "SHOP-142 AC-2 SAVE10 shows the discount line and total $108.00; FLAT20 then replaces it",
+      "classname": "discount.spec.js",
+      "time_s": 0.326,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-mobile/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "mobile",
+      "name": "SHOP-142 AC-3 an empty code shows \"Enter a discount code.\" and the total stays $120.00",
+      "classname": "discount.spec.js",
+      "time_s": 0.263,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-mobile/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "mobile",
+      "name": "SHOP-142 AC-3 an unknown code shows \"That code is not valid.\" and the total stays $120.00",
+      "classname": "discount.spec.js",
+      "time_s": 0.245,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-mobile/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "mobile",
+      "name": "SHOP-142 AC-3 a bad code after SAVE10 shows the error and removes the discount",
+      "classname": "discount.spec.js",
+      "time_s": 0.296,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-mobile/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "mobile",
+      "name": "SHOP-142 AC-5 on a Pixel 7 SAVE10 gives total $108.00 with no sideways scrolling",
+      "classname": "discount.spec.js",
+      "time_s": 0.248,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--bc510--with-no-sideways-scrolling-mobile/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-5"
+      ]
+    },
+    {
+      "suite": "e2e",
+      "project": "mobile",
+      "name": "SHOP-142 AC-5 on a Pixel 7 an unknown code shows the error with no sideways scrolling",
+      "classname": "discount.spec.js",
+      "time_s": 0.259,
+      "status": "pass",
+      "message": "",
+      "attachments": [
+        "verification/SHOP-142/runs/20261120T042459Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--0c5bb--with-no-sideways-scrolling-mobile/test-finished-1.png"
+      ],
+      "ac": [
+        "AC-5"
+      ]
+    }
+  ]
+}
