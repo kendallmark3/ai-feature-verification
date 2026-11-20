@@ -1,0 +1,30 @@
+{
+  "key": "SHOP-142",
+  "summary": "Discount codes at checkout",
+  "type": "Story",
+  "status": "In Progress",
+  "description": "As a shopper I want to apply a discount code to my cart so I can save money.\n\nMarketing is running a promo next month so this needs to be in the next release.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "text": "User can enter a discount code in the cart"
+    },
+    {
+      "id": "AC-2",
+      "text": "Valid codes apply the discount to the total"
+    },
+    {
+      "id": "AC-3",
+      "text": "Invalid codes show an error"
+    },
+    {
+      "id": "AC-4",
+      "text": "Should be fast"
+    },
+    {
+      "id": "AC-5",
+      "text": "Works on mobile"
+    }
+  ],
+  "pulled_at": "2026-11-20T04:18:47Z"
+}
