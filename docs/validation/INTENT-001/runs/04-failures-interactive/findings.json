@@ -1,0 +1,111 @@
+{
+  "story": "SHOP-142",
+  "run_id": "20261120T051219Z",
+  "verdict": "NOT VERIFIED",
+  "findings": [
+    {
+      "id": "F-1",
+      "story": "SHOP-142",
+      "suite": "api",
+      "environment": "local",
+      "target": {
+        "BASE_URL": ""
+      },
+      "revision": "0e8e357 + uncommitted changes",
+      "run_id": "20261120T051219Z",
+      "timestamp": "2026-11-20T05:12:36Z",
+      "log": "verification/SHOP-142/runs/20261120T051219Z/api.log",
+      "reproduce": {
+        "suite_command": "cd demo-app && npm run test:api",
+        "focus_command": "cd demo-app && node --test --test-name-pattern='SHOP\\-142\\ AC\\-2\\ DELIBERATE\\ SAVE10\\ on\\ the\\ \\$120\\ cart\\ totals\\ 100' 'tests/api/**/*.test.*'"
+      },
+      "kind": "acceptance",
+      "classification": "suspected defect (unreviewed test)",
+      "acceptance_criteria": [
+        "AC-2"
+      ],
+      "open_questions": [],
+      "test": "SHOP-142 AC-2 DELIBERATE SAVE10 on the $120 cart totals 100",
+      "project": "",
+      "origin": "unknown",
+      "expected": "100",
+      "observed": "108",
+      "message": "Expected values to be strictly equal: \u2014 108 !== 100",
+      "details": "[Error [ERR_TEST_FAILURE]: Expected values to be strictly equal:\n\n108 !== 100\n] {\n  code: 'ERR_TEST_FAILURE',\n  failureType: 'testCodeFailure',\n  cause: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  108 !== 100\n  \n      at TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/[REDACTED]/scratchpad/val2/repo/demo-app/tests/api/deliberate-reviewed.test.mjs:10:10)\n      at Test.runInAsyncScope (node:async_hooks:214:14)\n      at Test.run (node:internal/test_runner/test:1047:25)\n      at Test.start (node:internal/test_runner/test:944:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 108,\n    expected: 100,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n}",
+      "screenshots": [],
+      "traces": []
+    },
+    {
+      "id": "F-2",
+      "story": "SHOP-142",
+      "suite": "e2e",
+      "environment": "local",
+      "target": {
+        "BASE_URL": ""
+      },
+      "revision": "0e8e357 + uncommitted changes",
+      "run_id": "20261120T051219Z",
+      "timestamp": "2026-11-20T05:12:36Z",
+      "log": "verification/SHOP-142/runs/20261120T051219Z/e2e.log",
+      "reproduce": {
+        "suite_command": "cd demo-app && npx playwright test",
+        "focus_command": "cd demo-app && npx playwright test -g 'SHOP\\-142\\ AC\\-3\\ DELIBERATE\\ an\\ unknown\\ code\\ shows\\ \"Code\\ rejected\\.\"' --project=desktop"
+      },
+      "kind": "acceptance",
+      "classification": "suspected defect (unreviewed test)",
+      "acceptance_criteria": [
+        "AC-3"
+      ],
+      "open_questions": [],
+      "test": "SHOP-142 AC-3 DELIBERATE an unknown code shows \"Code rejected.\"",
+      "project": "desktop",
+      "origin": "unpromoted",
+      "expected": "\"Code rejected.\"",
+      "observed": "\"That code is not valid.\"",
+      "message": "[desktop] \u203a deliberate-proposed.spec.js:6:1 \u203a SHOP-142 AC-3 DELIBERATE an unknown code shows \"Code rejected.\" \u2014 expect(locator).toHaveText(expected) failed",
+      "details": "[desktop] \u203a deliberate-proposed.spec.js:6:1 \u203a SHOP-142 AC-3 DELIBERATE an unknown code shows \"Code rejected.\" \n\n    Error: expect(locator).toHaveText(expected) failed\n\n    Locator:  getByRole('alert')\n    Expected: \"Code rejected.\"\n    Received: \"That code is not valid.\"\n    Timeout:  3000ms\n\n    Call log:\n      - Expect \"toHaveText\" getByRole('alert') with timeout 3000ms\n      - waiting for getByRole('alert')\n        10 \u00d7 locator resolved to <p role=\"alert\" class=\"error\">That code is not valid.</p>\n           - unexpected value \"That code is not valid.\"\n\n\n       8 |   await page.getByLabel('Discount code').fill('NOPE');\n       9 |   await page.getByRole('button', { name: 'Apply' }).click();\n    > 10 |   await expect(page.getByRole('alert')).toHaveText('Code rejected.', { timeout: 3000 });\n         |                                         ^\n      11 | });\n      12 |\n        at /tmp/claude-0/-home-claude/[REDACTED]/scratchpad/val2/repo/demo-app/tests/e2e/deliberate-proposed.spec.js:10:41\n\n    attachment #1: screenshot (image/png) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    ../../reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/test-failed-1.png\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n    Error Context: ../../reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/error-context.md\n\n    attachment #3: trace (application/zip) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    ../../reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/trace.zip\n    Usage:\n\n        npx playwright show-trace ../../reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/trace.zip\n\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+      "screenshots": [
+        "verification/SHOP-142/runs/20261120T051219Z/e2e/artifacts/reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/test-failed-1.png"
+      ],
+      "traces": [
+        "verification/SHOP-142/runs/20261120T051219Z/e2e/artifacts/reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--desktop/trace.zip"
+      ]
+    },
+    {
+      "id": "F-3",
+      "story": "SHOP-142",
+      "suite": "e2e",
+      "environment": "local",
+      "target": {
+        "BASE_URL": ""
+      },
+      "revision": "0e8e357 + uncommitted changes",
+      "run_id": "20261120T051219Z",
+      "timestamp": "2026-11-20T05:12:36Z",
+      "log": "verification/SHOP-142/runs/20261120T051219Z/e2e.log",
+      "reproduce": {
+        "suite_command": "cd demo-app && npx playwright test",
+        "focus_command": "cd demo-app && npx playwright test -g 'SHOP\\-142\\ AC\\-3\\ DELIBERATE\\ an\\ unknown\\ code\\ shows\\ \"Code\\ rejected\\.\"' --project=mobile"
+      },
+      "kind": "acceptance",
+      "classification": "suspected defect (unreviewed test)",
+      "acceptance_criteria": [
+        "AC-3"
+      ],
+      "open_questions": [],
+      "test": "SHOP-142 AC-3 DELIBERATE an unknown code shows \"Code rejected.\"",
+      "project": "mobile",
+      "origin": "unpromoted",
+      "expected": "\"Code rejected.\"",
+      "observed": "\"That code is not valid.\"",
+      "message": "[mobile] \u203a deliberate-proposed.spec.js:6:1 \u203a SHOP-142 AC-3 DELIBERATE an unknown code shows \"Code rejected.\" \u2014 expect(locator).toHaveText(expected) failed",
+      "details": "[mobile] \u203a deliberate-proposed.spec.js:6:1 \u203a SHOP-142 AC-3 DELIBERATE an unknown code shows \"Code rejected.\" \n\n    Error: expect(locator).toHaveText(expected) failed\n\n    Locator:  getByRole('alert')\n    Expected: \"Code rejected.\"\n    Received: \"That code is not valid.\"\n    Timeout:  3000ms\n\n    Call log:\n      - Expect \"toHaveText\" getByRole('alert') with timeout 3000ms\n      - waiting for getByRole('alert')\n        10 \u00d7 locator resolved to <p role=\"alert\" class=\"error\">That code is not valid.</p>\n           - unexpected value \"That code is not valid.\"\n\n\n       8 |   await page.getByLabel('Discount code').fill('NOPE');\n       9 |   await page.getByRole('button', { name: 'Apply' }).click();\n    > 10 |   await expect(page.getByRole('alert')).toHaveText('Code rejected.', { timeout: 3000 });\n         |                                         ^\n      11 | });\n      12 |\n        at /tmp/claude-0/-home-claude/[REDACTED]/scratchpad/val2/repo/demo-app/tests/e2e/deliberate-proposed.spec.js:10:41\n\n    attachment #1: screenshot (image/png) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    ../../reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/test-failed-1.png\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n    Error Context: ../../reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/error-context.md\n\n    attachment #3: trace (application/zip) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    ../../reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/trace.zip\n    Usage:\n\n        npx playwright show-trace ../../reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/trace.zip\n\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+      "screenshots": [
+        "verification/SHOP-142/runs/20261120T051219Z/e2e/artifacts/reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/test-failed-1.png"
+      ],
+      "traces": [
+        "verification/SHOP-142/runs/20261120T051219Z/e2e/artifacts/reports/e2e-artifacts/deliberate-proposed-SHOP-1-eb0b1-n-code-shows-Code-rejected--mobile/trace.zip"
+      ]
+    }
+  ]
+}

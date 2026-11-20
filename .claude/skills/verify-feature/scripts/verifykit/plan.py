@@ -43,10 +43,16 @@ def load(cfg: dict, key: str) -> dict:
     return read_json(out_dir(cfg, key) / "plan.json")
 
 
+def _open_by_ac(cfg: dict, key: str) -> dict:
+    from .gaps import status  # local import: gaps imports story, as plan does
+    return (status(cfg, key) or {}).get("open_by_ac", {})
+
+
 def validate(cfg: dict, key: str) -> list[str]:
     plan = load(cfg, key)
     story = load_story(cfg, key)
     suites = cfg.get("suites", {})
+    unresolved = _open_by_ac(cfg, key)
     problems: list[str] = []
     planned = {a["id"] for a in plan.get("acs", [])}
     for ac in story.get("acceptance_criteria", []):
@@ -58,7 +64,9 @@ def validate(cfg: dict, key: str) -> list[str]:
             problems.append(f"{ac['id']}: disposition must be one of {sorted(DISPOSITIONS)}.")
             continue
         if d == "verify":
-            if not ac.get("checks"):
+            # An AC waiting on a Gate 1 answer may have no checks yet: expected behaviour is not invented.
+            # It is reported UNRESOLVED instead, which already keeps the verdict from VERIFIED.
+            if not ac.get("checks") and ac["id"] not in unresolved:
                 problems.append(f"{ac['id']}: needs at least one check, or a disposition with a reason.")
             for c in ac.get("checks", []):
                 if c.get("suite") not in suites:
@@ -75,13 +83,22 @@ def validate(cfg: dict, key: str) -> list[str]:
 def render(cfg: dict, key: str) -> Path:
     plan = load(cfg, key)
     problems = validate(cfg, key)
-    gate1 = read_json(out_dir(cfg, key) / "gate1-status.json", default={"passed": False, "open": ["not run"]})
+    from .gaps import status
+    gate1 = status(cfg, key)
+    if gate1 is None:
+        g1 = "not run"
+    elif gate1["passed"]:
+        g1 = "all questions answered"
+    else:
+        aff = ", ".join(f"{ac} ({', '.join(q)})" for ac, q in gate1["open_by_ac"].items()) or "none"
+        g1 = (f"{len(gate1['open'])} open question(s). Unresolved criteria: {aff}. "
+              "Testing continues for every other criterion.")
     L = [
         f"# Verification Plan · {key}",
         "",
         f"**Story:** {plan.get('summary', '')}",
         "",
-        f"**Gate 1 (clarifications):** {'passed' if gate1.get('passed') else 'OPEN — ' + ', '.join(gate1.get('open', []))}",
+        f"**Gate 1 (clarifications):** {g1}",
         "",
         f"**Tagging rule:** {plan.get('tagging', '')}",
         "",

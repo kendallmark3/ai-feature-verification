@@ -39,10 +39,12 @@ def init(root: Path, force: bool = False) -> Path:
     cfg = {
         "output_dir": "verification",
         "jira": {"adapter": "local", "path": "jira"},
-        "environments": {"local": {"BASE_URL": ""}, "dev": {"BASE_URL": "${DEV_BASE_URL}"}},
+        "environments": {"local": {"BASE_URL": "", "allow_shared_data_writes": True},
+                         "dev": {"BASE_URL": "${DEV_BASE_URL}"}},
         "guardrails": {"allowed_commands": ["npm", "npx", "node", "pytest", "python3", "mvn", "gradle", "./gradlew",
                                             "go", "gotestsum", "dotnet"],
                        "deny_url_patterns": ["(^|[./-])prod([./-]|$)", "production"],
+                       "protected_paths": [],
                        "max_runtime_seconds": 900},
         "suites": suites,
     }

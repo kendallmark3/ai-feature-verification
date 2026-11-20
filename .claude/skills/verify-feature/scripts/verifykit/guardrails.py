@@ -3,7 +3,12 @@
 - Only allow-listed executables run, with no shell (no pipes, redirects, chaining).
 - The target URL may not match a production pattern.
 - Secrets may not be written literally into verify.config.json.
-- Pipeline mode refuses to run tests still marked @ai-proposed (Gate 2).
+- Suites that write shared data run only where the environment allows it.
+- Pipeline mode withholds test files still marked @ai-proposed (Gate 2).
+
+The checks raise VerifyError. The runner turns a per-suite violation into a
+BLOCKED suite with the reason recorded, and carries on with the other suites.
+A missing permission is never read as permission.
 """
 from __future__ import annotations
 
@@ -51,9 +56,30 @@ def check_no_literal_secrets(obj, path="config") -> None:
             check_no_literal_secrets(v, f"{path}[{i}]")
 
 
+def check_shared_writes(suite: dict, env_cfg: dict, env_name: str) -> None:
+    """A suite flagged writes_shared_data runs only where the environment explicitly allows it."""
+    if suite.get("writes_shared_data") and env_cfg.get("allow_shared_data_writes") is not True:
+        raise VerifyError(
+            f"suite writes shared data and environment '{env_name}' does not set allow_shared_data_writes: true"
+        )
+
+
+def suite_violation(suite: dict, suite_env: dict, env_cfg: dict, env_name: str,
+                    allowed: list[str], deny_patterns: list[str]) -> str | None:
+    """Every per-suite rule in one place. Returns the reason the suite is blocked, or None."""
+    try:
+        parse_command(suite.get("command", ""), allowed)
+        check_target(suite_env, deny_patterns)
+        check_shared_writes(suite, env_cfg, env_name)
+    except VerifyError as e:
+        return str(e)
+    return None
+
+
 def unapproved_tests(root: Path, test_paths: list[str]) -> list[str]:
     hits = []
     for t in scan_tests(root):
-        if t["ai_proposed"] and any(t["path"].startswith(p.rstrip("/")) for p in test_paths):
+        if t["ai_proposed"] and any(t["path"] == p.rstrip("/") or t["path"].startswith(p.rstrip("/") + "/")
+                                    for p in test_paths if p):
             hits.append(t["path"])
     return hits

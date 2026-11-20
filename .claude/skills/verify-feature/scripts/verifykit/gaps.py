@@ -2,7 +2,12 @@
 
 The rules are plain pattern checks, so the same story always yields the same
 questions. Claude adds judgement-based questions in the same file format
-(IDs starting Q-AI-). Gate 1 passes only when every question has an Answer.
+(IDs starting Q-AI-).
+
+Clarification is exception-based: open questions do not stop testing. Each
+open question marks only the criteria it names as UNRESOLVED (never PASS), and
+is recorded with the person who owns the answer. Gate 1 "passes" when every
+question has an Answer; an unanswered question is never treated as approval.
 """
 from __future__ import annotations
 
@@ -89,15 +94,23 @@ def analyse(story: dict) -> list[dict]:
     return findings
 
 
+def owner_of(story: dict) -> str:
+    """Who answers requirement questions: the story's reporter when known."""
+    return (story.get("reporter") or "").strip() or "Product owner (not named on the story)"
+
+
 def _render(story: dict, findings: list[dict]) -> str:
+    owner = owner_of(story)
     lines = [
         f"# Gate 1 · Clarifications for {story['key']}",
         "",
         f"**Story:** {story.get('summary', '')}",
         "",
-        "Every question needs an `Answer:` before Gate 1 passes. An answer can be a decision,",
-        "a rule, an example, or `Accepted risk: <why>`. Questions from the deterministic rules come",
-        "first; Claude adds judgement questions below them with IDs `Q-AI-n`.",
+        "Testing does not wait for these answers. Each open question marks only the criterion it",
+        "names as UNRESOLVED: its tests may still run, but it can never be reported as passing until",
+        "the owner answers. An answer can be a decision, a rule, an example, or `Accepted risk: <why>`.",
+        "Questions from the deterministic rules come first; Claude adds judgement questions below",
+        "them with IDs `Q-AI-n`.",
         "",
         "Check with: `python3 .claude/skills/verify-feature/scripts/verify.py gate1 " + story["key"] + " --check`",
         "",
@@ -106,7 +119,7 @@ def _render(story: dict, findings: list[dict]) -> str:
         lines += [f"## {f['id']} · {f['ac']} · {f['rule']}", ""]
         if f["quote"]:
             lines += [f"> {f['quote']}", ""]
-        lines += [f"Question: {f['question']}", "", "Answer: ", ""]
+        lines += [f"Owner: {owner}", "", f"Question: {f['question']}", "", "Answer: ", ""]
     lines += ["<!-- Claude: add judgement questions below this line as ## Q-AI-n · AC-x · TOPIC -->", ""]
     return "\n".join(lines)
 
@@ -124,22 +137,60 @@ def run(cfg: dict, key: str, force: bool = False) -> tuple[Path, list[dict]]:
 
 
 _Q = re.compile(r"^##\s+(Q-[\w-]+)\s*·?(.*)$")
+_AC = re.compile(r"\bAC-\d+\b")
+
+
+def parse(text: str) -> list[dict]:
+    """Questions in a Gate 1 file: id, the ACs its heading names, owner, answer."""
+    questions, current = [], None
+    for line in text.splitlines():
+        m = _Q.match(line)
+        if m:
+            heading = m.group(2).strip(" ·")
+            scope = heading.split("·")[0] if "·" in heading else heading
+            current = {"id": m.group(1), "heading": heading, "acs": sorted(set(_AC.findall(scope)), key=_ac_num),
+                       "owner": "", "answer": ""}
+            questions.append(current)
+        elif current is not None and line.lower().startswith("answer:"):
+            current["answer"] = line.split(":", 1)[1].strip()
+        elif current is not None and line.lower().startswith("owner:"):
+            current["owner"] = line.split(":", 1)[1].strip()
+    return questions
+
+
+def _ac_num(ac: str) -> int:
+    return int(ac.split("-")[1])
 
 
 def check(cfg: dict, key: str) -> dict:
     md = out_dir(cfg, key) / "gate1-clarifications.md"
     if not md.is_file():
         raise VerifyError(f"No Gate 1 file yet. Run: verify.py gaps {key}")
-    questions, current = [], None
-    for line in md.read_text(encoding="utf-8").splitlines():
-        m = _Q.match(line)
-        if m:
-            current = {"id": m.group(1), "heading": m.group(2).strip(" ·"), "answer": ""}
-            questions.append(current)
-        elif current is not None and line.lower().startswith("answer:"):
-            current["answer"] = line.split(":", 1)[1].strip()
-    open_qs = [q["id"] for q in questions if not q["answer"]]
-    result = {"questions": len(questions), "answered": len(questions) - len(open_qs), "open": open_qs,
-              "passed": not open_qs}
+    questions = parse(md.read_text(encoding="utf-8"))
+    try:
+        default_owner = owner_of(load_story(cfg, key))
+    except VerifyError:
+        default_owner = owner_of({})
+    open_q = [q for q in questions if not q["answer"]]
+    open_by_ac: dict[str, list[str]] = {}
+    for q in open_q:
+        for ac in q["acs"]:
+            open_by_ac.setdefault(ac, []).append(q["id"])
+    result = {
+        "questions": len(questions), "answered": len(questions) - len(open_q),
+        "open": [q["id"] for q in open_q], "passed": not open_q,
+        # Exception-based clarification: which criteria each open question leaves unresolved.
+        "open_by_ac": dict(sorted(open_by_ac.items(), key=lambda kv: _ac_num(kv[0]))),
+        "story_level_open": [q["id"] for q in open_q if not q["acs"]],
+        "open_detail": [{"id": q["id"], "acs": q["acs"], "topic": q["heading"],
+                         "owner": q["owner"] or default_owner} for q in open_q],
+    }
     write_json(out_dir(cfg, key) / "gate1-status.json", result)
     return result
+
+
+def status(cfg: dict, key: str) -> dict | None:
+    """Current Gate 1 state, re-read from the file so edits are never stale. None if there is no Gate 1 file."""
+    if not (out_dir(cfg, key) / "gate1-clarifications.md").is_file():
+        return None
+    return check(cfg, key)

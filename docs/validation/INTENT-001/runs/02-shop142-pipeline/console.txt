@@ -1,0 +1,41 @@
+[verify] pipeline mode: withheld 2 unpromoted test file(s) (Gate 2 open):
+  - demo-app/tests/api/discount.test.mjs
+  - demo-app/tests/e2e/discount.spec.js
+
+▶ [api] npm run test:api  (cwd=demo-app, env=local, mode=pipeline)
+
+> shop-demo@1.0.0 pretest:api
+> node -e "require('fs').mkdirSync('reports',{recursive:true})"
+
+
+> shop-demo@1.0.0 test:api
+> node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/api-junit.xml "tests/api/**/*.test.mjs"
+
+✔ GET /api/cart returns the items and subtotal (20.400912ms)
+✔ GET /api/health reports ok (4.274109ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 105.852996
+◀ [api] ok in 0.28s · 1 report(s), 0 artifact(s)
+
+▶ [e2e] npx playwright test  (cwd=demo-app, env=local, mode=pipeline)
+
+Running 2 tests using 1 worker
+
+  ✓  1 [desktop] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (272ms)
+  ✓  2 [mobile] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (296ms)
+
+  2 passed (3.5s)
+◀ [e2e] ok in 4.17s · 1 report(s), 2 artifact(s)
+
+Run 20261120T051205Z finished. Suites with non-zero exit: none
+Withheld (unpromoted, Gate 2 open): 2 file(s)
+Verdict: INCOMPLETE
+  - No evidence because planned tests were blocked or withheld: AC-1, AC-2, AC-3, AC-5
+  - Not verifiable as written: AC-4
+  - 2 test file(s) still @ai-proposed (Gate 2 open); withheld from this pipeline run

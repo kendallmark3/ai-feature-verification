@@ -1,0 +1,4 @@
+verify: Gate 2 not passed: these tests are still marked @ai-proposed and cannot run in pipeline mode:
+  demo-app/tests/api/discount.test.mjs
+  demo-app/tests/e2e/discount.spec.js
+Review them and run `verify.py promote <file> --by <name>` (a person, not Claude).

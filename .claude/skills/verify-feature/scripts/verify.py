@@ -8,11 +8,15 @@ evidence the same way every time. Standard library only.
   story     <KEY>                 pull story, assign AC IDs
   inspect   <KEY>                 inventory frameworks, tests, AC tags
   gaps      <KEY> [--force]       Gate 1: deterministic clarification questions
-  gate1     <KEY> --check         Gate 1: pass only when every question is answered
+  gate1     <KEY> --check         Gate 1 status: exit 0 when every question is answered, 2 while any
+                                  are open. Open questions do not stop testing: they leave only their
+                                  own criteria UNRESOLVED.
   plan      <KEY> --init|--check|--render
   run       <KEY> [--suite a,b] [--mode interactive|pipeline] [--env local]
+                                  A suite that breaks a guardrail is BLOCKED and the rest still run.
+                                  Pipeline mode withholds unpromoted (@ai-proposed) test files.
   evidence  <KEY> [--run ID]      parse JUnit, map tests to ACs
-  report    <KEY>                 verdict + VERIFICATION_REPORT.md
+  report    <KEY>                 verdict + VERIFICATION_REPORT.md + findings.json
   post      <KEY>                 post the summary to Jira as a comment
   all       <KEY> [run options]   run + evidence + report
   proposed                        list tests still marked @ai-proposed
@@ -114,14 +118,21 @@ def main(argv: list[str] | None = None) -> int:
         elif a.cmd in ("run", "all"):
             suites = [s for s in a.suite.split(",") if s]
             m = runner.run(cfg, a.key, suites, a.mode, a.env)
-            failed = [s["name"] for s in m["suites"] if s["exit_code"] != 0]
+            failed = [s["name"] for s in m["suites"] if s.get("status", "ran") == "ran" and s["exit_code"] != 0]
+            not_run = [f"{s['name']} ({s['status']}: {s['reason']})" for s in m["suites"] if s.get("status", "ran") != "ran"]
             print(f"\nRun {m['run_id']} finished. Suites with non-zero exit: {failed or 'none'}")
+            if not_run:
+                print(f"Suites not run: {'; '.join(not_run)}")
+            if a.mode == "pipeline" and m["unpromoted"]["files"]:
+                print(f"Withheld (unpromoted, Gate 2 open): {len(m['unpromoted']['files'])} file(s)")
             if a.cmd == "all":
                 evidence.collect(cfg, a.key)
                 rep = report.build(cfg, a.key)
                 print(f"Verdict: {rep['verdict']}")
                 for r in rep["reasons"]:
                     print(f"  - {r}")
+                if rep["findings"]["total"]:
+                    print(f"Findings: {rep['findings']['by_classification']} (verification/{a.key}/findings.json)")
                 return VERDICT_EXIT[rep["verdict"]]
         elif a.cmd == "evidence":
             ev = evidence.collect(cfg, a.key, a.run)
@@ -130,8 +141,10 @@ def main(argv: list[str] | None = None) -> int:
                     | {"failed": len(ev["regression"]["failed"])}})
         elif a.cmd == "report":
             rep = report.build(cfg, a.key)
-            _print({"verdict": rep["verdict"], "reasons": rep["reasons"],
-                    "report": f"{cfg.get('output_dir', 'verification')}/{a.key}/VERIFICATION_REPORT.md"})
+            base = f"{cfg.get('output_dir', 'verification')}/{a.key}"
+            _print({"verdict": rep["verdict"], "reasons": rep["reasons"], "tests": rep["tests"],
+                    "findings": rep["findings"], "report": f"{base}/VERIFICATION_REPORT.md",
+                    "findings_file": f"{base}/findings.json"})
             return VERDICT_EXIT[rep["verdict"]]
         elif a.cmd == "post":
             _print({"posted": report.post(cfg, a.key)})

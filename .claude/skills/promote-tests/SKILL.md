@@ -5,8 +5,17 @@ description: Gate 2 of feature verification. Prepare AI-proposed tests for human
 
 # Promote Tests (Gate 2)
 
-Nothing AI-generated reaches CI unreviewed. A test file stays marked `@ai-proposed` until a
-person reads it and promotes it; pipeline mode refuses to run while any marker remains.
+Nothing AI-generated reaches the regression suite unreviewed. A test file stays marked
+`@ai-proposed` until a person reads it and promotes it. Two permissions are kept apart:
+
+- **Execution:** unpromoted tests run in interactive verification, and their evidence is
+  labelled *unreviewed*. No approval is needed for that.
+- **Promotion:** making a test part of the permanent regression suite. That is this gate, and
+  it is a person's decision. Pipeline runs withhold unpromoted files (and restore them after),
+  so unreviewed evidence never counts toward `VERIFIED`.
+
+Verification never waits for this gate. Prepare the review when the person wants the tests
+promoted, or when the report says Gate 2 is open.
 
 ```bash
 V=.claude/skills/verify-feature/scripts/verify.py
@@ -37,4 +46,5 @@ V=.claude/skills/verify-feature/scripts/verify.py
    `verification/<KEY>/gate2-promotions.json`. Run it yourself only when the person tells you
    to in this conversation and gives their name. If they want changes, make them, keep the
    marker, and go round again.
-6. When `proposed` returns an empty list, Gate 2 has passed. Continue with the pipeline run.
+6. When `proposed` returns an empty list, Gate 2 has passed, and the next pipeline run
+   includes those tests.

@@ -1,0 +1,24 @@
+{
+  "questions": 12,
+  "answered": 11,
+  "open": [
+    "Q-AI-4"
+  ],
+  "passed": false,
+  "open_by_ac": {
+    "AC-2": [
+      "Q-AI-4"
+    ]
+  },
+  "story_level_open": [],
+  "open_detail": [
+    {
+      "id": "Q-AI-4",
+      "acs": [
+        "AC-2"
+      ],
+      "topic": "AC-2 \u00b7 Several codes",
+      "owner": "Product owner (not named on the story)"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "run_id": "20261120T051324Z",
+  "story": "SHOP-142",
+  "mode": "interactive",
+  "environment": "dev",
+  "target": {
+    "BASE_URL": ""
+  },
+  "git_sha": "0e8e357",
+  "working_tree": {
+    "clean": false,
+    "changed": [
+      "verify.config.json"
+    ],
+    "protected_source_changed": [],
+    "committed_tests_changed": []
+  },
+  "started": "2026-11-20T05:13:24Z",
+  "suites": [
+    {
+      "name": "api",
+      "framework": "node-test",
+      "command": "npm run test:api",
+      "cwd": "demo-app",
+      "status": "ran",
+      "reason": "",
+      "exit_code": 0,
+      "duration_s": 0.43,
+      "log": "verification/SHOP-142/runs/20261120T051324Z/api.log",
+      "junit": [
+        "verification/SHOP-142/runs/20261120T051324Z/api/junit/api-junit.xml"
+      ],
+      "artifacts": [],
+      "report_base": "demo-app",
+      "unpromoted": [
+        "demo-app/tests/api/discount.test.mjs"
+      ],
+      "withheld": [],
+      "env": {
+        "BASE_URL": ""
+      }
+    },
+    {
+      "name": "e2e",
+      "framework": "playwright",
+      "command": "npx playwright test",
+      "cwd": "demo-app",
+      "status": "ran",
+      "reason": "",
+      "exit_code": 0,
+      "duration_s": 9.14,
+      "log": "verification/SHOP-142/runs/20261120T051324Z/e2e.log",
+      "junit": [
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/junit/e2e-junit.xml"
+      ],
+      "artifacts": [
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/cart-cart-page-lists-items-and-shows-the-subtotal-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-1-the-d3971-code-field-and-Apply-button-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-2-SAV-58c17--00-FLAT20-then-replaces-it-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-a-b-ad830-or-and-removes-the-discount-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--8576a--and-the-total-stays-120-00-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-3-an--bdb76--and-the-total-stays-120-00-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--0c5bb--with-no-sideways-scrolling-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--0c5bb--with-no-sideways-scrolling-mobile/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--bc510--with-no-sideways-scrolling-desktop/test-finished-1.png",
+        "verification/SHOP-142/runs/20261120T051324Z/e2e/artifacts/reports/e2e-artifacts/discount-SHOP-142-AC-5-on--bc510--with-no-sideways-scrolling-mobile/test-finished-1.png"
+      ],
+      "report_base": "demo-app",
+      "unpromoted": [
+        "demo-app/tests/e2e/discount.spec.js"
+      ],
+      "withheld": [],
+      "env": {
+        "BASE_URL": "",
+        "PW_CHANNEL": ""
+      }
+    },
+    {
+      "name": "load",
+      "framework": "other",
+      "command": "curl -s http://127.0.0.1:4310/api/health",
+      "cwd": "demo-app",
+      "status": "blocked",
+      "reason": "'curl' is not in guardrails.allowed_commands ['npm', 'npx', 'node', 'pytest', 'python3', 'mvn', 'gradle', './gradlew', 'go', 'gotestsum', 'dotnet'].",
+      "exit_code": null,
+      "duration_s": 0,
+      "log": "",
+      "junit": [],
+      "artifacts": [],
+      "report_base": "demo-app",
+      "unpromoted": [],
+      "withheld": [],
+      "env": {
+        "BASE_URL": ""
+      }
+    },
+    {
+      "name": "smoke-prod",
+      "framework": "playwright",
+      "command": "npx playwright test",
+      "cwd": "demo-app",
+      "status": "blocked",
+      "reason": "BASE_URL=https://shop.production.example.com matches production pattern 'production'. Verification never runs against prod.",
+      "exit_code": null,
+      "duration_s": 0,
+      "log": "",
+      "junit": [],
+      "artifacts": [],
+      "report_base": "demo-app",
+      "unpromoted": [],
+      "withheld": [],
+      "env": {
+        "BASE_URL": "https://shop.production.example.com"
+      }
+    },
+    {
+      "name": "seed-shared-data",
+      "framework": "other",
+      "command": "node -e 1",
+      "cwd": "demo-app",
+      "status": "blocked",
+      "reason": "suite writes shared data and environment 'dev' does not set allow_shared_data_writes: true",
+      "exit_code": null,
+      "duration_s": 0,
+      "log": "",
+      "junit": [],
+      "artifacts": [],
+      "report_base": "demo-app",
+      "unpromoted": [],
+      "withheld": [],
+      "env": {
+        "BASE_URL": ""
+      }
+    }
+  ],
+  "unpromoted": {
+    "policy": "executed-unpromoted",
+    "files": [
+      "demo-app/tests/api/discount.test.mjs",
+      "demo-app/tests/e2e/discount.spec.js"
+    ]
+  },
+  "finished": "2026-11-20T05:13:34Z"
+}

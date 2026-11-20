@@ -81,6 +81,7 @@ def pull(cfg: dict, key: str) -> dict:
         "type": issue.get("type", ""),
         "status": issue.get("status", ""),
         "description": issue.get("description", ""),
+        "reporter": issue.get("reporter", ""),  # owner of requirement questions at Gate 1
         "acceptance_criteria": acs,
         "pulled_at": now_iso(),
     }

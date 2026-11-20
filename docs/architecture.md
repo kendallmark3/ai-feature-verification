@@ -1,6 +1,8 @@
 # Architecture · AI-Assisted Feature Verification
 
-AI plans; the team's own frameworks execute; people decide at three gates.
+AI plans; the team's own frameworks execute; deterministic code judges; people decide only what
+needs their authority. Verification runs end to end without approvals; open questions, blocked
+operations and unreviewed tests are recorded as exceptions (INTENT-001).
 
 Design canvas (editable): https://claude.ai/artifact/GqWaVmerTPd9cFQtTC75Jr
 
@@ -8,7 +10,7 @@ Design canvas (editable): https://claude.ai/artifact/GqWaVmerTPd9cFQtTC75Jr
 flowchart LR
   subgraph H[1 · Human & intent]
     P[Tester / Dev / SRE] --> J[Jira story + AC]
-    G1{{Gate 1 · Clarify<br/>PO answers gaps}}
+    G1{{Gate 1 · Clarify<br/>PO answers gaps · any time}}
     G3{{Gate 3 · Review & approve}}
   end
   subgraph S[2 · AI verification skill]
@@ -16,17 +18,17 @@ flowchart LR
     K --> VP[(Verification plan<br/>AC → test → evidence<br/>versioned in repo)]
   end
   subgraph E[3 · Execution]
-    I[Interactive mode<br/>Claude Code + local runner] --> G2{{Gate 2 · Promote<br/>test PR review}}
-    G2 --> PL[Pipeline mode<br/>GitHub Actions · committed suites]
+    I[Interactive mode<br/>Claude Code + local runner<br/>runs unpromoted tests, labelled] -.-> G2{{Gate 2 · Promote<br/>test PR review}}
+    G2 --> PL[Pipeline mode<br/>GitHub Actions · reviewed tests only<br/>unpromoted withheld]
   end
   subgraph T[4 · Target]
     APP[Running app · DEV / UAT<br/>never prod]
   end
   subgraph O[5 · Observability & evidence]
-    EV[JUnit · logs · screenshots<br/>coverage by AC · report]
+    EV[JUnit · logs · screenshots · traces<br/>coverage by AC · report · findings]
   end
   J -->|story| K
-  K -->|gaps| G1 -->|answers| K
+  K -.->|open questions<br/>ACs UNRESOLVED| G1 -.->|answers| K
   K -->|plan + tests| I
   VP -->|AC-tagged| PL
   I --> APP
@@ -60,5 +62,7 @@ plan, tests), so every result can be traced and re-run without the model.
 ## Guardrails
 
 Allow-listed commands without a shell, never a production URL, no literal secrets in
-config, no `@ai-proposed` tests in pipeline mode, a time limit per suite. See
+config, shared-data writes only where an environment allows them, unpromoted tests withheld
+from pipeline runs, uncommitted application or reviewed-test changes recorded, a time limit
+per suite. A per-suite violation blocks that suite only; the rest still run. See
 `.claude/skills/verify-feature/references/guardrails.md`.

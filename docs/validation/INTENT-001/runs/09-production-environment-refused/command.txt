@@ -1,0 +1,1 @@
+python3 .claude/skills/verify-feature/scripts/verify.py run SHOP-142 --env prod-mirror   (engine: new, stdin closed, no TTY, CI=1)

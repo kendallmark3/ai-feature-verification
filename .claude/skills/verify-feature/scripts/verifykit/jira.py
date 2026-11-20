@@ -81,6 +81,7 @@ class CloudJira:
             "description": f.get("description") or "",
             "acceptance_criteria": ac or "",
             "labels": f.get("labels", []),
+            "reporter": (f.get("reporter") or {}).get("displayName", ""),
         }
 
     def add_comment(self, key: str, author: str, body: str) -> dict:

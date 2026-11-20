@@ -1,12 +1,18 @@
 ---
 name: clarify-story
-description: Gate 1 of feature verification. Find the gaps and ambiguities in a story's acceptance criteria and get them answered by a person before any test is planned or run. Use when asked whether a story or ticket is ready, testable or clear, or as step 3 of verify-feature.
+description: Gate 1 of feature verification. Find the gaps and ambiguities in a story's acceptance criteria and record each as a question for the person who owns the answer, without holding up testing of everything else. Use when asked whether a story or ticket is ready, testable or clear, or as step 3 of verify-feature.
 ---
 
 # Clarify Story (Gate 1)
 
-Testing an unclear criterion only proves the code does *something*. This gate makes the
-person who owns the story say what "done" means before anything runs.
+Testing an unclear criterion only proves the code does *something*. This gate records what
+"done" still doesn't say, and who has to say it, **without stopping the rest of verification**.
+Clarification is exception-based:
+
+- An open question marks only the criteria it names as UNRESOLVED. Their tests may run, but
+  they are never reported as passing, and the verdict can't be VERIFIED, until it's answered.
+- Every other criterion is planned, tested and reported normally.
+- An unanswered question is never treated as approval or as an implied answer.
 
 ```bash
 V=.claude/skills/verify-feature/scripts/verify.py
@@ -32,12 +38,23 @@ V=.claude/skills/verify-feature/scripts/verify.py
    ```
 
    Ask only questions whose answer would change a test. Point to the code that raised it.
-4. Show the person the questions, grouped by AC, in plain language, and ask them to answer.
-   They can edit the file or answer in chat. When they answer in chat, write their words on
-   the `Answer:` line; don't paraphrase them into something stronger, and never answer a
-   question yourself. "Accepted risk: <why>" is a valid answer.
-5. Run `python3 $V gate1 <KEY> --check`. Exit code 0 means Gate 1 passed. Anything else:
-   list the open question IDs and stop.
+4. Write an `Owner:` line under each question you add: the person who can decide it. The
+   engine fills it in for rule questions from the story's reporter. Use the story reporter
+   or product owner for business rules, and name a different owner when the question is
+   someone else's to decide (security, legal, a platform team).
+5. Run `python3 $V gate1 <KEY> --check`. It lists open questions by criterion and owner.
+   Exit 2 means questions are still open. **Continue with the plan and tests anyway**, for
+   every criterion that doesn't depend on an answer. Where it does, don't write a test that
+   guesses the expected behaviour: plan only what is unambiguous, or leave that AC's checks
+   empty until answered.
+6. Show the person the open questions, grouped by owner, in plain language, alongside the
+   results, not as a blocker before them. When someone answers (in the file or in chat),
+   write their words on the `Answer:` line; don't paraphrase them into something stronger,
+   and never answer a question yourself. "Accepted risk: <why>" is a valid answer.
+7. After answers arrive, `python3 $V report <KEY>` re-reads the file: criteria whose
+   questions are answered stop being UNRESOLVED. Re-run tests if the answer changes what
+   they should assert.
 
-If the person wants to skip the gate, say what will be weaker (criteria verified against a
-guess), record `Accepted risk: skipped by <name>` on each open question, and continue.
+Only hold back an affected test when the ambiguity makes it unsafe or meaningless to run,
+for example when it would write to shared data under an unknown rule. Never hold back
+unrelated tests.

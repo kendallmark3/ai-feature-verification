@@ -1,0 +1,1 @@
+python3 .claude/skills/verify-feature/scripts/verify.py all SHOP-142 --mode pipeline   (engine: new, stdin closed, no TTY, CI=1)
