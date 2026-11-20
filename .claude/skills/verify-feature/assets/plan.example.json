@@ -1,0 +1,122 @@
+{
+  "story": "SHOP-142",
+  "summary": "Discount codes at checkout",
+  "created": "2026-11-19T23:45:00Z",
+  "tagging": "Every test that verifies a criterion names it in its title, e.g. 'SHOP-142 AC-1 ...'",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "User can enter a discount code in the cart",
+      "clarified_as": "The cart page has a labelled 'Discount code' field and an Apply button.",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-1.a",
+          "description": "Cart page shows a labelled Discount code input and an Apply button",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e (desktop + mobile)",
+            "screenshot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-2",
+      "text": "Valid codes apply the discount to the total",
+      "clarified_as": "SAVE10 = 10% off; FLAT20 = $20 off orders of $50+. Case-insensitive. One code at a time; a new code replaces the old. $120 cart: SAVE10 \u2192 $108.00, FLAT20 \u2192 $100.00. (Q-1, Q-6, Q-AI-2, Q-AI-3, Q-AI-4)",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-2.a",
+          "description": "API: SAVE10 and FLAT20 return the right discount and total for a $120 cart",
+          "suite": "api",
+          "expected_evidence": [
+            "junit: api",
+            "response values"
+          ]
+        },
+        {
+          "id": "AC-2.b",
+          "description": "API: lower-case save10 is accepted",
+          "suite": "api",
+          "expected_evidence": [
+            "junit: api"
+          ]
+        },
+        {
+          "id": "AC-2.c",
+          "description": "UI: applying SAVE10 shows the discount line and total $108.00; applying FLAT20 next replaces it with total $100.00",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e",
+            "screenshot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-3",
+      "text": "Invalid codes show an error",
+      "clarified_as": "Unknown codes, expired codes (WELCOME5) and FLAT20 under $50 are refused with a message under the field; total unchanged. FLAT20 message states $50. (Q-2, Q-AI-1, Q-AI-3)",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-3.a",
+          "description": "API: unknown and expired codes return 400 with an error message",
+          "suite": "api",
+          "expected_evidence": [
+            "junit: api",
+            "status code + error body"
+          ]
+        },
+        {
+          "id": "AC-3.b",
+          "description": "API: FLAT20 under $50 is refused with a message that names $50 (rule tested directly against discount logic)",
+          "suite": "api",
+          "expected_evidence": [
+            "junit: api"
+          ]
+        },
+        {
+          "id": "AC-3.c",
+          "description": "UI: an unknown code shows an alert and the total stays $120.00",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e",
+            "screenshot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-4",
+      "text": "Should be fast",
+      "clarified_as": "",
+      "disposition": "not-verifiable",
+      "reason": "No threshold agreed. PO recorded accepted risk (Q-3): 'Revisit after launch.' Without a number there is no pass/fail.",
+      "checks": []
+    },
+    {
+      "id": "AC-5",
+      "text": "Works on mobile",
+      "clarified_as": "On a Pixel-size phone the shopper can enter a code, apply it and see the new total with no sideways scrolling. (Q-4, Q-5)",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-5.a",
+          "description": "Mobile project: apply SAVE10 and see $108.00; page has no horizontal overflow",
+          "suite": "e2e",
+          "expected_evidence": [
+            "junit: e2e/mobile",
+            "screenshot"
+          ]
+        }
+      ]
+    }
+  ]
+}

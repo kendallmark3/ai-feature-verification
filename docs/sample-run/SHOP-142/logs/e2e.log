@@ -1,0 +1,16 @@
+
+Running 10 tests using 1 worker
+
+  ✓   1 [desktop] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (385ms)
+  ✓   2 [desktop] › tests/e2e/discount.spec.js:17:1 › SHOP-142 AC-1 cart page has a labelled discount code field and an Apply button (306ms)
+  ✓   3 [desktop] › tests/e2e/discount.spec.js:22:1 › SHOP-142 AC-2 SAVE10 shows the discount and a $108.00 total; FLAT20 then replaces it ($100.00) (435ms)
+  ✓   4 [desktop] › tests/e2e/discount.spec.js:32:1 › SHOP-142 AC-3 an unknown code shows an error and leaves the total at $120.00 (375ms)
+  -   5 [desktop] › tests/e2e/discount.spec.js:38:1 › SHOP-142 AC-5 on a phone the shopper applies SAVE10 and sees $108.00 without sideways scrolling
+  ✓   6 [mobile] › tests/e2e/cart.spec.js:3:1 › cart page lists items and shows the subtotal (408ms)
+  ✓   7 [mobile] › tests/e2e/discount.spec.js:17:1 › SHOP-142 AC-1 cart page has a labelled discount code field and an Apply button (293ms)
+  ✓   8 [mobile] › tests/e2e/discount.spec.js:22:1 › SHOP-142 AC-2 SAVE10 shows the discount and a $108.00 total; FLAT20 then replaces it ($100.00) (514ms)
+  ✓   9 [mobile] › tests/e2e/discount.spec.js:32:1 › SHOP-142 AC-3 an unknown code shows an error and leaves the total at $120.00 (383ms)
+  ✓  10 [mobile] › tests/e2e/discount.spec.js:38:1 › SHOP-142 AC-5 on a phone the shopper applies SAVE10 and sees $108.00 without sideways scrolling (385ms)
+
+  1 skipped
+  9 passed (7.2s)

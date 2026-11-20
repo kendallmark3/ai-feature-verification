@@ -1,0 +1,20 @@
+{
+  "key": "SHOP-142",
+  "type": "Story",
+  "status": "In Progress",
+  "summary": "Discount codes at checkout",
+  "reporter": "Product Owner (simulated)",
+  "labels": [
+    "checkout",
+    "web"
+  ],
+  "description": "As a shopper I want to apply a discount code to my cart so I can save money.\n\nMarketing is running a promo next month so this needs to be in the next release.",
+  "acceptance_criteria": [
+    "User can enter a discount code in the cart",
+    "Valid codes apply the discount to the total",
+    "Invalid codes show an error",
+    "Should be fast",
+    "Works on mobile"
+  ],
+  "comments": []
+}

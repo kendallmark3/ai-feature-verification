@@ -1,0 +1,33 @@
+{
+  "output_dir": "verification",
+  "jira": { "adapter": "local", "path": "jira" },
+  "environments": {
+    "local": { "BASE_URL": "" },
+    "dev": { "BASE_URL": "${DEV_BASE_URL}" },
+    "uat": { "BASE_URL": "${UAT_BASE_URL}" }
+  },
+  "guardrails": {
+    "allowed_commands": ["npm", "npx", "node", "pytest", "python3", "mvn", "gradle", "./gradlew", "go", "gotestsum", "dotnet"],
+    "deny_url_patterns": ["(^|[./-])prod([./-]|$)", "production"],
+    "max_runtime_seconds": 900
+  },
+  "suites": {
+    "api": {
+      "framework": "node-test",
+      "cwd": "demo-app",
+      "command": "npm run test:api",
+      "junit": ["reports/api-junit.xml"],
+      "artifacts": [],
+      "test_paths": ["demo-app/tests/api"]
+    },
+    "e2e": {
+      "framework": "playwright",
+      "cwd": "demo-app",
+      "command": "npx playwright test",
+      "junit": ["reports/e2e-junit.xml"],
+      "artifacts": ["reports/e2e-artifacts/**/*.png"],
+      "env": { "PW_CHANNEL": "${PW_CHANNEL}" },
+      "test_paths": ["demo-app/tests/e2e"]
+    }
+  }
+}

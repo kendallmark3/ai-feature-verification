@@ -1,0 +1,70 @@
+{
+  "story": "SHOP-142",
+  "summary": "Discount codes at checkout",
+  "verdict": "NOT VERIFIED",
+  "reasons": [
+    "Failing criteria: AC-2, AC-3"
+  ],
+  "generated": "2026-11-19T23:46:19Z",
+  "run_id": "20261119T234555Z",
+  "mode": "pipeline",
+  "environment": "local",
+  "git_sha": null,
+  "gates": {
+    "gate1_clarify": "passed",
+    "gate2_promote": "passed",
+    "gate3_approve": "pending human decision"
+  },
+  "coverage": [
+    {
+      "id": "AC-1",
+      "status": "pass",
+      "text": "User can enter a discount code in the cart",
+      "clarified_as": "The cart page has a labelled 'Discount code' field and an Apply button.",
+      "reason": "",
+      "tests": 2,
+      "passed": 2
+    },
+    {
+      "id": "AC-2",
+      "status": "fail",
+      "text": "Valid codes apply the discount to the total",
+      "clarified_as": "SAVE10 = 10% off; FLAT20 = $20 off orders of $50+. Case-insensitive. One code at a time; a new code replaces the old. $120 cart: SAVE10 \u2192 $108.00, FLAT20 \u2192 $100.00. (Q-1, Q-6, Q-AI-2, Q-AI-3, Q-AI-4)",
+      "reason": "",
+      "tests": 5,
+      "passed": 4
+    },
+    {
+      "id": "AC-3",
+      "status": "fail",
+      "text": "Invalid codes show an error",
+      "clarified_as": "Unknown codes, expired codes (WELCOME5) and FLAT20 under $50 are refused with a message under the field; total unchanged. FLAT20 message states $50. (Q-2, Q-AI-1, Q-AI-3)",
+      "reason": "",
+      "tests": 5,
+      "passed": 4
+    },
+    {
+      "id": "AC-4",
+      "status": "not-verifiable",
+      "text": "Should be fast",
+      "clarified_as": "",
+      "reason": "No threshold agreed. PO recorded accepted risk (Q-3): 'Revisit after launch.' Without a number there is no pass/fail.",
+      "tests": 0,
+      "passed": 0
+    },
+    {
+      "id": "AC-5",
+      "status": "pass",
+      "text": "Works on mobile",
+      "clarified_as": "On a Pixel-size phone the shopper can enter a code, apply it and see the new total with no sideways scrolling. (Q-4, Q-5)",
+      "reason": "",
+      "tests": 1,
+      "passed": 1
+    }
+  ],
+  "regression": {
+    "total": 4,
+    "passed": 4,
+    "failed": []
+  }
+}

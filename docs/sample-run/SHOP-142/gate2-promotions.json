@@ -1,0 +1,14 @@
+[
+  {
+    "file": "demo-app/tests/api/discount.test.mjs",
+    "by": "Reviewer (simulated)",
+    "at": "2026-11-19T23:45:50Z",
+    "markers": 1
+  },
+  {
+    "file": "demo-app/tests/e2e/discount.spec.js",
+    "by": "Reviewer (simulated)",
+    "at": "2026-11-19T23:45:50Z",
+    "markers": 1
+  }
+]

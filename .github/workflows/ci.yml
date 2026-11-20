@@ -1,0 +1,10 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash tests/pre-implement.test.sh
+      - name: verifykit unit tests (stdlib only)
+        run: python3 -m unittest discover -s tests/verifykit -v

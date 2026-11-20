@@ -1,0 +1,26 @@
+{
+  "key": "SHOP-142",
+  "type": "Story",
+  "status": "In Progress",
+  "summary": "Discount codes at checkout",
+  "reporter": "Product Owner (simulated)",
+  "labels": [
+    "checkout",
+    "web"
+  ],
+  "description": "As a shopper I want to apply a discount code to my cart so I can save money.\n\nMarketing is running a promo next month so this needs to be in the next release.",
+  "acceptance_criteria": [
+    "User can enter a discount code in the cart",
+    "Valid codes apply the discount to the total",
+    "Invalid codes show an error",
+    "Should be fast",
+    "Works on mobile"
+  ],
+  "comments": [
+    {
+      "author": "verify-feature (Claude)",
+      "created": "2026-11-19T23:46:31Z",
+      "body": "AI-assisted verification \u00b7 NOT VERIFIED\nRun 20261119T234555Z (pipeline, local)\n- Failing criteria: AC-2, AC-3\nCoverage:\n  AC-1: PASS (2/2)\n  AC-2: FAIL (4/5)\n  AC-3: FAIL (4/5)\n  AC-4: NOT VERIFIABLE (0/0)\n  AC-5: PASS (1/1)\nGates: G1 passed \u00b7 G2 passed \u00b7 G3 pending human\nFull report: verification/SHOP-142/VERIFICATION_REPORT.md"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+
+> shop-demo@1.0.0 pretest:api
+> node -e "require('fs').mkdirSync('reports',{recursive:true})"
+
+
+> shop-demo@1.0.0 test:api
+> node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/api-junit.xml "tests/api/**/*.test.mjs"
+
+✔ GET /api/cart returns the items and subtotal (27.888393ms)
+✔ GET /api/health reports ok (3.941757ms)
+✔ SHOP-142 AC-2 SAVE10 takes 10% off a $120 cart (total 108.00) (25.165776ms)
+✔ SHOP-142 AC-2 FLAT20 takes $20 off a $120 cart (total 100.00) (4.701394ms)
+✖ SHOP-142 AC-2 codes are not case-sensitive (save10 is accepted) (3.176394ms)
+✔ SHOP-142 AC-3 an unknown code is refused with a message (6.176507ms)
+✖ SHOP-142 AC-3 an expired code (WELCOME5) is refused with a message (2.817139ms)
+✔ SHOP-142 AC-3 FLAT20 under $50 is refused and the message names $50 (0.299835ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 6
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 257.020671
+
+✖ failing tests:
+
+test at tests/api/discount.test.mjs:39:1
+✖ SHOP-142 AC-2 codes are not case-sensitive (save10 is accepted) (3.176394ms)
+  AssertionError [ERR_ASSERTION]: lower-case save10 should be accepted
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (file:///home/claude/ai-feature-verification/demo-app/tests/api/discount.test.mjs:41:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/api/discount.test.mjs:51:1
+✖ SHOP-142 AC-3 an expired code (WELCOME5) is refused with a message (2.817139ms)
+  AssertionError [ERR_ASSERTION]: WELCOME5 expired on 2025-06-30 and must be refused
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (file:///home/claude/ai-feature-verification/demo-app/tests/api/discount.test.mjs:53:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,25 @@
+{
+  "name": "shop-demo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Demo React + Node.js shop used to exercise the AI-assisted feature verification skills.",
+  "type": "module",
+  "scripts": {
+    "build": "vite build --config web/vite.config.js",
+    "start": "node server/server.js",
+    "dev:web": "vite --config web/vite.config.js",
+    "pretest:api": "node -e \"require('fs').mkdirSync('reports',{recursive:true})\"",
+    "test:api": "node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/api-junit.xml \"tests/api/**/*.test.mjs\"",
+    "test:e2e": "playwright test",
+    "test": "npm run test:api && npm run test:e2e"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  }
+}
