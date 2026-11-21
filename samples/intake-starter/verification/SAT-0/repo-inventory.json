@@ -1,0 +1,35 @@
+{
+  "frameworks": [
+    {
+      "framework": "maven-surefire",
+      "where": "backend",
+      "marker": "pom.xml"
+    },
+    {
+      "framework": "npm-scripts",
+      "where": "frontend",
+      "marker": "package.json",
+      "scripts": {}
+    }
+  ],
+  "configured_suites": {
+    "maven-surefire:backend": {
+      "command": "mvn -B test",
+      "cwd": "backend"
+    }
+  },
+  "tests": [
+    {
+      "path": "backend/src/test/java/com/example/intake/IntakeApplicationTests.java",
+      "ac_tags": [],
+      "ai_proposed": false,
+      "approved": false
+    }
+  ],
+  "summary": {
+    "test_files": 1,
+    "files_with_ac_tags": 0,
+    "ai_proposed_unapproved": [],
+    "unconfigured_frameworks": []
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "key": "SAT-0",
+  "summary": "Client submits a project intake",
+  "type": "Story",
+  "status": "In Progress",
+  "description": "As a prospective client I want to describe the project I want built so the team can turn it into an intent.\n\nDress rehearsal story for the Intent-Driven Saturday harness (INTENT-003).",
+  "reporter": "Product Owner (simulated, dress rehearsal)",
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "text": "POST /api/intakes with a client name, a project type (ECOMMERCE, WEBSITE or API) and a description of at least 20 characters returns 201 with a reference like INT-1001 and status RECEIVED"
+    },
+    {
+      "id": "AC-2",
+      "text": "A description shorter than 20 characters returns 400 with the error \"Describe what you want in at least 20 characters\""
+    },
+    {
+      "id": "AC-3",
+      "text": "GET /api/intakes/{reference} returns the submitted intake, and an unknown reference returns 404"
+    },
+    {
+      "id": "AC-4",
+      "text": "On the intake page, submitting a valid form shows \"Your reference is INT-\" followed by the number"
+    },
+    {
+      "id": "AC-5",
+      "text": "On the intake page, a description shorter than 20 characters shows the error message and keeps what the client typed"
+    }
+  ],
+  "pulled_at": "2026-11-21T16:41:15Z"
+}

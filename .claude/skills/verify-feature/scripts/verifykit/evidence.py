@@ -76,6 +76,8 @@ def _tags(case: dict, key: str) -> list[str]:
 
 
 _FILE_NAME = re.compile(r"\.(m?[jt]sx?|cjs|py|rb|go|cs|java|kt)$")
+_JVM_CLASS = re.compile(r"^[A-Za-z_]\w*(\.[A-Za-z_][\w$]*)+$")
+JVM_FRAMEWORKS = {"maven-surefire", "gradle-test"}
 
 
 def _origin(case: dict, suite: dict) -> str:
@@ -84,13 +86,19 @@ def _origin(case: dict, suite: dict) -> str:
 
     If the suite ran no unpromoted file, every result is committed. Otherwise the JUnit
     classname decides, but only when the framework writes the test file there (Playwright,
-    Jest, Vitest). Anything else is 'unknown', which is treated as unreviewed. Errs safe:
+    Jest, Vitest) or, for Maven/Gradle suites, the fully qualified class that maps to one
+    .java/.kt file. Anything else is 'unknown', which is treated as unreviewed. Errs safe:
     a committed file that shares a name with an unpromoted one is labelled unpromoted.
     """
     unpromoted = suite.get("unpromoted", [])
     if not unpromoted:
         return "committed"
     cn = case.get("classname", "").replace("\\", "/").strip()
+    if suite.get("framework") in JVM_FRAMEWORKS and _JVM_CLASS.match(cn):
+        # Surefire/Gradle write the fully qualified class: com.example.FooTest -> .../com/example/FooTest.java
+        path = "/" + cn.split("$")[0].replace(".", "/")
+        hit = any(("/" + f).endswith(path + ext) for f in unpromoted for ext in (".java", ".kt"))
+        return "unpromoted" if hit else "committed"
     base = cn.split("/")[-1]
     if not _FILE_NAME.search(base):
         return "unknown"

@@ -23,6 +23,10 @@ evidence the same way every time. Standard library only.
   promote   <file> --by NAME [--story KEY]   Gate 2 (a person runs this)
   approve   <KEY> --by NAME --decision approved|rejected [--note] [--transition Done]   Gate 3 (a person)
   init      [--force]             write a starter verify.config.json
+  frameworks <KEY> --propose      propose a default framework (Playwright web, pytest Python) where a
+                                  project has none, and the Maven reporter that keeps @DisplayName tags
+  frameworks <KEY> --approve --by NAME   a person approves the proposal as written
+  frameworks <KEY> --apply        make the approved changes (refuses without approval; installs nothing)
 """
 from __future__ import annotations
 
@@ -33,7 +37,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from verifykit import config_init, evidence, gaps, inspect_repo, plan, promote, report, runner, story  # noqa: E402
+from verifykit import config_init, evidence, gaps, inspect_repo, plan, promote, report, runner, scaffold, story  # noqa: E402
 from verifykit.util import VerifyError, load_config, repo_root  # noqa: E402
 
 
@@ -83,11 +87,19 @@ def main(argv: list[str] | None = None) -> int:
     ap_.add_argument("--note", default="")
     ap_.add_argument("--transition", default=None)
     sub.add_parser("init").add_argument("--force", action="store_true")
+    fw = keyed("frameworks")
+    fg = fw.add_mutually_exclusive_group(required=True)
+    fg.add_argument("--propose", action="store_true")
+    fg.add_argument("--approve", action="store_true")
+    fg.add_argument("--apply", action="store_true")
+    fw.add_argument("--by", default=None)
 
     a = ap.parse_args(argv)
     try:
         if a.cmd == "init":
             _print(f"Wrote {config_init.init(Path.cwd(), a.force)}. Review every suite before running.")
+            for note in config_init.review_notes(Path.cwd()):
+                _print(f"\nACTION NEEDED · {note}")
             return 0
         cfg = load_config(repo_root())
         if a.cmd == "story":
@@ -152,6 +164,18 @@ def main(argv: list[str] | None = None) -> int:
             _print({"ai_proposed": promote.proposed(cfg)})
         elif a.cmd == "promote":
             _print(promote.promote(cfg, a.file, a.by, a.story))
+        elif a.cmd == "frameworks":
+            if a.propose:
+                prop = scaffold.propose(cfg, a.key)
+                base = f"{cfg.get('output_dir', 'verification')}/{a.key}"
+                _print({"proposed": [i["id"] for i in prop["items"]], "review": f"{base}/FRAMEWORK_PROPOSAL.md",
+                        "next": f"a person runs: verify.py frameworks {a.key} --approve --by \"Name\""})
+            elif a.approve:
+                if not a.by:
+                    raise VerifyError("--approve needs --by NAME (the person approving).")
+                _print(scaffold.approve(cfg, a.key, a.by))
+            else:
+                _print(scaffold.apply(cfg, a.key))
         elif a.cmd == "approve":
             _print(report.approve(cfg, a.key, a.by, a.decision, a.note, a.transition))
         return 0

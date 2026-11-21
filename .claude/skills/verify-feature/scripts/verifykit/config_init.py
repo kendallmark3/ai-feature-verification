@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 
+from . import scaffold
 from .inspect_repo import detect_frameworks
 from .util import CONFIG_NAME, VerifyError
 
@@ -37,6 +38,9 @@ def init(root: Path, force: bool = False) -> Path:
         name = f["framework"] if f["where"] == "." else f"{f['framework']}:{f['where']}"
         suites[name] = {"framework": f["framework"], "cwd": f["where"], "command": cmd, "junit": junit,
                         "artifacts": [], "env": env, "test_paths": [f["where"]], "_review": "Suggested. Confirm before use."}
+        if f["framework"] == "maven-surefire" and not scaffold.maven_tags_kept(root / f["where"] / "pom.xml"):
+            suites[name]["_review"] += (" pom.xml lacks usePhrasedTestCaseMethodName=true: @DisplayName AC tags "
+                                        "will be lost. See the ACTION NEEDED note from init, or ac-tagging.md.")
     cfg = {
         "output_dir": "verification",
         "jira": jira_block(),
@@ -51,6 +55,22 @@ def init(root: Path, force: bool = False) -> Path:
     }
     path.write_text(json.dumps(cfg, indent=2) + "\n", encoding="utf-8")
     return path
+
+
+def review_notes(root: Path) -> list[str]:
+    """What the person must decide before every criterion can be traced. init changes no build file."""
+    notes = []
+    for n in scaffold.needs(root):
+        if n["framework"] == "maven-surefire":
+            notes.append(f"{n['where']}/pom.xml: JUnit 5 @DisplayName tags (e.g. \"SAT-1 AC-1 ...\") will not reach "
+                         "Surefire's XML, so those tests would count as untagged. Add this to <build><plugins> "
+                         "(Surefire 3.0.0-M4+), or let `verify.py frameworks <KEY> --propose` add it after a person "
+                         "approves:\n" + scaffold.MAVEN_REPORTER_SNIPPET)
+        else:
+            default = "Playwright" if n["framework"] == "playwright" else "pytest"
+            notes.append(f"{n['where']}: {n['why']}. The default is {default}. Nothing is added until a named person "
+                         "approves: `verify.py frameworks <KEY> --propose`, then `--approve --by \"Name\"`, then `--apply`.")
+    return notes
 
 
 CLOUD_JIRA = {"adapter": "cloud", "base_url": "${JIRA_BASE_URL}", "email": "${JIRA_EMAIL}",

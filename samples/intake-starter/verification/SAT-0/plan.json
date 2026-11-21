@@ -1,0 +1,96 @@
+{
+  "story": "SAT-0",
+  "summary": "Client submits a project intake",
+  "created": "2026-11-21T16:41:31Z",
+  "tagging": "Every test that verifies a criterion names it in its title, e.g. 'SAT-0 AC-1 ...'",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "POST /api/intakes with a client name, a project type (ECOMMERCE, WEBSITE or API) and a description of at least 20 characters returns 201 with a reference like INT-1001 and status RECEIVED",
+      "clarified_as": "Reference format: 'INT-' then digits (INT-1001 is the first). All three project types accepted.",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-1.a",
+          "description": "API: POST with each project type and a 46-character description returns 201, reference INT-<digits>, status RECEIVED",
+          "suite": "maven-surefire:backend",
+          "expected_evidence": [
+            "junit: maven-surefire:backend"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-2",
+      "text": "A description shorter than 20 characters returns 400 with the error \"Describe what you want in at least 20 characters\"",
+      "clarified_as": "Under 20 = 19 or fewer characters after trimming; exactly 20 is accepted.",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-2.a",
+          "description": "API: a 19-character description returns 400 with the exact message; a 20-character one returns 201",
+          "suite": "maven-surefire:backend",
+          "expected_evidence": [
+            "junit: maven-surefire:backend",
+            "response values"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-3",
+      "text": "GET /api/intakes/{reference} returns the submitted intake, and an unknown reference returns 404",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-3.a",
+          "description": "API: GET by the reference just created returns the same name and type; GET INT-999999 returns 404",
+          "suite": "maven-surefire:backend",
+          "expected_evidence": [
+            "junit: maven-surefire:backend"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-4",
+      "text": "On the intake page, submitting a valid form shows \"Your reference is INT-\" followed by the number",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-4.a",
+          "description": "UI: fill name, type and a valid description, submit, see 'Your reference is INT-<digits>' (API and UI started by Playwright)",
+          "suite": "playwright:frontend",
+          "expected_evidence": [
+            "junit: playwright:frontend (desktop)",
+            "screenshot"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-5",
+      "text": "On the intake page, a description shorter than 20 characters shows the error message and keeps what the client typed",
+      "clarified_as": "'Keeps what the client typed' = name, type and description fields still hold the entered values after the error.",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-5.a",
+          "description": "UI: a short description shows the exact error and the three fields keep their values",
+          "suite": "playwright:frontend",
+          "expected_evidence": [
+            "junit: playwright:frontend (desktop)",
+            "screenshot"
+          ]
+        }
+      ]
+    }
+  ]
+}

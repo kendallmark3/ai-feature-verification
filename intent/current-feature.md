@@ -22,7 +22,9 @@ reason there is none, with a person deciding at three gates (clarify, promote, a
 
 ## Constraints / Boundaries
 - Python standard library only for the engine. No pip installs.
-- Never add a test framework; use the team's. JUnit XML is the common output.
+- Use the team's test framework. Only when a project has none, add the default (Playwright for
+  web, pytest for Python), and only after a person approves it (INTENT-003). JUnit XML is the
+  common output.
 - AI plans and writes; it does not approve its own tests or the story.
 
 ## Delta · INTENT-001 Autonomous evidence-based verification
@@ -67,3 +69,31 @@ path-independent skills; `init` writes the cloud Jira block from the environment
 
 **Evidence:** engine unit tests pass; the IDS-3 suite passes except the live test, which runs
 only where `JIRA_*` is set.
+
+## Delta · INTENT-003 Saturday-ready verification
+
+Full intent: `intent/INTENT-003-saturday-ready.md`.
+
+**Observation:** Next Saturday's build is a Spring Boot API with a React front end. Measured
+on 2026-11-21: Maven Surefire drops JUnit 5 `@DisplayName`, so `SAT-1 AC-1` tags are lost
+unless the phrased-name reporter is configured; with it, the engine reads them. A fresh React
+front end has no tests, and the engine can't create the Jira story.
+
+**Change (decided by Mark Kendall, 2026-11-21):** when a project has no test framework, propose
+the default (Playwright for web, pytest for Python) and add it only after a named person
+approves. Make Java tagging work, detect both apps in one repo, decide how the Saturday story
+gets into Jira, and rehearse on `samples/intake-starter/` (SAT-0).
+
+**Evidence:** the dress rehearsal reaches a real verdict with Java tests tagged; nothing is
+added or changed without approval; SHOP-142 and IDS-3 verdicts unchanged.
+
+**Result (2026-11-21):** done to the stop point. `init` finds `backend/` and `frontend/`,
+reports the missing Surefire reporter and the untested front end, and changes nothing.
+`verify.py frameworks <KEY> --propose | --approve --by NAME | --apply` adds Playwright (web) or
+pytest (Python), or the Maven reporter block, only after a named person approves; the approval
+(name, time, proposal hash) is in `verification/<KEY>/framework-proposal.json`. Java results map
+to their `.java` file for Gate 2 labels. Dress rehearsal `samples/intake-starter/` (SAT-0,
+approved by Mark Kendall): AC-1–AC-5 all PASS from tests that ran (3 JUnit via MockMvc, 2
+Playwright), Java tags counted; verdict INCOMPLETE only for Gate 2 and interactive mode. Before
+the reporter, the same three Java tests passed but counted as untagged. 96 engine tests pass;
+SHOP-142 and IDS-3 verdicts unchanged when their last runs are re-judged. Gradle still unmeasured.

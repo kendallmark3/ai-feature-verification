@@ -1,0 +1,87 @@
+{
+  "story": "SAT-0",
+  "created": "2026-11-21T16:41:15Z",
+  "items": [
+    {
+      "id": "maven-reporter:backend",
+      "kind": "build-config",
+      "framework": "maven-surefire",
+      "where": "backend",
+      "why": "Surefire drops JUnit 5 @DisplayName, so 'KEY AC-n' tags would be lost",
+      "pom": {
+        "path": "backend/pom.xml",
+        "snippet": "<plugin>\n  <groupId>org.apache.maven.plugins</groupId>\n  <artifactId>maven-surefire-plugin</artifactId>\n  <configuration>\n    <statelessTestsetReporter implementation=\"org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter\">\n      <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>\n    </statelessTestsetReporter>\n  </configuration>\n</plugin>"
+      },
+      "creates": {},
+      "after_apply": []
+    },
+    {
+      "id": "playwright:frontend",
+      "kind": "framework",
+      "framework": "playwright",
+      "where": "frontend",
+      "why": "web front end with no test framework",
+      "creates": {
+        "frontend/playwright.config.mjs": "// Playwright for this front end, proposed by verify.py frameworks (INTENT-003).\n// BASE_URL points the suite at a running DEV/UAT host; without it Playwright starts\n// the API and the UI locally.\nimport { defineConfig, devices } from '@playwright/test';\n\nconst external = Boolean(process.env.BASE_URL);\nconst baseURL = process.env.BASE_URL || 'http://127.0.0.1:5173';\nconst channel = process.env.PW_CHANNEL || undefined; // e.g. \"chrome\" to use an installed Chrome\n\nexport default defineConfig({\n  testDir: 'tests/e2e',\n  outputDir: 'reports/e2e-artifacts',\n  workers: 1,\n  reporter: [['list'], ['junit', { outputFile: 'reports/e2e-junit.xml' }]],\n  use: { baseURL, screenshot: 'on', trace: 'retain-on-failure', channel },\n  projects: [{ name: 'desktop', use: { ...devices['Desktop Chrome'], channel } }],\n  webServer: external ? undefined : [\n    { command: 'mvn -B -q spring-boot:run', cwd: '../backend', port: 8080, timeout: 180_000, reuseExistingServer: !process.env.CI },\n    { command: 'npm run dev -- --host 127.0.0.1 --port 5173 --strictPort', url: 'http://127.0.0.1:5173', timeout: 60_000, reuseExistingServer: !process.env.CI },\n  ],\n});\n"
+      },
+      "package_json": {
+        "path": "frontend/package.json",
+        "devDependencies": {
+          "@playwright/test": "^1.65.1"
+        },
+        "scripts": {
+          "test:e2e": "playwright test"
+        }
+      },
+      "after_apply": [
+        "cd frontend && npm install && npx playwright install chromium"
+      ],
+      "suite": {
+        "playwright:frontend": {
+          "framework": "playwright",
+          "cwd": "frontend",
+          "command": "npx playwright test",
+          "junit": [
+            "reports/e2e-junit.xml"
+          ],
+          "artifacts": [
+            "reports/e2e-artifacts/**/*.png"
+          ],
+          "env": {
+            "PW_CHANNEL": "${PW_CHANNEL}"
+          },
+          "test_paths": [
+            "frontend/tests/e2e"
+          ]
+        }
+      },
+      "notes": [
+        "Unit tests for components: Vitest (`--reporter=junit`) is the documented option; it is not added here."
+      ]
+    }
+  ],
+  "sha256": "a01a8fbabeeeeff46c0195dce527658a657cd1dd3c1dd7d4b1adcfb543e27f29",
+  "approval": {
+    "by": "Mark Kendall",
+    "at": "2026-11-21T16:43:19Z",
+    "sha256": "a01a8fbabeeeeff46c0195dce527658a657cd1dd3c1dd7d4b1adcfb543e27f29"
+  },
+  "applied": {
+    "at": "2026-11-21T16:43:19Z",
+    "approved_by": "Mark Kendall",
+    "changed": [
+      "frontend/playwright.config.mjs",
+      "frontend/package.json",
+      "backend/pom.xml",
+      "verify.config.json"
+    ]
+  },
+  "amendments": [
+    {
+      "at": "2026-11-21T16:44:54Z",
+      "approved_by": "Mark Kendall",
+      "file": "frontend/playwright.config.mjs",
+      "change": "UI test port 5173 -> 5310: 5173 was held by another local dev server and the runner sets CI=1 (no server reuse)."
+    }
+  ]
+}
