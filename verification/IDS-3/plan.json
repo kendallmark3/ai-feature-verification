@@ -1,0 +1,152 @@
+{
+  "story": "IDS-3",
+  "summary": "Integrate AI Test Harness with Jira (summary field truncated in Jira, see Q-AI-1)",
+  "created": "2026-11-21T14:50:00Z",
+  "tagging": "pytest parametrize id 'IDS-3 AC-n' on every test in tests/ids3/",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "The harness retrieves a real Jira story using its issue key.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-1.a",
+          "description": "local adapter returns IDS-3 by key; malformed key rejected; cloud adapter GETs /rest/api/2/issue/IDS-3 with Basic auth; unknown key \u2192 error",
+          "suite": "harness",
+          "expected_evidence": [
+            "junit: harness \u00b7 request path and auth header seen by REST stand-in"
+          ]
+        },
+        {
+          "id": "AC-1.b",
+          "description": "LIVE: cloud adapter pulls IDS-3 from intentdrivenengineering.atlassian.net (skipped unless JIRA_* set)",
+          "suite": "harness",
+          "expected_evidence": [
+            "junit: harness (skip reason recorded when no credentials)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-2",
+      "text": "Story descriptions and acceptance criteria are extracted correctly.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-2.a",
+          "description": "8 criteria extracted from the real Description, texts exact; description kept verbatim; same from REST v2 wiki markup",
+          "suite": "harness",
+          "expected_evidence": [
+            "junit: harness \u00b7 extracted AC texts"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-3",
+      "text": "Missing acceptance criteria prevent test execution.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-3.a",
+          "description": "Gate 1 flags NO_ACCEPTANCE_CRITERIA; plan --check fails with zero ACs; run refuses to execute suites with zero ACs",
+          "suite": "harness",
+          "expected_evidence": [
+            "junit: harness \u00b7 exit code and suite-ran marker"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-4",
+      "text": "Test plans map test cases to acceptance criteria.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-4.a",
+          "description": "IDS-3 plan lists AC-1..AC-8 and validates; tagged test names map to ACs; documented pytest classname tag recognised",
+          "suite": "harness",
+          "expected_evidence": [
+            "junit: harness"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-5",
+      "text": "Jira integration tests produce deterministic results.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-5.a",
+          "description": "same snapshot \u2192 identical ACs and Gate 1 questions; same REST response \u2192 identical normalised issue",
+          "suite": "harness",
+          "expected_evidence": [
+            "junit: harness"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-6",
+      "text": "Verification reports distinguish passed, failed, skipped, and blocked tests.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-6.a",
+          "description": "JUnit pass/fail/skip/error classified; guardrail breach \u2192 BLOCKED suite; report lists all four outcomes",
+          "suite": "harness",
+          "expected_evidence": [
+            "junit: harness"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-7",
+      "text": "Authorized verification results can be posted to Jira.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-7.a",
+          "description": "local adapter appends comment; cloud adapter POSTs to /rest/api/2/issue/IDS-3/comment; approve without --by refused",
+          "suite": "harness",
+          "expected_evidence": [
+            "junit: harness \u00b7 POST path and body seen by REST stand-in \u00b7 live MCP comment ID once authorised"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AC-8",
+      "text": "Existing simulated-Jira tests remain operational.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "checks": [
+        {
+          "id": "AC-8.a",
+          "description": "SHOP-142 simulated story still yields its committed criteria; existing engine unit suite passes",
+          "suite": "harness",
+          "expected_evidence": [
+            "junit: harness \u00b7 unittest exit code"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "frameworks": [
+    {
+      "framework": "node-test",
+      "where": "demo-app",
+      "marker": "package.json:scripts"
+    },
+    {
+      "framework": "npm-scripts",
+      "where": "demo-app",
+      "marker": "package.json",
+      "scripts": {
+        "pretest:api": "node -e \"require('fs').mkdirSync('reports',{recursive:true})\"",
+        "test:api": "node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/api-junit.xml \"tests/api/**/*.test.mjs\"",
+        "test:e2e": "playwright test",
+        "test": "npm run test:api && npm run test:e2e"
+      }
+    },
+    {
+      "framework": "playwright",
+      "where": "demo-app",
+      "marker": "package.json:@playwright/test"
+    }
+  ],
+  "configured_suites": {
+    "api": {
+      "command": "npm run test:api",
+      "cwd": "demo-app"
+    },
+    "e2e": {
+      "command": "npx playwright test",
+      "cwd": "demo-app"
+    }
+  },
+  "tests": [
+    {
+      "path": "demo-app/tests/api/cart.test.mjs",
+      "ac_tags": [],
+      "ai_proposed": false,
+      "approved": false
+    },
+    {
+      "path": "demo-app/tests/api/discount.test.mjs",
+      "ac_tags": [
+        "AC-2",
+        "AC-3",
+        "SHOP-142/AC-2",
+        "SHOP-142/AC-3"
+      ],
+      "ai_proposed": true,
+      "approved": false
+    },
+    {
+      "path": "demo-app/tests/e2e/cart.spec.js",
+      "ac_tags": [],
+      "ai_proposed": false,
+      "approved": false
+    },
+    {
+      "path": "demo-app/tests/e2e/discount.spec.js",
+      "ac_tags": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "AC-5",
+        "SHOP-142/AC-1",
+        "SHOP-142/AC-2",
+        "SHOP-142/AC-3",
+        "SHOP-142/AC-5"
+      ],
+      "ai_proposed": true,
+      "approved": false
+    },
+    {
+      "path": "docs/sample-run/SHOP-142/tests/discount.spec.js",
+      "ac_tags": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "AC-5",
+        "SHOP-142/AC-1",
+        "SHOP-142/AC-2",
+        "SHOP-142/AC-3",
+        "SHOP-142/AC-5"
+      ],
+      "ai_proposed": false,
+      "approved": true
+    },
+    {
+      "path": "docs/sample-run/SHOP-142/tests/discount.test.mjs",
+      "ac_tags": [
+        "AC-2",
+        "AC-3",
+        "SHOP-142/AC-2",
+        "SHOP-142/AC-3"
+      ],
+      "ai_proposed": false,
+      "approved": true
+    },
+    {
+      "path": "docs/validation/INTENT-001/fixtures/deliberate-proposed.spec.js",
+      "ac_tags": [
+        "SHOP-142/AC-3"
+      ],
+      "ai_proposed": true,
+      "approved": false
+    },
+    {
+      "path": "docs/validation/INTENT-001/fixtures/deliberate-reviewed.test.mjs",
+      "ac_tags": [
+        "SHOP-142/AC-2"
+      ],
+      "ai_proposed": false,
+      "approved": false
+    },
+    {
+      "path": "tests/verifykit/test_intent001.py",
+      "ac_tags": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "DEMO-1/AC-1",
+        "DEMO-1/AC-2",
+        "DEMO-1/AC-3"
+      ],
+      "ai_proposed": true,
+      "approved": false
+    },
+    {
+      "path": "tests/verifykit/test_verifykit.py",
+      "ac_tags": [
+        "AC-1",
+        "AC-2",
+        "OTHER-9/AC-2",
+        "SHOP-1/AC-2",
+        "SHOP-1/AC-3"
+      ],
+      "ai_proposed": false,
+      "approved": false
+    }
+  ],
+  "summary": {
+    "test_files": 10,
+    "files_with_ac_tags": 8,
+    "ai_proposed_unapproved": [
+      "demo-app/tests/api/discount.test.mjs",
+      "demo-app/tests/e2e/discount.spec.js",
+      "docs/validation/INTENT-001/fixtures/deliberate-proposed.spec.js",
+      "tests/verifykit/test_intent001.py"
+    ],
+    "unconfigured_frameworks": []
+  }
+}

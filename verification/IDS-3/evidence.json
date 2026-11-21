@@ -1,0 +1,921 @@
+{
+  "story": "IDS-3",
+  "run_id": "20261121T144836Z",
+  "mode": "interactive",
+  "environment": "local",
+  "git_sha": "76f0f23",
+  "working_tree": {
+    "clean": false,
+    "changed": [
+      "jira/IDS-3.json",
+      "verify.config.json",
+      "tests/ids3/test_ids3_jira_integration.py"
+    ],
+    "protected_source_changed": [],
+    "committed_tests_changed": []
+  },
+  "started": "2026-11-21T14:48:36Z",
+  "finished": "2026-11-21T14:48:43Z",
+  "target": {
+    "BASE_URL": ""
+  },
+  "unpromoted": {
+    "policy": "executed-unpromoted",
+    "files": [
+      "tests/ids3/test_ids3_jira_integration.py"
+    ]
+  },
+  "suites": {
+    "harness": {
+      "status": "ran",
+      "reason": "",
+      "exit_code": 1,
+      "cases": 25,
+      "log": "verification/IDS-3/runs/20261121T144836Z/harness.log",
+      "error": false,
+      "command": "python3 -m pytest tests/ids3 -q -p no:cacheprovider --junitxml=reports/harness-junit.xml",
+      "cwd": ".",
+      "framework": "pytest",
+      "env": {
+        "BASE_URL": ""
+      },
+      "unpromoted": [
+        "tests/ids3/test_ids3_jira_integration.py"
+      ],
+      "withheld": []
+    }
+  },
+  "coverage": [
+    {
+      "id": "AC-1",
+      "text": "The harness retrieves a real Jira story using its issue key.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [
+        "Q-1"
+      ],
+      "tests": [
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_local_adapter_returns_the_real_story_by_key[IDS-3 AC-1]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_malformed_key_is_rejected_before_any_lookup[IDS-3 AC-1]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_cloud_adapter_requests_the_issue_by_key_with_basic_auth[IDS-3 AC-1]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_cloud_adapter_reports_an_unknown_key_as_an_error[IDS-3 AC-1]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_live_cloud_adapter_pulls_ids3_with_eight_criteria[IDS-3 AC-1 AC-2]",
+          "status": "skip",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "unresolved",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-2",
+      "text": "Story descriptions and acceptance criteria are extracted correctly.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [
+        "Q-2"
+      ],
+      "tests": [
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_live_cloud_adapter_pulls_ids3_with_eight_criteria[IDS-3 AC-1 AC-2]",
+          "status": "skip",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_eight_criteria_extracted_from_the_real_description[IDS-3 AC-2]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_description_is_kept_verbatim[IDS-3 AC-2]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_criteria_extracted_from_rest_v2_wiki_markup[IDS-3 AC-2]",
+          "status": "fail",
+          "message": "ac = 'IDS-3 AC-2' \u2014 fake_jira = <test_ids3_jira_integration.FakeJiraV2 object at 0x7f7e4a57c050>",
+          "attachments": [],
+          "origin": "unknown"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "fail",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-3",
+      "text": "Missing acceptance criteria prevent test execution.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [
+        "Q-3"
+      ],
+      "tests": [
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_gate1_flags_a_story_without_criteria[IDS-3 AC-3]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_plan_check_fails_when_the_story_has_no_criteria[IDS-3 AC-3]",
+          "status": "fail",
+          "message": "ac = 'IDS-3 AC-3', sandbox = PosixPath('/tmp/tmpbtpqu3ae') \u2014 @tag(\"AC-3\")",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_run_refuses_to_execute_without_criteria[IDS-3 AC-3]",
+          "status": "fail",
+          "message": "ac = 'IDS-3 AC-3', sandbox = PosixPath('/tmp/tmpzi3d3i2p') \u2014 @tag(\"AC-3\")",
+          "attachments": [],
+          "origin": "unknown"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "fail",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-4",
+      "text": "Test plans map test cases to acceptance criteria.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [
+        "Q-4"
+      ],
+      "tests": [
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_the_ids3_plan_covers_every_criterion_and_validates[IDS-3 AC-4]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_tagged_test_names_map_to_their_criteria[IDS-3 AC-4]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_documented_pytest_classname_tag_is_recognised[IDS-3 AC-4]",
+          "status": "fail",
+          "message": "ac = 'IDS-3 AC-4' \u2014 @tag(\"AC-4\")",
+          "attachments": [],
+          "origin": "unknown"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "fail",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-5",
+      "text": "Jira integration tests produce deterministic results.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [
+        "Q-5"
+      ],
+      "tests": [
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_pulling_the_same_story_twice_gives_identical_criteria[IDS-3 AC-5]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_gate1_questions_are_identical_on_every_run[IDS-3 AC-5]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_cloud_adapter_normalises_the_same_response_identically[IDS-3 AC-5]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "unresolved",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-6",
+      "text": "Verification reports distinguish passed, failed, skipped, and blocked tests.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [
+        "Q-6"
+      ],
+      "tests": [
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_junit_cases_are_classified_pass_fail_skip[IDS-3 AC-6]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_a_guardrail_violation_marks_the_suite_blocked_not_failed[IDS-3 AC-6]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_report_shows_all_four_outcomes[IDS-3 AC-6]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "unresolved",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-7",
+      "text": "Authorized verification results can be posted to Jira.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [
+        "Q-7"
+      ],
+      "tests": [
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_local_adapter_appends_the_comment_to_the_story[IDS-3 AC-7]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_cloud_adapter_posts_the_comment_to_the_originating_issue[IDS-3 AC-7]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_approval_without_a_named_person_is_refused[IDS-3 AC-7]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "unresolved",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-8",
+      "text": "Existing simulated-Jira tests remain operational.",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [
+        "Q-8"
+      ],
+      "tests": [
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_simulated_shop142_still_pulls_its_criteria[IDS-3 AC-8]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        },
+        {
+          "suite": "harness",
+          "project": "vm",
+          "name": "test_existing_engine_suite_passes[IDS-3 AC-8]",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unknown"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "unresolved",
+      "evidence_basis": "unreviewed"
+    }
+  ],
+  "unplanned_ac_tags": [],
+  "gate1": {
+    "questions": 9,
+    "answered": 0,
+    "open": [
+      "Q-1",
+      "Q-2",
+      "Q-3",
+      "Q-4",
+      "Q-5",
+      "Q-6",
+      "Q-7",
+      "Q-8",
+      "Q-9"
+    ],
+    "passed": false,
+    "open_by_ac": {
+      "AC-1": [
+        "Q-1"
+      ],
+      "AC-2": [
+        "Q-2"
+      ],
+      "AC-3": [
+        "Q-3"
+      ],
+      "AC-4": [
+        "Q-4"
+      ],
+      "AC-5": [
+        "Q-5"
+      ],
+      "AC-6": [
+        "Q-6"
+      ],
+      "AC-7": [
+        "Q-7"
+      ],
+      "AC-8": [
+        "Q-8"
+      ]
+    },
+    "story_level_open": [
+      "Q-9"
+    ],
+    "open_detail": [
+      {
+        "id": "Q-1",
+        "acs": [
+          "AC-1"
+        ],
+        "topic": "AC-1 \u00b7 NO_OBSERVABLE_OUTCOME",
+        "owner": "Mark Kendall"
+      },
+      {
+        "id": "Q-2",
+        "acs": [
+          "AC-2"
+        ],
+        "topic": "AC-2 \u00b7 VAGUE_TERM",
+        "owner": "Mark Kendall"
+      },
+      {
+        "id": "Q-3",
+        "acs": [
+          "AC-3"
+        ],
+        "topic": "AC-3 \u00b7 NO_OBSERVABLE_OUTCOME",
+        "owner": "Mark Kendall"
+      },
+      {
+        "id": "Q-4",
+        "acs": [
+          "AC-4"
+        ],
+        "topic": "AC-4 \u00b7 NO_OBSERVABLE_OUTCOME",
+        "owner": "Mark Kendall"
+      },
+      {
+        "id": "Q-5",
+        "acs": [
+          "AC-5"
+        ],
+        "topic": "AC-5 \u00b7 NO_OBSERVABLE_OUTCOME",
+        "owner": "Mark Kendall"
+      },
+      {
+        "id": "Q-6",
+        "acs": [
+          "AC-6"
+        ],
+        "topic": "AC-6 \u00b7 NO_OBSERVABLE_OUTCOME",
+        "owner": "Mark Kendall"
+      },
+      {
+        "id": "Q-7",
+        "acs": [
+          "AC-7"
+        ],
+        "topic": "AC-7 \u00b7 NO_OBSERVABLE_OUTCOME",
+        "owner": "Mark Kendall"
+      },
+      {
+        "id": "Q-8",
+        "acs": [
+          "AC-8"
+        ],
+        "topic": "AC-8 \u00b7 NO_OBSERVABLE_OUTCOME",
+        "owner": "Mark Kendall"
+      },
+      {
+        "id": "Q-9",
+        "acs": [],
+        "topic": "STORY \u00b7 NO_EXAMPLES",
+        "owner": "Mark Kendall"
+      }
+    ]
+  },
+  "regression": {
+    "total": 0,
+    "passed": 0,
+    "failed": []
+  },
+  "cases": [
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_local_adapter_returns_the_real_story_by_key[IDS-3 AC-1]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.001,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-1"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_malformed_key_is_rejected_before_any_lookup[IDS-3 AC-1]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.0,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-1"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_cloud_adapter_requests_the_issue_by_key_with_basic_auth[IDS-3 AC-1]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.533,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-1"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_cloud_adapter_reports_an_unknown_key_as_an_error[IDS-3 AC-1]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.503,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-1"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_live_cloud_adapter_pulls_ids3_with_eight_criteria[IDS-3 AC-1 AC-2]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.0,
+      "status": "skip",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-1",
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_eight_criteria_extracted_from_the_real_description[IDS-3 AC-2]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.005,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_description_is_kept_verbatim[IDS-3 AC-2]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.002,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_criteria_extracted_from_rest_v2_wiki_markup[IDS-3 AC-2]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.49,
+      "status": "fail",
+      "message": "ac = 'IDS-3 AC-2' \u2014 fake_jira = <test_ids3_jira_integration.FakeJiraV2 object at 0x7f7e4a57c050>",
+      "details": "ac = 'IDS-3 AC-2'\nfake_jira = <test_ids3_jira_integration.FakeJiraV2 object at 0x7f7e4a57c050>\nsandbox = PosixPath('/tmp/tmprpertyth')\n\n    @tag(\"AC-2\")\n    def test_criteria_extracted_from_rest_v2_wiki_markup(ac, fake_jira, sandbox):\n        \"\"\"The cloud adapter reads REST v2, which returns wiki markup (\"# item\"), not markdown.\"\"\"\n        issue = CloudJira(fake_jira.url, \"qa@example.com\", \"test-token\", None).get_issue(\"IDS-3\")\n        lines = story._ac_block_from_description(issue[\"description\"])\n        acs = story.parse_acceptance_criteria(lines)\n>       assert [a[\"text\"] for a in acs] == EXPECTED_ACS\nE       AssertionError: assert [] == ['The harness... tests.', ...]\nE         \nE         Right contains 8 more items, first extra item: 'The harness retrieves a real Jira story using its issue key.'\nE         \nE         Full diff:\nE         + []\nE         - [\nE         -     'The harness retrieves a real Jira story using its issue key.',\nE         -     'Story descriptions and acceptance criteria are extracted correctly.',\nE         -     'Missing acceptance criteria prevent test execution.',\nE         -     'Test plans map test cases to acceptance criteria.',\nE         -     'Jira integration tests produce deterministic results.',\nE         -     'Verification reports distinguish passed, failed, skipped, and blocked '\nE         -     'tests.',\nE         -     'Authorized verification results can be posted to Jira.',\nE         -     'Existing simulated-Jira tests remain operational.',\nE         - ]\n\ntests/ids3/test_ids3_jira_integration.py:183: AssertionError",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_gate1_flags_a_story_without_criteria[IDS-3 AC-3]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.001,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_plan_check_fails_when_the_story_has_no_criteria[IDS-3 AC-3]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.003,
+      "status": "fail",
+      "message": "ac = 'IDS-3 AC-3', sandbox = PosixPath('/tmp/tmpbtpqu3ae') \u2014 @tag(\"AC-3\")",
+      "details": "ac = 'IDS-3 AC-3', sandbox = PosixPath('/tmp/tmpbtpqu3ae')\n\n    @tag(\"AC-3\")\n    def test_plan_check_fails_when_the_story_has_no_criteria(ac, sandbox):\n        (sandbox / \"jira\" / \"EMPTY-1.json\").write_text(json.dumps({\"key\": \"EMPTY-1\", \"summary\": \"s\", \"description\": \"\"}))\n        cfg = cfg_for(sandbox)\n        story.pull(cfg, \"EMPTY-1\")\n        plan.init(cfg, \"EMPTY-1\")\n>       assert plan.validate(cfg, \"EMPTY-1\"), \"an empty plan must not validate\"\nE       AssertionError: an empty plan must not validate\nE       assert []\nE        +  where [] = <function validate at 0x7f7e4a545a80>({'_root': '/tmp/tmpbtpqu3ae', 'output_dir': 'verification', 'jira': {'adapter': 'local', 'path': 'jira'}, 'suites': {'harness': {'command': 'python3 -m pytest'}}}, 'EMPTY-1')\nE        +    where <function validate at 0x7f7e4a545a80> = plan.validate\n\ntests/ids3/test_ids3_jira_integration.py:200: AssertionError",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_run_refuses_to_execute_without_criteria[IDS-3 AC-3]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.171,
+      "status": "fail",
+      "message": "ac = 'IDS-3 AC-3', sandbox = PosixPath('/tmp/tmpzi3d3i2p') \u2014 @tag(\"AC-3\")",
+      "details": "ac = 'IDS-3 AC-3', sandbox = PosixPath('/tmp/tmpzi3d3i2p')\n\n    @tag(\"AC-3\")\n    def test_run_refuses_to_execute_without_criteria(ac, sandbox):\n        marker = sandbox / \"suite-ran.txt\"\n        (sandbox / \"jira\" / \"EMPTY-1.json\").write_text(json.dumps({\"key\": \"EMPTY-1\", \"summary\": \"s\", \"description\": \"\"}))\n        (sandbox / \"verify.config.json\").write_text(json.dumps({\n            \"output_dir\": \"verification\", \"jira\": {\"adapter\": \"local\", \"path\": \"jira\"},\n            \"environments\": {\"local\": {\"BASE_URL\": \"\", \"allow_shared_data_writes\": True}},\n            \"guardrails\": {\"allowed_commands\": [\"python3\"], \"deny_url_patterns\": [], \"protected_paths\": [],\n                           \"max_runtime_seconds\": 60},\n            \"suites\": {\"s\": {\"cwd\": \".\", \"command\": f\"python3 -c \\\"open('{marker.name}','w').write('ran')\\\"\",\n                             \"junit\": [], \"artifacts\": [], \"test_paths\": [\"tests\"]}}}))\n        subprocess.run([sys.executable, str(VERIFY), \"story\", \"EMPTY-1\"], cwd=sandbox, capture_output=True)\n        r = subprocess.run([sys.executable, str(VERIFY), \"run\", \"EMPTY-1\"], cwd=sandbox, capture_output=True, text=True)\n>       assert r.returncode != 0 and not marker.exists(), f\"suite executed for a story with no criteria (exit {r.returncode})\"\nE       AssertionError: suite executed for a story with no criteria (exit 0)\nE       assert (0 != 0)\nE        +  where 0 = CompletedProcess(args=['/usr/local/bin/python3', '/home/claude/ai-feature-verification/.claude/skills/verify-feature/s... in 0.02s \u00b7 0 report(s), 0 artifact(s)\\n\\nRun 20261121T144838Z finished. Suites with non-zero exit: none\\n', stderr='').returncode\n\ntests/ids3/test_ids3_jira_integration.py:216: AssertionError",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_the_ids3_plan_covers_every_criterion_and_validates[IDS-3 AC-4]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.001,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-4"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_tagged_test_names_map_to_their_criteria[IDS-3 AC-4]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.0,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-4"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_documented_pytest_classname_tag_is_recognised[IDS-3 AC-4]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.0,
+      "status": "fail",
+      "message": "ac = 'IDS-3 AC-4' \u2014 @tag(\"AC-4\")",
+      "details": "ac = 'IDS-3 AC-4'\n\n    @tag(\"AC-4\")\n    def test_documented_pytest_classname_tag_is_recognised(ac):\n        \"\"\"references/ac-tagging.md says a pytest class named TestSHOP142_AC2 is enough.\"\"\"\n>       assert evidence._tags({\"name\": \"test_total\", \"classname\": \"tests.test_cart.TestIDS3_AC4\"}, \"IDS-3\") == [\"AC-4\"]\nE       AssertionError: assert [] == ['AC-4']\nE         \nE         Right contains one more item: 'AC-4'\nE         \nE         Full diff:\nE         + []\nE         - [\nE         -     'AC-4',\nE         - ]\n\ntests/ids3/test_ids3_jira_integration.py:240: AssertionError",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-4"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_pulling_the_same_story_twice_gives_identical_criteria[IDS-3 AC-5]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.002,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-5"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_gate1_questions_are_identical_on_every_run[IDS-3 AC-5]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.006,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-5"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_cloud_adapter_normalises_the_same_response_identically[IDS-3 AC-5]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.503,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-5"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_junit_cases_are_classified_pass_fail_skip[IDS-3 AC-6]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.007,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-6"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_a_guardrail_violation_marks_the_suite_blocked_not_failed[IDS-3 AC-6]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.0,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-6"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_report_shows_all_four_outcomes[IDS-3 AC-6]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.001,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-6"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_local_adapter_appends_the_comment_to_the_story[IDS-3 AC-7]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.002,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-7"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_cloud_adapter_posts_the_comment_to_the_originating_issue[IDS-3 AC-7]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.503,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-7"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_approval_without_a_named_person_is_refused[IDS-3 AC-7]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.071,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-7"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_simulated_shop142_still_pulls_its_criteria[IDS-3 AC-8]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 0.002,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-8"
+      ]
+    },
+    {
+      "suite": "harness",
+      "project": "vm",
+      "name": "test_existing_engine_suite_passes[IDS-3 AC-8]",
+      "classname": "tests.ids3.test_ids3_jira_integration",
+      "time_s": 3.407,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unknown",
+      "ac": [
+        "AC-8"
+      ]
+    }
+  ]
+}

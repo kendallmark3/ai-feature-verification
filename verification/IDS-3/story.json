@@ -1,0 +1,43 @@
+{
+  "key": "IDS-3",
+  "summary": "Here\u2019s our first Jira story, ready to paste into your project.  Story: Integrate AI Test Harness with Jira  Story Type: Story Priority: High Epic: AI Test Harness Labels: jira-integration, test-automation, intent-driven-engineering  User Story  As a QA en",
+  "type": "Story",
+  "status": "In Progress",
+  "description": "## Acceptance Criteria\n\n1. The harness retrieves a real Jira story using its issue key.\n2. Story descriptions and acceptance criteria are extracted correctly.\n3. Missing acceptance criteria prevent test execution.\n4. Test plans map test cases to acceptance criteria.\n5. Jira integration tests produce deterministic results.\n6. Verification reports distinguish passed, failed, skipped, and blocked tests.\n7. Authorized verification results can be posted to Jira.\n8. Existing simulated-Jira tests remain operational.\n\n",
+  "reporter": "Mark Kendall",
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "text": "The harness retrieves a real Jira story using its issue key."
+    },
+    {
+      "id": "AC-2",
+      "text": "Story descriptions and acceptance criteria are extracted correctly."
+    },
+    {
+      "id": "AC-3",
+      "text": "Missing acceptance criteria prevent test execution."
+    },
+    {
+      "id": "AC-4",
+      "text": "Test plans map test cases to acceptance criteria."
+    },
+    {
+      "id": "AC-5",
+      "text": "Jira integration tests produce deterministic results."
+    },
+    {
+      "id": "AC-6",
+      "text": "Verification reports distinguish passed, failed, skipped, and blocked tests."
+    },
+    {
+      "id": "AC-7",
+      "text": "Authorized verification results can be posted to Jira."
+    },
+    {
+      "id": "AC-8",
+      "text": "Existing simulated-Jira tests remain operational."
+    }
+  ],
+  "pulled_at": "2026-11-21T14:46:31Z"
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "ac": "AC-1",
+    "rule": "NO_OBSERVABLE_OUTCOME",
+    "quote": "The harness retrieves a real Jira story using its issue key.",
+    "question": "What does the user or caller observe when this is met (a message, a value, a status)?",
+    "id": "Q-1"
+  },
+  {
+    "ac": "AC-2",
+    "rule": "VAGUE_TERM",
+    "quote": "Story descriptions and acceptance criteria are extracted correctly.",
+    "question": "'correctly' can't be tested as written. What exact, observable result counts as passing?",
+    "id": "Q-2"
+  },
+  {
+    "ac": "AC-3",
+    "rule": "NO_OBSERVABLE_OUTCOME",
+    "quote": "Missing acceptance criteria prevent test execution.",
+    "question": "What does the user or caller observe when this is met (a message, a value, a status)?",
+    "id": "Q-3"
+  },
+  {
+    "ac": "AC-4",
+    "rule": "NO_OBSERVABLE_OUTCOME",
+    "quote": "Test plans map test cases to acceptance criteria.",
+    "question": "What does the user or caller observe when this is met (a message, a value, a status)?",
+    "id": "Q-4"
+  },
+  {
+    "ac": "AC-5",
+    "rule": "NO_OBSERVABLE_OUTCOME",
+    "quote": "Jira integration tests produce deterministic results.",
+    "question": "What does the user or caller observe when this is met (a message, a value, a status)?",
+    "id": "Q-5"
+  },
+  {
+    "ac": "AC-6",
+    "rule": "NO_OBSERVABLE_OUTCOME",
+    "quote": "Verification reports distinguish passed, failed, skipped, and blocked tests.",
+    "question": "What does the user or caller observe when this is met (a message, a value, a status)?",
+    "id": "Q-6"
+  },
+  {
+    "ac": "AC-7",
+    "rule": "NO_OBSERVABLE_OUTCOME",
+    "quote": "Authorized verification results can be posted to Jira.",
+    "question": "What does the user or caller observe when this is met (a message, a value, a status)?",
+    "id": "Q-7"
+  },
+  {
+    "ac": "AC-8",
+    "rule": "NO_OBSERVABLE_OUTCOME",
+    "quote": "Existing simulated-Jira tests remain operational.",
+    "question": "What does the user or caller observe when this is met (a message, a value, a status)?",
+    "id": "Q-8"
+  },
+  {
+    "ac": "STORY",
+    "rule": "NO_EXAMPLES",
+    "quote": "",
+    "question": "No criterion has a concrete value or example. Can you give at least one worked example?",
+    "id": "Q-9"
+  }
+]

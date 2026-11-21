@@ -1,0 +1,222 @@
+{
+  "story": "IDS-3",
+  "summary": "Here\u2019s our first Jira story, ready to paste into your project.  Story: Integrate AI Test Harness with Jira  Story Type: Story Priority: High Epic: AI Test Harness Labels: jira-integration, test-automation, intent-driven-engineering  User Story  As a QA en",
+  "verdict": "NOT VERIFIED",
+  "reasons": [
+    "Failing criteria: AC-2, AC-3, AC-4"
+  ],
+  "generated": "2026-11-21T14:49:00Z",
+  "run_id": "20261121T144836Z",
+  "mode": "interactive",
+  "environment": "local",
+  "git_sha": "76f0f23",
+  "working_tree_clean": false,
+  "gates": {
+    "gate1_clarify": "open",
+    "gate2_promote": "open (3 file(s))",
+    "gate3_approve": "pending human decision"
+  },
+  "tests": {
+    "passed": 20,
+    "failed": 4,
+    "skipped": 1,
+    "suites_not_run": []
+  },
+  "not_run": {},
+  "withheld": [],
+  "open_questions": [
+    {
+      "id": "Q-1",
+      "acs": [
+        "AC-1"
+      ],
+      "topic": "AC-1 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-2",
+      "acs": [
+        "AC-2"
+      ],
+      "topic": "AC-2 \u00b7 VAGUE_TERM",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-3",
+      "acs": [
+        "AC-3"
+      ],
+      "topic": "AC-3 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-4",
+      "acs": [
+        "AC-4"
+      ],
+      "topic": "AC-4 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-5",
+      "acs": [
+        "AC-5"
+      ],
+      "topic": "AC-5 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-6",
+      "acs": [
+        "AC-6"
+      ],
+      "topic": "AC-6 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-7",
+      "acs": [
+        "AC-7"
+      ],
+      "topic": "AC-7 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-8",
+      "acs": [
+        "AC-8"
+      ],
+      "topic": "AC-8 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-9",
+      "acs": [],
+      "topic": "STORY \u00b7 NO_EXAMPLES",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-AI-1",
+      "acs": [],
+      "topic": "STORY \u00b7 SUMMARY_TRUNCATED",
+      "owner": "Mark Kendall"
+    }
+  ],
+  "findings": {
+    "total": 4,
+    "by_classification": {
+      "requirement ambiguity": 4
+    }
+  },
+  "coverage": [
+    {
+      "id": "AC-1",
+      "status": "unresolved",
+      "text": "The harness retrieves a real Jira story using its issue key.",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 4,
+      "passed": 4,
+      "open_questions": [
+        "Q-1"
+      ],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-2",
+      "status": "fail",
+      "text": "Story descriptions and acceptance criteria are extracted correctly.",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 3,
+      "passed": 2,
+      "open_questions": [
+        "Q-2"
+      ],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-3",
+      "status": "fail",
+      "text": "Missing acceptance criteria prevent test execution.",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 3,
+      "passed": 1,
+      "open_questions": [
+        "Q-3"
+      ],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-4",
+      "status": "fail",
+      "text": "Test plans map test cases to acceptance criteria.",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 3,
+      "passed": 2,
+      "open_questions": [
+        "Q-4"
+      ],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-5",
+      "status": "unresolved",
+      "text": "Jira integration tests produce deterministic results.",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 3,
+      "passed": 3,
+      "open_questions": [
+        "Q-5"
+      ],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-6",
+      "status": "unresolved",
+      "text": "Verification reports distinguish passed, failed, skipped, and blocked tests.",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 3,
+      "passed": 3,
+      "open_questions": [
+        "Q-6"
+      ],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-7",
+      "status": "unresolved",
+      "text": "Authorized verification results can be posted to Jira.",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 3,
+      "passed": 3,
+      "open_questions": [
+        "Q-7"
+      ],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-8",
+      "status": "unresolved",
+      "text": "Existing simulated-Jira tests remain operational.",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 2,
+      "passed": 2,
+      "open_questions": [
+        "Q-8"
+      ],
+      "evidence_basis": "unreviewed"
+    }
+  ],
+  "regression": {
+    "total": 0,
+    "passed": 0,
+    "failed": []
+  }
+}
