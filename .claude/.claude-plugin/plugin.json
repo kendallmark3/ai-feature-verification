@@ -1,0 +1,11 @@
+{
+  "name": "ai-feature-verification",
+  "description": "Verify a Jira story with evidence: pull the story (real Jira Cloud or simulated), plan against its acceptance criteria, write tests in your own framework, run them deterministically, and report per criterion. People decide at three gates.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Mark Kendall"
+  },
+  "homepage": "https://intent-driven-engineering.com",
+  "repository": "https://github.com/kendallmark3/ai-feature-verification",
+  "keywords": ["testing", "jira", "verification", "qa", "intent-driven-engineering"]
+}

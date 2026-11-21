@@ -8,6 +8,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from .story import load as load_story
+from .story import require_criteria
 from .util import VerifyError, now_iso, out_dir, read_json, write_json, write_text
 
 DISPOSITIONS = {"verify", "not-verifiable", "out-of-scope"}
@@ -51,6 +52,9 @@ def _open_by_ac(cfg: dict, key: str) -> dict:
 def validate(cfg: dict, key: str) -> list[str]:
     plan = load(cfg, key)
     story = load_story(cfg, key)
+    if not story.get("acceptance_criteria"):
+        return [f"{key} has no acceptance criteria, so there is nothing to plan. Answer Gate 1 "
+                "(NO_ACCEPTANCE_CRITERIA) in Jira, then pull the story again."]
     suites = cfg.get("suites", {})
     unresolved = _open_by_ac(cfg, key)
     problems: list[str] = []

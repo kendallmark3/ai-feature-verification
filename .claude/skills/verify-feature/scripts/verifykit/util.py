@@ -157,3 +157,18 @@ def rel(path: Path, root: Path) -> str:
         return str(Path(path).resolve().relative_to(root.resolve())).replace("\\", "/")
     except ValueError:
         return str(path)
+
+
+_ENGINE = Path(__file__).resolve().parents[1] / "verify.py"
+
+
+def verify_cmd(root: Path | str) -> str:
+    """How to call the engine from the repo root, for text written into reports.
+
+    Inside the repo it is the relative path; installed as a plugin it lives elsewhere, so the
+    plugin-root form is written instead (stable across machines, so reports stay deterministic).
+    """
+    try:
+        return "python3 " + _ENGINE.relative_to(Path(root).resolve()).as_posix()
+    except ValueError:
+        return 'python3 "${CLAUDE_PLUGIN_ROOT}/skills/verify-feature/scripts/verify.py"'

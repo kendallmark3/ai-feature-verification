@@ -26,10 +26,13 @@ anything: it pulls the story, runs the commands in `verify.config.json`, parses 
 XML, and computes coverage. You do the thinking it can't: judging gaps, writing the
 plan, writing tests, triaging failures, explaining results.
 
-Run every command from the repository root:
+Run every command from the root of the repository being verified. The engine ships inside
+this skill, so take its path from this skill's base directory (shown when the skill loads;
+in the ai-feature-verification repo it is `.claude/skills/verify-feature`, and installed as a
+plugin it is in the plugin's install folder):
 
 ```bash
-V=.claude/skills/verify-feature/scripts/verify.py
+V="<this skill's base directory>/scripts/verify.py"
 ```
 
 ## Before you start
@@ -39,12 +42,21 @@ V=.claude/skills/verify-feature/scripts/verify.py
   test command and run it.
 - Read `references/guardrails.md`. Never point a run at production, never put secrets in
   files, never install packages or change CI without asking.
+- **Real Jira** (`references/jira.md`): the `cloud` adapter reads `JIRA_BASE_URL`,
+  `JIRA_EMAIL` and `JIRA_API_TOKEN` from the environment. If they are exported when `init`
+  runs, it configures the cloud adapter for you. If `story` fails because they are missing,
+  tell the person to export them in their own shell (an Atlassian API token, from
+  id.atlassian.com → Security → API tokens) and restart Claude Code. **Never ask for the
+  token in chat and never write it into any file.**
 
 ## The loop
 
 Work through these in order without pausing for confirmation. Track them in the task list.
 
 1. **Pull the story.** `python3 $V story <KEY>`. Check the AC IDs it assigned look right.
+   If it finds no criteria, stop: Gate 1 records NO_ACCEPTANCE_CRITERIA, and `plan` and
+   `run` refuse until the story in Jira has them (a numbered list under an "Acceptance
+   Criteria" heading in the description). Tell the person exactly that.
 2. **Inspect the repo.** `python3 $V inspect <KEY>`. Then read the existing tests for the
    area the story touches and the code they exercise, so new tests follow the team's
    conventions (file layout, helpers, selectors, fixtures).

@@ -14,8 +14,10 @@ Clarification is exception-based:
 - Every other criterion is planned, tested and reported normally.
 - An unanswered question is never treated as approval or as an implied answer.
 
+The engine lives in the sibling `verify-feature` skill (next to this skill's base directory):
+
 ```bash
-V=.claude/skills/verify-feature/scripts/verify.py
+V="<this skill's base directory>/../verify-feature/scripts/verify.py"
 ```
 
 1. If `verification/<KEY>/story.json` is missing, run `python3 $V story <KEY>`.

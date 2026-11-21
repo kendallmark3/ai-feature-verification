@@ -23,6 +23,7 @@ from pathlib import Path
 
 from . import guardrails as g
 from .inspect_repo import PROPOSED
+from .story import require_criteria
 from .util import (VerifyError, expand_env, git_changes, git_sha, git_show_head, now_iso, out_dir, read_json,
                    redact, rel, write_json)
 
@@ -115,6 +116,7 @@ def run(cfg: dict, key: str, suites: list[str] | None, mode: str, env_name: str)
     deny = rails.get("deny_url_patterns", [])
     timeout = int(rails.get("max_runtime_seconds", 900))
     g.check_no_literal_secrets({k: v for k, v in cfg.items() if not k.startswith("_")})
+    require_criteria(cfg, key)  # no acceptance criteria → nothing to verify, so nothing runs
 
     all_suites = cfg.get("suites", {})
     names = suites or list(all_suites)

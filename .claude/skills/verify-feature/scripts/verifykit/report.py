@@ -9,7 +9,7 @@ from . import jira
 from .guardrails import unapproved_tests
 from .inspect_repo import scan_tests
 from .plan import validate as validate_plan
-from .util import VerifyError, now_iso, out_dir, read_json, write_json, write_text
+from .util import VerifyError, now_iso, out_dir, read_json, verify_cmd, write_json, write_text
 
 ICON = {"pass": "PASS", "fail": "FAIL", "missing": "NOT COVERED", "not-verifiable": "NOT VERIFIABLE",
         "out-of-scope": "OUT OF SCOPE", "unresolved": "UNRESOLVED", "blocked": "BLOCKED"}
@@ -245,7 +245,7 @@ def build(cfg: dict, key: str) -> dict:
         "regression": dict(ev["regression"]),
     }
     write_json(d / "report.json", rep)
-    write_text(d / "VERIFICATION_REPORT.md", _markdown(key, story, ev, rep, findings, problems, open_detail))
+    write_text(d / "VERIFICATION_REPORT.md", _markdown(key, story, ev, rep, findings, problems, open_detail, cfg["_root"]))
     return rep
 
 
@@ -256,7 +256,7 @@ def _count(items) -> dict:
     return out
 
 
-def _markdown(key, story, ev, rep, findings, problems, open_detail) -> str:
+def _markdown(key, story, ev, rep, findings, problems, open_detail, root=".") -> str:
     wt = ev.get("working_tree") or {}
     t = rep["tests"]
     L = [f"# Verification Report · {key}", "", f"**{story.get('summary', '')}**", "",
@@ -362,7 +362,7 @@ def _markdown(key, story, ev, rep, findings, problems, open_detail) -> str:
     if problems:
         L += ["", "## Plan problems", ""] + [f"- {p}" for p in problems]
     L += ["", "---", "", "Gate 3 is a human decision. Record it with:", "",
-          f"`python3 .claude/skills/verify-feature/scripts/verify.py approve {key} --by \"<your name>\" "
+          f"`{verify_cmd(root)} approve {key} --by \"<your name>\" "
           "--decision approved|rejected --note \"...\"`", ""]
     return "\n".join(L)
 

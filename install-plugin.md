@@ -1,112 +1,83 @@
-# Install the Intent-Driven Engineering starter plugin
+# Install the AI Feature Verification plugin
 
-The starter is a Claude Code plugin. Install it once and it is available in every repository you open with Claude Code.
+Verify a Jira story in your own repository: Claude pulls the story, plans against its
+acceptance criteria, writes tests in the framework you already use, runs them, and reports
+evidence per criterion. You decide at three gates (clarify, promote, approve).
 
 ## Before you start
 
-You need:
-
-- [Claude Code](https://claude.com/claude-code), with the `claude` command available in your terminal
-- `git`, which Claude Code uses to fetch the plugin
-- `bash`, which the plugin's check runs in (on Windows, use Git Bash or WSL)
+- [Claude Code](https://claude.com/claude-code) (the `claude` command)
+- `git` and Python 3.10+ (the engine is standard-library Python; nothing to pip install)
+- A repository with tests that write JUnit XML (pytest, Jest, Vitest, Playwright, Cypress,
+  node:test, Maven, Gradle, Go, .NET)
+- For real Jira: access to a Jira Cloud site and your own Atlassian API token
 
 ## Install
 
-Run these two commands in a terminal. It does not matter which folder you are in.
-
 ```bash
-claude plugin marketplace add kendallmark3/intent-drive-starter
-claude plugin install intent-drive-starter@intent-drive-starter
+claude plugin marketplace add kendallmark3/ai-feature-verification
+claude plugin install ai-feature-verification@ai-feature-verification
 ```
 
-The first command tells Claude Code where the plugin lives. The second installs it.
+Start a new Claude Code session, then check that `claude plugin list` shows
+`ai-feature-verification@ai-feature-verification` as `enabled`.
 
-Then start a new Claude Code session. Plugins load when a session starts, so a session that was already open will not see it.
+## Connect your Jira (once per machine)
 
-To confirm it worked:
+1. Create an API token: **id.atlassian.com → Security → Create and manage API tokens**.
+2. Export these in your shell profile (`~/.zshrc`, `~/.bashrc`), not in any project file:
 
-```bash
-claude plugin list
-```
+   ```bash
+   export JIRA_BASE_URL="https://your-site.atlassian.net"
+   export JIRA_EMAIL="you@example.com"
+   export JIRA_API_TOKEN="…"          # your token; never commit it, never paste it into a chat
+   ```
 
-You should see `intent-drive-starter@intent-drive-starter` with the status `enabled`.
+3. Open a new terminal and start Claude Code from it, so it sees the variables.
 
-## First use
+The engine reads them from the environment at run time. `verify.config.json` only ever holds
+`${JIRA_API_TOKEN}`-style references, and the engine refuses to run if a literal secret is
+written there.
 
-Open Claude Code in any repository and run:
+Using the shared **Intent Driven Saturdays** board? Ask Mark for access to the Jira site, then
+set `JIRA_BASE_URL=https://intentdrivenengineering.atlassian.net` with your own email and token.
 
-```text
-/intent-drive-starter:start <the outcome you want>
-```
+## Verify a story
 
-For example:
+In your repository:
 
-```text
-/intent-drive-starter:start operators can see the status of last night's jobs on one page
-```
+> Verify IDS-5.
 
-Claude creates `intent/current-feature.md` in your repository, writes down the outcome and how success will be judged, and builds the smallest thing you can look at. If you did not say how success will be judged, it asks you.
+The first time, Claude runs `init`, which finds your test frameworks and writes
+`verify.config.json` (with the real-Jira block when `JIRA_BASE_URL` is set). It shows you
+the suggested test commands and waits for you to confirm them. After that it runs the whole
+loop on its own and reports back.
 
-Then look at the result and say what you think in plain words: "keep the layout", "this is too busy", "don't change the backend". That feedback becomes the next small change. Each round ends with one question: continue or stop.
+### Write stories it can test
 
-## What you get
+Put the acceptance criteria in the story's **Description**, as a numbered or bulleted list
+under an **Acceptance Criteria** heading. Keep the Summary short: Jira cuts it at 255
+characters. A story with no criteria stops at Gate 1, and nothing runs.
 
-### Skills
+## What it brings back
 
-Skills are instructions Claude follows for a particular job. You can run one by name, and Claude also picks them up on its own when the situation fits.
+- `verification/<KEY>/VERIFICATION_REPORT.md`: verdict, a row per criterion, and what passed,
+  failed, was skipped or was blocked
+- `verification/<KEY>/gate1-clarifications.md`: questions for the story owner (testing doesn't wait for them)
+- New tests marked `@ai-proposed` until a person promotes them (Gate 2)
+- With your OK, a summary comment on the Jira story
 
-| Skill | Command | What it does |
-| --- | --- | --- |
-| Start | `/intent-drive-starter:start` | Sets up the intent file in your repository, records the outcome and the evidence of success, and builds the first thing you can observe. |
-| Feature planner | `/intent-drive-starter:feature-planner` | Reads the repository and the current intent, and works out the smallest useful change to make next. |
-| Progressive intent | `/intent-drive-starter:progressive-intent` | Turns your feedback on a running result into a short "delta" appended to the intent file: what you observed, what to keep, what to change. |
+## Skills
 
-### Agents
-
-Agents are roles Claude can hand part of the work to. A normal session can run the whole loop without them; they are there when you want the work split up.
-
-| Agent | What it does |
-| --- | --- |
-| `intent-drive-starter:planner` | Works out the smallest useful change from the repository and the intent. |
-| `intent-drive-starter:developer` | Builds that change. |
-| `intent-drive-starter:qa` | Runs the tests and checks the result against the evidence the intent asked for. |
-| `intent-drive-starter:reviewer` | Reviews the change against the intent and its deltas, not just the diff. |
-
-### One safety check
-
-The plugin adds one automatic check. Before Claude edits a code file, it confirms that `intent/current-feature.md` states two things:
-
-- an **Outcome**
-- a **Success / Evidence**
-
-If either is missing, the edit is blocked and Claude is told which one to fill in.
-
-The check stays out of your way in three cases:
-
-- Repositories with no `intent/current-feature.md` are never checked. Nothing changes until you run `start` there.
-- Markdown files are never blocked, so the intent itself can always be written.
-- It does not ask for requirements, architecture, or a full specification. Two filled-in sections are enough.
-
-### Templates
-
-The plugin carries the two templates its skills use:
-
-- **Feature intent:** Outcome, Inputs, Outputs, Success / Evidence, Constraints / Boundaries. Only the first and fourth are required.
-- **Intent delta:** Observation, Keep, Change, New Boundary, Evidence. Use only the sections you need.
-
-## What it adds to your repository
-
-One file: `intent/current-feature.md`, created the first time you run `start`. Deltas are appended to that same file. The plugin itself lives in your Claude Code settings, not in your repository.
+| Skill | When |
+|---|---|
+| `verify-feature` | "verify IDS-5", "is this story done?", "test this ticket" |
+| `clarify-story` | "is this story ready / testable?" (Gate 1) |
+| `promote-tests` | "review the generated tests" (Gate 2) |
 
 ## Update or remove
 
 ```bash
-claude plugin update intent-drive-starter@intent-drive-starter
-claude plugin uninstall intent-drive-starter@intent-drive-starter
+claude plugin marketplace update ai-feature-verification
+claude plugin uninstall ai-feature-verification@ai-feature-verification
 ```
-
-## Learn more
-
-- [README](README.md) for the operating model and the architecture diagram
-- [learnteachmaster.org](https://learnteachmaster.org)
-- [intent-driven-engineering.com](https://intent-driven-engineering.com)

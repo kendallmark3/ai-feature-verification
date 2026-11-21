@@ -3,11 +3,15 @@
 #
 # IDS-3 "Integrate AI Test Harness with Jira" (intentdrivenengineering.atlassian.net).
 # The story was retrieved live through the Atlassian MCP server and snapshotted, field for
-# field, in jira/IDS-3.json. These tests exercise the harness's EXISTING Jira code against it:
+# field, in jira/IDS-3.json. These tests exercise the harness's Jira code against it:
 #   - local adapter + story parser, on the real snapshot
 #   - cloud (REST v2) adapter, against a local HTTP stand-in (contract tests, NOT live)
 #   - cloud adapter live, only when JIRA_BASE_URL / JIRA_EMAIL / JIRA_API_TOKEN are set (else skipped)
-# Each test name carries "IDS-3 AC-n" through its parametrize id, which is what the evidence step reads.
+#
+# Standard library unittest. Each class name carries its criteria (TestIDS3_AC1 → AC-1), which
+# is what the evidence step reads from JUnit. Run with JUnit output (the `harness` suite):
+#   python3 -m pytest tests/ids3 --junitxml=reports/harness-junit.xml
+# or plainly:  python3 -m unittest discover -s tests/ids3
 import json
 import os
 import shutil
@@ -15,10 +19,9 @@ import subprocess
 import sys
 import tempfile
 import threading
+import unittest
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
-
-import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / ".claude/skills/verify-feature/scripts"))
@@ -41,16 +44,11 @@ EXPECTED_ACS = [
     "Existing simulated-Jira tests remain operational.",
 ]
 
-# How Jira REST API v2 returns a description that was saved as the markdown above:
-# v2 serves wiki markup (h2. headings, "# " numbered items). Contract assumption; the live
-# test below confirms or refutes it when credentials are available.
+# How Jira REST API v2 returns a description that was saved as the markdown above: v2 serves
+# wiki markup (h2. headings, "# " numbered items). Contract assumption; the live test confirms it.
 WIKI_DESCRIPTION = "h2. Acceptance Criteria\n\n" + "\n".join(f"# {t}" for t in EXPECTED_ACS) + "\n"
 
 LIVE = all(os.environ.get(v) for v in ("JIRA_BASE_URL", "JIRA_EMAIL", "JIRA_API_TOKEN"))
-
-
-def tag(*acs):
-    return pytest.mark.parametrize("ac", [f"IDS-3 {' '.join(acs)}"])
 
 
 def cfg_for(root: Path) -> dict:
@@ -58,15 +56,27 @@ def cfg_for(root: Path) -> dict:
             "suites": {"harness": {"command": "python3 -m pytest"}}}
 
 
-@pytest.fixture
-def sandbox():
-    """A throwaway repo root holding a copy of the real snapshot (tests never write to jira/)."""
-    with tempfile.TemporaryDirectory() as d:
-        root = Path(d)
-        (root / "jira").mkdir()
-        shutil.copy(ROOT / "jira" / "IDS-3.json", root / "jira" / "IDS-3.json")
-        shutil.copy(ROOT / "jira" / "SHOP-142.json", root / "jira" / "SHOP-142.json")
-        yield root
+class Sandbox(unittest.TestCase):
+    """A throwaway repo root holding copies of the real snapshots (tests never write to jira/)."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        (self.root / "jira").mkdir()
+        for name in ("IDS-3.json", "SHOP-142.json"):
+            shutil.copy(ROOT / "jira" / name, self.root / "jira" / name)
+        self.cfg = cfg_for(self.root)
+        self.fake = FakeJiraV2()
+
+    def tearDown(self):
+        self.fake.close()
+        self._tmp.cleanup()
+
+    def cloud(self):
+        return CloudJira(self.fake.url, "qa@example.com", "test-token", None)
+
+    def empty_story(self):
+        (self.root / "jira" / "EMPTY-1.json").write_text(json.dumps({"key": "EMPTY-1", "summary": "s", "description": ""}))
 
 
 class FakeJiraV2:
@@ -109,221 +119,185 @@ class FakeJiraV2:
 
     def close(self):
         self.server.shutdown()
+        self.server.server_close()
 
 
-@pytest.fixture
-def fake_jira():
-    f = FakeJiraV2()
-    yield f
-    f.close()
+class TestIDS3_AC1(Sandbox):
+    """The harness retrieves a real Jira story using its issue key."""
+
+    def test_local_adapter_returns_the_real_story_by_key(self):
+        issue = LocalJira(ROOT / "jira").get_issue("IDS-3")
+        self.assertEqual((issue["key"], issue["reporter"]), ("IDS-3", "Mark Kendall"))
+        self.assertIn("Atlassian MCP", issue["_source"])
+
+    def test_malformed_key_is_rejected_before_any_lookup(self):
+        with self.assertRaises(VerifyError):
+            LocalJira(ROOT / "jira").get_issue("ids-3; rm -rf")
+
+    def test_cloud_adapter_requests_the_issue_by_key_with_basic_auth(self):
+        issue = self.cloud().get_issue("IDS-3")
+        method, path, headers, _ = self.fake.requests[0]
+        self.assertEqual((method, path), ("GET", "/rest/api/2/issue/IDS-3"))
+        self.assertTrue(headers["Authorization"].startswith("Basic "))
+        self.assertEqual((issue["key"], issue["type"], issue["status"]), ("IDS-3", "Story", "In Progress"))
+
+    def test_cloud_adapter_reports_an_unknown_key_as_an_error(self):
+        with self.assertRaisesRegex(VerifyError, "HTTP 404"):
+            self.cloud().get_issue("IDS-999")
 
 
-# ---------------------------------------------------------------- AC-1 retrieve by key
+@unittest.skipUnless(LIVE, "Live Jira not configured: JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN unset")
+class TestIDS3_AC1_AC2_Live(Sandbox):
+    """Against the real site, through the existing REST adapter."""
 
-@tag("AC-1")
-def test_local_adapter_returns_the_real_story_by_key(ac):
-    issue = LocalJira(ROOT / "jira").get_issue("IDS-3")
-    assert issue["key"] == "IDS-3"
-    assert issue["reporter"] == "Mark Kendall"
-    assert "Atlassian MCP" in issue["_source"]
-
-
-@tag("AC-1")
-def test_malformed_key_is_rejected_before_any_lookup(ac):
-    with pytest.raises(VerifyError):
-        LocalJira(ROOT / "jira").get_issue("ids-3; rm -rf")
+    def test_live_cloud_adapter_pulls_ids3_with_eight_criteria(self):
+        cfg = dict(self.cfg, jira={"adapter": "cloud", "base_url": "${JIRA_BASE_URL}",
+                                   "email": "${JIRA_EMAIL}", "api_token": "${JIRA_API_TOKEN}"})
+        s = story.pull(cfg, "IDS-3")
+        self.assertEqual([a["text"] for a in s["acceptance_criteria"]], EXPECTED_ACS)
 
 
-@tag("AC-1")
-def test_cloud_adapter_requests_the_issue_by_key_with_basic_auth(ac, fake_jira):
-    issue = CloudJira(fake_jira.url, "qa@example.com", "test-token", None).get_issue("IDS-3")
-    method, path, headers, _ = fake_jira.requests[0]
-    assert (method, path) == ("GET", "/rest/api/2/issue/IDS-3")
-    assert headers["Authorization"].startswith("Basic ")
-    assert (issue["key"], issue["type"], issue["status"]) == ("IDS-3", "Story", "In Progress")
+class TestIDS3_AC2(Sandbox):
+    """Story descriptions and acceptance criteria are extracted correctly."""
+
+    def test_eight_criteria_extracted_from_the_real_description(self):
+        s = story.pull(self.cfg, "IDS-3")
+        self.assertEqual([a["id"] for a in s["acceptance_criteria"]], [f"AC-{i}" for i in range(1, 9)])
+        self.assertEqual([a["text"] for a in s["acceptance_criteria"]], EXPECTED_ACS)
+
+    def test_description_is_kept_verbatim(self):
+        self.assertEqual(story.pull(self.cfg, "IDS-3")["description"], SNAPSHOT["description"])
+
+    def test_criteria_extracted_from_rest_v2_wiki_markup(self):
+        issue = self.cloud().get_issue("IDS-3")
+        acs = story.parse_acceptance_criteria(story._ac_block_from_description(issue["description"]))
+        self.assertEqual([a["text"] for a in acs], EXPECTED_ACS)
 
 
-@tag("AC-1")
-def test_cloud_adapter_reports_an_unknown_key_as_an_error(ac, fake_jira):
-    with pytest.raises(VerifyError, match="HTTP 404"):
-        CloudJira(fake_jira.url, "qa@example.com", "test-token", None).get_issue("IDS-999")
+class TestIDS3_AC3(Sandbox):
+    """Missing acceptance criteria prevent test execution."""
+
+    def test_gate1_flags_a_story_without_criteria(self):
+        findings = gaps.analyse({"summary": "x", "description": "", "acceptance_criteria": []})
+        self.assertIn("NO_ACCEPTANCE_CRITERIA", {f["rule"] for f in findings})
+
+    def test_plan_check_fails_when_the_story_has_no_criteria(self):
+        self.empty_story()
+        story.pull(self.cfg, "EMPTY-1")
+        plan.init(self.cfg, "EMPTY-1")
+        self.assertTrue(plan.validate(self.cfg, "EMPTY-1"), "an empty plan must not validate")
+
+    def test_run_refuses_to_execute_without_criteria(self):
+        self.empty_story()
+        marker = self.root / "suite-ran.txt"
+        (self.root / "verify.config.json").write_text(json.dumps({
+            "output_dir": "verification", "jira": {"adapter": "local", "path": "jira"},
+            "environments": {"local": {"BASE_URL": "", "allow_shared_data_writes": True}},
+            "guardrails": {"allowed_commands": ["python3"], "deny_url_patterns": [], "protected_paths": [],
+                           "max_runtime_seconds": 60},
+            "suites": {"s": {"cwd": ".", "command": f"python3 -c \"open('{marker.name}','w').write('ran')\"",
+                             "junit": [], "artifacts": [], "test_paths": ["tests"]}}}))
+        subprocess.run([sys.executable, str(VERIFY), "story", "EMPTY-1"], cwd=self.root, capture_output=True)
+        r = subprocess.run([sys.executable, str(VERIFY), "run", "EMPTY-1"], cwd=self.root, capture_output=True, text=True)
+        self.assertNotEqual(r.returncode, 0)
+        self.assertFalse(marker.exists(), "a suite executed for a story with no criteria")
+        self.assertIn("no acceptance criteria", r.stderr)
 
 
-@tag("AC-1", "AC-2")
-@pytest.mark.skipif(not LIVE, reason="Live Jira not configured: JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN unset")
-def test_live_cloud_adapter_pulls_ids3_with_eight_criteria(ac, sandbox):
-    cfg = {"_root": str(sandbox), "output_dir": "verification",
-           "jira": {"adapter": "cloud", "base_url": "${JIRA_BASE_URL}", "email": "${JIRA_EMAIL}",
-                    "api_token": "${JIRA_API_TOKEN}"}}
-    s = story.pull(cfg, "IDS-3")
-    assert [a["text"] for a in s["acceptance_criteria"]] == EXPECTED_ACS
+class TestIDS3_AC4(unittest.TestCase):
+    """Test plans map test cases to acceptance criteria."""
+
+    def test_the_ids3_plan_covers_every_criterion_and_validates(self):
+        cfg = json.loads((ROOT / "verify.config.json").read_text())
+        cfg["_root"] = str(ROOT)
+        p = json.loads((ROOT / "verification/IDS-3/plan.json").read_text())
+        self.assertEqual([a["id"] for a in p["acs"]], [f"AC-{i}" for i in range(1, 9)])
+        self.assertEqual(plan.validate(cfg, "IDS-3"), [])
+
+    def test_tagged_test_names_map_to_their_criteria(self):
+        case = {"name": "test_x IDS-3 AC-2 AC-5", "classname": "tests.ids3.mod"}
+        self.assertEqual(evidence._tags(case, "IDS-3"), ["AC-2", "AC-5"])
+        self.assertEqual(evidence._tags({"name": "SHOP-142 AC-2 x", "classname": ""}, "IDS-3"), [])
+
+    def test_documented_class_name_tag_is_recognised(self):
+        """references/ac-tagging.md: a class named TestSHOP142_AC2 is enough."""
+        self.assertEqual(evidence._tags({"name": "test_total", "classname": "tests.test_cart.TestIDS3_AC4"}, "IDS-3"),
+                         ["AC-4"])
 
 
-# ---------------------------------------------------------------- AC-2 extraction
+class TestIDS3_AC5(Sandbox):
+    """Jira integration tests produce deterministic results."""
 
-@tag("AC-2")
-def test_eight_criteria_extracted_from_the_real_description(ac, sandbox):
-    s = story.pull(cfg_for(sandbox), "IDS-3")
-    assert [a["id"] for a in s["acceptance_criteria"]] == [f"AC-{i}" for i in range(1, 9)]
-    assert [a["text"] for a in s["acceptance_criteria"]] == EXPECTED_ACS
+    def test_pulling_the_same_story_twice_gives_identical_criteria(self):
+        self.assertEqual(story.pull(self.cfg, "IDS-3")["acceptance_criteria"],
+                         story.pull(self.cfg, "IDS-3")["acceptance_criteria"])
 
+    def test_gate1_questions_are_identical_on_every_run(self):
+        s = story.pull(self.cfg, "IDS-3")
+        self.assertEqual(gaps.analyse(s), gaps.analyse(json.loads(json.dumps(s))))
 
-@tag("AC-2")
-def test_description_is_kept_verbatim(ac, sandbox):
-    s = story.pull(cfg_for(sandbox), "IDS-3")
-    assert s["description"] == SNAPSHOT["description"]
-
-
-@tag("AC-2")
-def test_criteria_extracted_from_rest_v2_wiki_markup(ac, fake_jira, sandbox):
-    """The cloud adapter reads REST v2, which returns wiki markup ("# item"), not markdown."""
-    issue = CloudJira(fake_jira.url, "qa@example.com", "test-token", None).get_issue("IDS-3")
-    lines = story._ac_block_from_description(issue["description"])
-    acs = story.parse_acceptance_criteria(lines)
-    assert [a["text"] for a in acs] == EXPECTED_ACS
+    def test_cloud_adapter_normalises_the_same_response_identically(self):
+        j = self.cloud()
+        self.assertEqual(j.get_issue("IDS-3"), j.get_issue("IDS-3"))
 
 
-# ---------------------------------------------------------------- AC-3 missing ACs stop execution
+class TestIDS3_AC6(unittest.TestCase):
+    """Verification reports distinguish passed, failed, skipped, and blocked tests."""
 
-@tag("AC-3")
-def test_gate1_flags_a_story_without_criteria(ac):
-    findings = gaps.analyse({"summary": "x", "description": "", "acceptance_criteria": []})
-    assert "NO_ACCEPTANCE_CRITERIA" in {f["rule"] for f in findings}
+    def test_junit_cases_are_classified_pass_fail_skip(self):
+        with tempfile.TemporaryDirectory() as d:
+            x = Path(d) / "j.xml"
+            x.write_text('<testsuite><testcase name="a"/><testcase name="b"><failure message="boom"/></testcase>'
+                         '<testcase name="c"><skipped message="no creds"/></testcase>'
+                         '<testcase name="d"><error message="crash"/></testcase></testsuite>')
+            self.assertEqual([c["status"] for c in evidence.parse_junit(x, "harness")], ["pass", "fail", "skip", "fail"])
 
+    def test_a_guardrail_violation_marks_the_suite_blocked_not_failed(self):
+        reason = guardrails.suite_violation({"command": "curl https://example.com", "writes_shared_data": True},
+                                            {}, {"BASE_URL": ""}, "uat", ["python3"], [])
+        self.assertTrue(reason, "suite should be blocked")
 
-@tag("AC-3")
-def test_plan_check_fails_when_the_story_has_no_criteria(ac, sandbox):
-    (sandbox / "jira" / "EMPTY-1.json").write_text(json.dumps({"key": "EMPTY-1", "summary": "s", "description": ""}))
-    cfg = cfg_for(sandbox)
-    story.pull(cfg, "EMPTY-1")
-    plan.init(cfg, "EMPTY-1")
-    assert plan.validate(cfg, "EMPTY-1"), "an empty plan must not validate"
-
-
-@tag("AC-3")
-def test_run_refuses_to_execute_without_criteria(ac, sandbox):
-    marker = sandbox / "suite-ran.txt"
-    (sandbox / "jira" / "EMPTY-1.json").write_text(json.dumps({"key": "EMPTY-1", "summary": "s", "description": ""}))
-    (sandbox / "verify.config.json").write_text(json.dumps({
-        "output_dir": "verification", "jira": {"adapter": "local", "path": "jira"},
-        "environments": {"local": {"BASE_URL": "", "allow_shared_data_writes": True}},
-        "guardrails": {"allowed_commands": ["python3"], "deny_url_patterns": [], "protected_paths": [],
-                       "max_runtime_seconds": 60},
-        "suites": {"s": {"cwd": ".", "command": f"python3 -c \"open('{marker.name}','w').write('ran')\"",
-                         "junit": [], "artifacts": [], "test_paths": ["tests"]}}}))
-    subprocess.run([sys.executable, str(VERIFY), "story", "EMPTY-1"], cwd=sandbox, capture_output=True)
-    r = subprocess.run([sys.executable, str(VERIFY), "run", "EMPTY-1"], cwd=sandbox, capture_output=True, text=True)
-    assert r.returncode != 0 and not marker.exists(), f"suite executed for a story with no criteria (exit {r.returncode})"
+    def test_report_shows_all_four_outcomes(self):
+        md = Path(report.__file__).read_text()
+        for word in ("passed", "failed", "skipped", "BLOCKED"):
+            self.assertIn(word, md)
 
 
-# ---------------------------------------------------------------- AC-4 plan ↔ criteria traceability
+class TestIDS3_AC7(Sandbox):
+    """Authorized verification results can be posted to Jira."""
 
-@tag("AC-4")
-def test_the_ids3_plan_covers_every_criterion_and_validates(ac):
-    cfg = json.loads((ROOT / "verify.config.json").read_text())
-    cfg["_root"] = str(ROOT)
-    p = json.loads((ROOT / "verification/IDS-3/plan.json").read_text())
-    assert [a["id"] for a in p["acs"]] == [f"AC-{i}" for i in range(1, 9)]
-    assert plan.validate(cfg, "IDS-3") == []
+    def test_local_adapter_appends_the_comment_to_the_story(self):
+        LocalJira(self.root / "jira").add_comment("IDS-3", "verify-feature (Claude)", "Verdict: INCOMPLETE")
+        saved = json.loads((self.root / "jira" / "IDS-3.json").read_text())
+        self.assertEqual(saved["comments"][-1]["author"], "verify-feature (Claude)")
+        self.assertEqual(saved["comments"][-1]["body"], "Verdict: INCOMPLETE")
 
+    def test_cloud_adapter_posts_the_comment_to_the_originating_issue(self):
+        self.cloud().add_comment("IDS-3", "verify-feature (Claude)", "Verdict: X")
+        method, path, _, body = self.fake.requests[-1]
+        self.assertEqual((method, path), ("POST", "/rest/api/2/issue/IDS-3/comment"))
+        self.assertTrue(body["body"].startswith("[verify-feature (Claude)]") and "Verdict: X" in body["body"])
 
-@tag("AC-4")
-def test_tagged_test_names_map_to_their_criteria(ac):
-    case = {"name": "test_x[IDS-3 AC-2 AC-5]", "classname": "tests.ids3.test_ids3_jira_integration"}
-    assert evidence._tags(case, "IDS-3") == ["AC-2", "AC-5"]
-    assert evidence._tags({"name": "test_y[SHOP-142 AC-2]", "classname": ""}, "IDS-3") == []
-
-
-@tag("AC-4")
-def test_documented_pytest_classname_tag_is_recognised(ac):
-    """references/ac-tagging.md says a pytest class named TestSHOP142_AC2 is enough."""
-    assert evidence._tags({"name": "test_total", "classname": "tests.test_cart.TestIDS3_AC4"}, "IDS-3") == ["AC-4"]
+    def test_approval_without_a_named_person_is_refused(self):
+        r = subprocess.run([sys.executable, str(VERIFY), "approve", "IDS-3", "--decision", "approved"],
+                           cwd=ROOT, capture_output=True, text=True)
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("--by", r.stderr)
 
 
-# ---------------------------------------------------------------- AC-5 determinism
+class TestIDS3_AC8(Sandbox):
+    """Existing simulated-Jira tests remain operational."""
 
-@tag("AC-5")
-def test_pulling_the_same_story_twice_gives_identical_criteria(ac, sandbox):
-    cfg = cfg_for(sandbox)
-    first = story.pull(cfg, "IDS-3")["acceptance_criteria"]
-    second = story.pull(cfg, "IDS-3")["acceptance_criteria"]
-    assert first == second
+    def test_simulated_shop142_still_pulls_its_criteria(self):
+        s = story.pull(self.cfg, "SHOP-142")
+        sample = json.loads((ROOT / "docs/sample-run/SHOP-142/story.json").read_text())
+        self.assertEqual([a["text"] for a in s["acceptance_criteria"]], [a["text"] for a in sample["acceptance_criteria"]])
 
-
-@tag("AC-5")
-def test_gate1_questions_are_identical_on_every_run(ac, sandbox):
-    s = story.pull(cfg_for(sandbox), "IDS-3")
-    assert gaps.analyse(s) == gaps.analyse(json.loads(json.dumps(s)))
+    def test_existing_engine_suite_passes(self):
+        r = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests/verifykit"],
+                           cwd=ROOT, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr[-800:])
 
 
-@tag("AC-5")
-def test_cloud_adapter_normalises_the_same_response_identically(ac, fake_jira):
-    j = CloudJira(fake_jira.url, "qa@example.com", "test-token", None)
-    assert j.get_issue("IDS-3") == j.get_issue("IDS-3")
-
-
-# ---------------------------------------------------------------- AC-6 pass / fail / skip / blocked
-
-@tag("AC-6")
-def test_junit_cases_are_classified_pass_fail_skip(ac, tmp_path):
-    x = tmp_path / "j.xml"
-    x.write_text('<testsuite><testcase name="a"/><testcase name="b"><failure message="boom"/></testcase>'
-                 '<testcase name="c"><skipped message="no creds"/></testcase>'
-                 '<testcase name="d"><error message="crash"/></testcase></testsuite>')
-    assert [c["status"] for c in evidence.parse_junit(x, "harness")] == ["pass", "fail", "skip", "fail"]
-
-
-@tag("AC-6")
-def test_a_guardrail_violation_marks_the_suite_blocked_not_failed(ac):
-    reason = guardrails.suite_violation({"command": "curl https://example.com", "writes_shared_data": True},
-                                        {}, {"BASE_URL": ""}, "uat", ["python3"], [])
-    assert reason, "suite should be blocked"
-
-
-@tag("AC-6")
-def test_report_shows_all_four_outcomes(ac):
-    md = Path(report.__file__).read_text()
-    for word in ("passed", "failed", "skipped", "BLOCKED"):
-        assert word in md
-
-
-# ---------------------------------------------------------------- AC-7 posting results
-
-@tag("AC-7")
-def test_local_adapter_appends_the_comment_to_the_story(ac, sandbox):
-    LocalJira(sandbox / "jira").add_comment("IDS-3", "verify-feature (Claude)", "Verdict: INCOMPLETE")
-    saved = json.loads((sandbox / "jira" / "IDS-3.json").read_text())
-    assert saved["comments"][-1]["author"] == "verify-feature (Claude)"
-    assert saved["comments"][-1]["body"] == "Verdict: INCOMPLETE"
-
-
-@tag("AC-7")
-def test_cloud_adapter_posts_the_comment_to_the_originating_issue(ac, fake_jira):
-    CloudJira(fake_jira.url, "qa@example.com", "test-token", None).add_comment("IDS-3", "verify-feature (Claude)", "Verdict: X")
-    method, path, _, body = fake_jira.requests[-1]
-    assert (method, path) == ("POST", "/rest/api/2/issue/IDS-3/comment")
-    assert body["body"].startswith("[verify-feature (Claude)]") and "Verdict: X" in body["body"]
-
-
-@tag("AC-7")
-def test_approval_without_a_named_person_is_refused(ac):
-    import argparse  # noqa: F401  (the CLI enforces --by; this checks the engine path too)
-    r = subprocess.run([sys.executable, str(VERIFY), "approve", "IDS-3", "--decision", "approved"],
-                       cwd=ROOT, capture_output=True, text=True)
-    assert r.returncode != 0 and "--by" in r.stderr
-
-
-# ---------------------------------------------------------------- AC-8 simulated Jira still works
-
-@tag("AC-8")
-def test_simulated_shop142_still_pulls_its_criteria(ac, sandbox):
-    s = story.pull(cfg_for(sandbox), "SHOP-142")
-    sample = json.loads((ROOT / "docs/sample-run/SHOP-142/story.json").read_text())
-    assert [a["text"] for a in s["acceptance_criteria"]] == [a["text"] for a in sample["acceptance_criteria"]]
-
-
-@tag("AC-8")
-def test_existing_engine_suite_passes(ac):
-    r = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests/verifykit"],
-                       cwd=ROOT, capture_output=True, text=True)
-    assert r.returncode == 0, r.stderr[-800:]
+if __name__ == "__main__":
+    unittest.main()

@@ -1,14 +1,14 @@
 {
-  "name": "intent-drive-starter",
+  "name": "ai-feature-verification",
   "owner": {
     "name": "Mark Kendall"
   },
-  "description": "The Intent-Driven Engineering starter, installable as a Claude Code plugin.",
+  "description": "AI-assisted feature verification for Jira stories, installable as a Claude Code plugin.",
   "plugins": [
     {
-      "name": "intent-drive-starter",
-      "source": "./",
-      "description": "Progressive Intent for any repository: write a small intent, build the smallest useful delta, observe, refine, continue or stop."
+      "name": "ai-feature-verification",
+      "source": "./.claude",
+      "description": "Verify a Jira story against its acceptance criteria with evidence from your own test frameworks. Skills: verify-feature, clarify-story, promote-tests."
     }
   ]
 }

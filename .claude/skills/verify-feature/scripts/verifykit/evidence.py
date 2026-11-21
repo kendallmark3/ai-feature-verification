@@ -15,6 +15,8 @@ from .util import VerifyError, out_dir, read_json, redact, write_json
 
 STORY_KEY = re.compile(r"\b([A-Z][A-Z0-9]+-\d+)\b")
 AC_ID = re.compile(r"\b(AC-\d+)\b")
+# Also "AC2" / "AC_2" where a hyphen can't be used, e.g. a pytest or JUnit class TestSHOP142_AC2.
+AC_TAG = re.compile(r"(?<![A-Z])AC[-_]?(\d+)(?!\d)")
 ATTACHMENT = re.compile(r"\[\[ATTACHMENT\|(.+?)\]\]")
 
 
@@ -70,7 +72,7 @@ def _tags(case: dict, key: str) -> list[str]:
     keys = set(STORY_KEY.findall(text)) - set(AC_ID.findall(text))
     if keys and key not in keys:
         return []  # tagged for another story
-    return sorted(set(AC_ID.findall(text)))
+    return sorted({f"AC-{n}" for n in AC_TAG.findall(text)})
 
 
 _FILE_NAME = re.compile(r"\.(m?[jt]sx?|cjs|py|rb|go|cs|java|kt)$")

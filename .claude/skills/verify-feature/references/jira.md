@@ -20,9 +20,20 @@ to its `comments`; `approve --transition Done` sets its `status`. Shape:
           "api_token": "${JIRA_API_TOKEN}", "ac_field": "customfield_10050" }
 ```
 
+The three values come from the environment (`export JIRA_BASE_URL=… JIRA_EMAIL=… JIRA_API_TOKEN=…`;
+the token is an Atlassian API token). `verify.py init` writes this block for you when
+`JIRA_BASE_URL` is set. Never put the values themselves in the file: the engine refuses
+literal secrets. `ac_field` is optional; leave it out on team-managed projects.
+
 If `ac_field` is empty, ACs are read from the list under an "Acceptance Criteria" heading in
-the description. `approve --transition` uses the workflow transition whose target status
-matches the name. Comments are posted as plain text.
+the description. REST v2 returns the description as wiki markup (`h2. Acceptance Criteria`
+then `# item` or `* item`); Markdown (`## Acceptance Criteria`, `1. item`) also works. A story
+with no criteria stops: `plan --check` and `run` refuse until the story has them.
+`approve --transition` uses the workflow transition whose target status matches the name.
+Comments are posted as plain text.
+
+Errors say what to fix: 401 → email/token; 403 → project access; 404 → wrong key or no access;
+unreachable → `JIRA_BASE_URL` or network.
 
 An MCP Jira connector can be used for reading context during Gate 1, but posting results
 goes through the adapter so the comment format is the same everywhere.

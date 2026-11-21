@@ -37,6 +37,7 @@ Full diagram: [docs/architecture.md](docs/architecture.md).
 | `.claude/skills/promote-tests/` | Gate 2 skill: review brief for AI-proposed tests |
 | `verify.config.json` | Your suites (the commands you already run), environments, guardrails, Jira adapter |
 | `jira/SHOP-142.json` | Simulated Jira story. Deliberately ordinary, not cooked |
+| `jira/IDS-3.json`, `tests/ids3/` | A real Jira Cloud story (snapshot) and the tests the harness ran against its own Jira integration (EXPERIMENT-001) |
 | `demo-app/` | React + Node.js shop to verify against. node:test (API) + Playwright (desktop + mobile) |
 | `docs/sample-run/SHOP-142/` | A complete run: questions, plan, tests, logs, screenshots, report |
 | `tests/verifykit/` | Unit tests for the engine (`python3 -m unittest discover -s tests/verifykit`) |
@@ -106,13 +107,19 @@ meaning. Validation evidence: `docs/validation/INTENT-001/`.
 
 ## Using it on another repo
 
-1. Copy `.claude/skills/verify-feature`, `clarify-story` and `promote-tests` into that repo's `.claude/skills/`.
-2. From its root: `python3 .claude/skills/verify-feature/scripts/verify.py init` writes a
-   starter `verify.config.json` from the frameworks it finds (pytest, Jest, Vitest,
-   Playwright, Cypress, Maven, Gradle, Go, .NET). Check each suite's command and JUnit path.
-3. Point `jira` at your instance (see `.claude/skills/verify-feature/references/jira.md`) or
-   keep the local folder.
-4. Tag tests with `<KEY> AC-n` in their titles.
+Install it as a Claude Code plugin and point it at your Jira (full guide: [install-plugin.md](install-plugin.md)):
+
+```bash
+claude plugin marketplace add kendallmark3/ai-feature-verification
+claude plugin install ai-feature-verification@ai-feature-verification
+export JIRA_BASE_URL="https://your-site.atlassian.net" JIRA_EMAIL="you@example.com" JIRA_API_TOKEN="…"
+```
+
+Then, in your repo: "Verify PROJ-12". The first run writes `verify.config.json` from the
+frameworks it finds (pytest, Jest, Vitest, Playwright, Cypress, Maven, Gradle, Go, .NET) and
+waits for you to confirm each suite's command. Tag tests with `<KEY> AC-n` in their titles,
+or name the class `Test..._ACn`. The plugin is the `.claude/` folder of this repo; the
+marketplace entry is `.claude-plugin/marketplace.json`.
 
 ## Deploying the demo to AWS (optional)
 
