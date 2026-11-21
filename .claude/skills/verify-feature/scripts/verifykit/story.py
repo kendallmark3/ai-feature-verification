@@ -18,17 +18,28 @@ def _lines_from(value) -> list[str]:
     return str(value or "").splitlines()
 
 
+_WIKI_HEADING = re.compile(r"^\s*h\d\.\s*\S")
+_MD_HEADING = re.compile(r"^\s*#+\s+\S")
+_WIKI_ITEM = re.compile(r"^\s*[#*]+\s+(.+)$")
+
+
 def _ac_block_from_description(desc: str) -> list[str]:
-    """Fallback: take the list under an 'Acceptance Criteria' heading."""
-    out, inside = [], False
+    """Fallback: take the list under an 'Acceptance Criteria' heading.
+
+    Handles both Markdown ("## Acceptance Criteria" + "1. item") and the Jira wiki markup
+    that REST API v2 returns ("h2. Acceptance Criteria" + "# item" or "* item"). In wiki
+    markup "#" starts a numbered item, not a heading, so the style is taken from the heading.
+    """
+    out, inside, wiki = [], False, False
     for line in desc.splitlines():
-        if _AC_HEADING.match(line):
-            inside = True
+        if not inside and _AC_HEADING.match(line):
+            inside, wiki = True, bool(_WIKI_HEADING.match(line))
             continue
         if inside:
-            if re.match(r"^\s*(?:h\d\.|#+)\s*\S", line):
+            if _WIKI_HEADING.match(line) or (not wiki and _MD_HEADING.match(line)):
                 break
-            out.append(line)
+            item = _WIKI_ITEM.match(line) if wiki else None
+            out.append(f"- {item.group(1).strip()}" if item else line)
     return out
 
 
@@ -96,3 +107,15 @@ def load(cfg: dict, key: str) -> dict:
     if not path.is_file():
         raise VerifyError(f"Story not pulled yet. Run: verify.py story {key}")
     return read_json(path)
+
+
+def require_criteria(cfg: dict, key: str) -> list[dict]:
+    """Refuse to go on when the pulled story has no acceptance criteria."""
+    acs = load(cfg, key).get("acceptance_criteria", [])
+    if not acs:
+        raise VerifyError(
+            f"{key} has no acceptance criteria, so no tests are run. Add them to the story in Jira "
+            f"(a numbered list under an 'Acceptance Criteria' heading in the description), "
+            f"then run: verify.py story {key}"
+        )
+    return acs

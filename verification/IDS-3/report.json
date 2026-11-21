@@ -1,15 +1,17 @@
 {
   "story": "IDS-3",
   "summary": "Here\u2019s our first Jira story, ready to paste into your project.  Story: Integrate AI Test Harness with Jira  Story Type: Story Priority: High Epic: AI Test Harness Labels: jira-integration, test-automation, intent-driven-engineering  User Story  As a QA en",
-  "verdict": "NOT VERIFIED",
+  "verdict": "INCOMPLETE",
   "reasons": [
-    "Failing criteria: AC-2, AC-3, AC-4"
+    "Gate 1 has 10 open question(s); unresolved criteria: AC-1 (Q-1), AC-2 (Q-2), AC-3 (Q-3), AC-4 (Q-4), AC-5 (Q-5), AC-6 (Q-6), AC-7 (Q-7), AC-8 (Q-8); story-level: Q-9, Q-AI-1",
+    "3 test file(s) still @ai-proposed (Gate 2 open)",
+    "Evidence is from interactive mode; re-run in pipeline mode before approval"
   ],
-  "generated": "2026-11-21T14:49:00Z",
-  "run_id": "20261121T144836Z",
+  "generated": "2026-11-21T15:00:39Z",
+  "run_id": "20261121T150027Z",
   "mode": "interactive",
   "environment": "local",
-  "git_sha": "76f0f23",
+  "git_sha": "b26d598",
   "working_tree_clean": false,
   "gates": {
     "gate1_clarify": "open",
@@ -17,8 +19,8 @@
     "gate3_approve": "pending human decision"
   },
   "tests": {
-    "passed": 20,
-    "failed": 4,
+    "passed": 24,
+    "failed": 0,
     "skipped": 1,
     "suites_not_run": []
   },
@@ -103,10 +105,8 @@
     }
   ],
   "findings": {
-    "total": 4,
-    "by_classification": {
-      "requirement ambiguity": 4
-    }
+    "total": 0,
+    "by_classification": {}
   },
   "coverage": [
     {
@@ -124,12 +124,12 @@
     },
     {
       "id": "AC-2",
-      "status": "fail",
+      "status": "unresolved",
       "text": "Story descriptions and acceptance criteria are extracted correctly.",
       "clarified_as": "",
       "reason": "",
       "tests": 3,
-      "passed": 2,
+      "passed": 3,
       "open_questions": [
         "Q-2"
       ],
@@ -137,12 +137,12 @@
     },
     {
       "id": "AC-3",
-      "status": "fail",
+      "status": "unresolved",
       "text": "Missing acceptance criteria prevent test execution.",
       "clarified_as": "",
       "reason": "",
       "tests": 3,
-      "passed": 1,
+      "passed": 3,
       "open_questions": [
         "Q-3"
       ],
@@ -150,12 +150,12 @@
     },
     {
       "id": "AC-4",
-      "status": "fail",
+      "status": "unresolved",
       "text": "Test plans map test cases to acceptance criteria.",
       "clarified_as": "",
       "reason": "",
       "tests": 3,
-      "passed": 2,
+      "passed": 3,
       "open_questions": [
         "Q-4"
       ],

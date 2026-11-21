@@ -53,3 +53,17 @@ modes; a story with an ambiguous criterion still runs its unrelated tests; a blo
 reported as BLOCKED while others run; pipeline mode runs with stdin closed; verdicts match the
 previous engine wherever the intent does not change them. Evidence is kept in
 `docs/validation/INTENT-001/`.
+
+## Delta · INTENT-002 Real Jira, shipped as a plugin
+
+Full intent: `intent/INTENT-002-real-jira-plugin.md`.
+
+**Observation:** EXPERIMENT-001 (IDS-3) found four defects on the real-Jira path, and the
+verification skills were not in the shipped plugin.
+
+**Change:** parse REST v2 wiki-markup criteria; refuse to plan or run a story with no criteria;
+recognise `ACn` class tags; ship `.claude/` as the `ai-feature-verification` plugin with
+path-independent skills; `init` writes the cloud Jira block from the environment.
+
+**Evidence:** engine unit tests pass; the IDS-3 suite passes except the live test, which runs
+only where `JIRA_*` is set.

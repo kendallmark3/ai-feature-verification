@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from .inspect_repo import detect_frameworks
@@ -38,7 +39,7 @@ def init(root: Path, force: bool = False) -> Path:
                         "artifacts": [], "env": env, "test_paths": [f["where"]], "_review": "Suggested. Confirm before use."}
     cfg = {
         "output_dir": "verification",
-        "jira": {"adapter": "local", "path": "jira"},
+        "jira": jira_block(),
         "environments": {"local": {"BASE_URL": "", "allow_shared_data_writes": True},
                          "dev": {"BASE_URL": "${DEV_BASE_URL}"}},
         "guardrails": {"allowed_commands": ["npm", "npx", "node", "pytest", "python3", "mvn", "gradle", "./gradlew",
@@ -50,3 +51,16 @@ def init(root: Path, force: bool = False) -> Path:
     }
     path.write_text(json.dumps(cfg, indent=2) + "\n", encoding="utf-8")
     return path
+
+
+CLOUD_JIRA = {"adapter": "cloud", "base_url": "${JIRA_BASE_URL}", "email": "${JIRA_EMAIL}",
+              "api_token": "${JIRA_API_TOKEN}"}
+
+
+def jira_block(environ: dict | None = None) -> dict:
+    """Real Jira when JIRA_BASE_URL is set in the environment, otherwise simulated stories in jira/.
+
+    Only ${VAR} references are written: the URL, email and token stay in the environment.
+    """
+    env = os.environ if environ is None else environ
+    return dict(CLOUD_JIRA) if env.get("JIRA_BASE_URL") else {"adapter": "local", "path": "jira"}

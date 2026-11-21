@@ -17,8 +17,10 @@ Nothing AI-generated reaches the regression suite unreviewed. A test file stays 
 Verification never waits for this gate. Prepare the review when the person wants the tests
 promoted, or when the report says Gate 2 is open.
 
+The engine lives in the sibling `verify-feature` skill (next to this skill's base directory):
+
 ```bash
-V=.claude/skills/verify-feature/scripts/verify.py
+V="<this skill's base directory>/../verify-feature/scripts/verify.py"
 ```
 
 1. `python3 $V proposed` lists every file still marked `@ai-proposed`.

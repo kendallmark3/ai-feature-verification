@@ -67,7 +67,12 @@ class CloudJira:
                 raw = r.read()
                 return json.loads(raw) if raw else {}
         except urllib.error.HTTPError as e:
-            raise VerifyError(f"Jira {method} {path} failed: HTTP {e.code} {e.read()[:300]!r}") from e
+            hint = {401: " Check JIRA_EMAIL and JIRA_API_TOKEN (an Atlassian API token, not your password).",
+                    403: " Your Jira account can't see or change this issue; ask the site admin for project access.",
+                    404: " The issue doesn't exist on this site, or your account can't see it."}.get(e.code, "")
+            raise VerifyError(f"Jira {method} {path} failed: HTTP {e.code}.{hint} {e.read()[:300]!r}") from e
+        except urllib.error.URLError as e:
+            raise VerifyError(f"Can't reach Jira at {self.base}: {e.reason}. Check JIRA_BASE_URL and your network.") from e
 
     def get_issue(self, key: str) -> dict:
         data = self._call("GET", f"/rest/api/2/issue/{key}")

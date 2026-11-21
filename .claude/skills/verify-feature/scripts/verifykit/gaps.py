@@ -15,7 +15,7 @@ import re
 from pathlib import Path
 
 from .story import load as load_story
-from .util import VerifyError, out_dir, write_json, write_text
+from .util import VerifyError, out_dir, verify_cmd, write_json, write_text
 
 VAGUE = [
     "fast", "quick", "quickly", "slow", "easy", "easily", "simple", "user-friendly", "user friendly",
@@ -99,7 +99,7 @@ def owner_of(story: dict) -> str:
     return (story.get("reporter") or "").strip() or "Product owner (not named on the story)"
 
 
-def _render(story: dict, findings: list[dict]) -> str:
+def _render(story: dict, findings: list[dict], root=".") -> str:
     owner = owner_of(story)
     lines = [
         f"# Gate 1 · Clarifications for {story['key']}",
@@ -112,7 +112,7 @@ def _render(story: dict, findings: list[dict]) -> str:
         "Questions from the deterministic rules come first; Claude adds judgement questions below",
         "them with IDs `Q-AI-n`.",
         "",
-        "Check with: `python3 .claude/skills/verify-feature/scripts/verify.py gate1 " + story["key"] + " --check`",
+        "Check with: `" + verify_cmd(root) + " gate1 " + story["key"] + " --check`",
         "",
     ]
     for f in findings:
@@ -131,7 +131,7 @@ def run(cfg: dict, key: str, force: bool = False) -> tuple[Path, list[dict]]:
     md = d / "gate1-clarifications.md"
     if md.exists() and not force:
         raise VerifyError(f"{md} exists and may hold answers. Use --force to overwrite.")
-    write_text(md, _render(story, findings))
+    write_text(md, _render(story, findings, cfg["_root"]))
     write_json(d / "gate1-findings.json", findings)
     return md, findings
 
