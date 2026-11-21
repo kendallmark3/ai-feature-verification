@@ -9,8 +9,43 @@ evidence per criterion. You decide at three gates (clarify, promote, approve).
 - [Claude Code](https://claude.com/claude-code) (the `claude` command)
 - `git` and Python 3.10+ (the engine is standard-library Python; nothing to pip install)
 - A repository with tests that write JUnit XML (pytest, Jest, Vitest, Playwright, Cypress,
-  node:test, Maven, Gradle, Go, .NET)
+  node:test, Maven, Gradle, Go, .NET). A web front end or Python project with no tests yet is
+  fine too: see [What it needs on your machine](#what-it-needs-on-your-machine).
 - For real Jira: access to a Jira Cloud site and your own Atlassian API token
+
+## What it needs on your machine
+
+The plugin installs nothing and brings no test framework. It runs the commands your project
+already uses (`mvn test`, `npx playwright test`, `pytest`, ...) and reads their JUnit XML.
+
+| What | Who provides it | Notes |
+|---|---|---|
+| The plugin: 3 skills + the `verify.py` engine | `claude plugin install` | Standard-library Python only. No pip, no npm. |
+| Python 3.10+ | Your machine | Already on macOS and most Linux. |
+| Your project's toolchain (JDK + Maven, Node + npm, Python + pytest, ...) | Your project | Whatever you already need to build and test it. Same on CI. |
+| Playwright browsers | Once per machine, in your repo | `npx playwright install chromium` (CI: `npx playwright install --with-deps chromium`), or set `channel: 'chrome'` to use your installed Chrome. |
+
+**Caveats:**
+
+- **One-time setup when a project has no tests.** For a front end with no test framework
+  (a fresh Vite/React app, for example), Claude proposes Playwright. For Python with no tests,
+  it proposes pytest. Nothing is written until a named person approves:
+  `verify.py frameworks <KEY> --propose`, then `--approve --by "Name"`, then `--apply`. Then
+  you run the install line it prints (for example `cd frontend && npm install && npx playwright
+  install chromium`). A project that already has a framework never gets a second one.
+- **Spring Boot / Maven with JUnit 5.** Surefire writes the method name, not the
+  `@DisplayName`, to its XML, so `KEY AC-n` tags are lost. You need a one-time block in
+  `pom.xml`. `init` shows it, and `frameworks --propose` adds it after approval. This edits
+  the build file; it doesn't install anything.
+- **Free ports.** Playwright starts your app itself and won't reuse a server already running
+  on its ports (the runner sets `CI=1`). The defaults are 8080 for a Spring Boot API and 5310
+  for the UI. Stop your own dev servers first, or set `BASE_URL` to a running DEV/UAT host.
+- **pytest on Homebrew Python (macOS).** `pip install pytest` is refused (PEP 668). Use a
+  virtualenv (`python3 -m venv .venv && . .venv/bin/activate && pip install pytest`), or
+  `python3 -m pip install --user --break-system-packages pytest`. Only needed if your project
+  uses pytest.
+- **Nothing from the plugin's own repo comes along.** `demo-app/`, `samples/` and `tests/` live
+  in the source repo, not in the plugin, so they add no dependencies to your machine.
 
 ## Install
 
@@ -126,6 +161,9 @@ characters. A story with no criteria stops at Gate 1, and nothing runs.
 | Jira can't be reached, or `init` writes the `local` adapter | The `JIRA_*` variables aren't in Claude Code's environment: export them in your shell profile, open a new terminal, start `claude` from it |
 | Playwright: `Executable doesn't exist ... chrome-headless-shell` | Install the browser in your repo (`npx playwright install chromium`), or set `channel: 'chrome'` in your Playwright config to use your installed Chrome |
 | A suite runs but shows no results | Its `junit` path in `verify.config.json` doesn't match where the framework writes JUnit XML |
+| Playwright: `http://127.0.0.1:5310 is already used` or `EADDRINUSE` | Another server holds that port. Stop it (`lsof -nP -iTCP:<port> -sTCP:LISTEN` shows which), or set `BASE_URL` |
+| Java tests pass but every criterion shows no evidence | The Surefire reporter block is missing from `pom.xml`, so tags were lost. Run `init` or `frameworks <KEY> --propose` |
+| `No module named pytest` | Your `python3` changed (for example a Homebrew upgrade) and has no pytest. See the pytest caveat under [What it needs on your machine](#what-it-needs-on-your-machine) |
 
 ## Update or remove
 
