@@ -1,0 +1,95 @@
+{
+  "story": "SAT-0",
+  "summary": "Client submits a project intake",
+  "verdict": "INCOMPLETE",
+  "reasons": [
+    "2 test file(s) still @ai-proposed (Gate 2 open)",
+    "Evidence is from interactive mode; re-run in pipeline mode before approval"
+  ],
+  "generated": "2026-11-21T16:45:31Z",
+  "run_id": "20261121T164454Z",
+  "mode": "interactive",
+  "environment": "local",
+  "git_sha": "ce7a1f0",
+  "working_tree_clean": false,
+  "gates": {
+    "gate1_clarify": "passed",
+    "gate2_promote": "open (2 file(s))",
+    "gate3_approve": "pending human decision"
+  },
+  "tests": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "suites_not_run": []
+  },
+  "not_run": {},
+  "withheld": [],
+  "open_questions": [],
+  "findings": {
+    "total": 0,
+    "by_classification": {}
+  },
+  "coverage": [
+    {
+      "id": "AC-1",
+      "status": "pass",
+      "text": "POST /api/intakes with a client name, a project type (ECOMMERCE, WEBSITE or API) and a description of at least 20 characters returns 201 with a reference like INT-1001 and status RECEIVED",
+      "clarified_as": "Reference format: 'INT-' then digits (INT-1001 is the first). All three project types accepted.",
+      "reason": "",
+      "tests": 1,
+      "passed": 1,
+      "open_questions": [],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-2",
+      "status": "pass",
+      "text": "A description shorter than 20 characters returns 400 with the error \"Describe what you want in at least 20 characters\"",
+      "clarified_as": "Under 20 = 19 or fewer characters after trimming; exactly 20 is accepted.",
+      "reason": "",
+      "tests": 1,
+      "passed": 1,
+      "open_questions": [],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-3",
+      "status": "pass",
+      "text": "GET /api/intakes/{reference} returns the submitted intake, and an unknown reference returns 404",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 1,
+      "passed": 1,
+      "open_questions": [],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-4",
+      "status": "pass",
+      "text": "On the intake page, submitting a valid form shows \"Your reference is INT-\" followed by the number",
+      "clarified_as": "",
+      "reason": "",
+      "tests": 1,
+      "passed": 1,
+      "open_questions": [],
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-5",
+      "status": "pass",
+      "text": "On the intake page, a description shorter than 20 characters shows the error message and keeps what the client typed",
+      "clarified_as": "'Keeps what the client typed' = name, type and description fields still hold the entered values after the error.",
+      "reason": "",
+      "tests": 1,
+      "passed": 1,
+      "open_questions": [],
+      "evidence_basis": "unreviewed"
+    }
+  ],
+  "regression": {
+    "total": 1,
+    "passed": 1,
+    "failed": []
+  }
+}

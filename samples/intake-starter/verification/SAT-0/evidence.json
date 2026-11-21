@@ -1,0 +1,341 @@
+{
+  "story": "SAT-0",
+  "run_id": "20261121T164454Z",
+  "mode": "interactive",
+  "environment": "local",
+  "git_sha": "ce7a1f0",
+  "working_tree": {
+    "clean": false,
+    "changed": [
+      ".claude/skills/verify-feature/references/ac-tagging.md",
+      ".claude/skills/verify-feature/references/framework-adapters.md",
+      ".claude/skills/verify-feature/scripts/verify.py",
+      ".claude/skills/verify-feature/scripts/verifykit/config_init.py",
+      "intent/current-feature.md",
+      ".claude/skills/verify-feature/references/story-template.md",
+      ".claude/skills/verify-feature/scripts/verifykit/scaffold.py",
+      "intent/INTENT-003-saturday-ready.md",
+      "samples/intake-starter/.gitignore",
+      "samples/intake-starter/backend/pom.xml",
+      "samples/intake-starter/backend/src/main/java/com/example/intake/IntakeApplication.java",
+      "samples/intake-starter/backend/src/main/java/com/example/intake/IntakeController.java",
+      "samples/intake-starter/backend/src/main/resources/application.properties",
+      "samples/intake-starter/backend/src/test/java/com/example/intake/IntakeApiTest.java",
+      "samples/intake-starter/backend/src/test/java/com/example/intake/IntakeApplicationTests.java",
+      "samples/intake-starter/frontend/index.html",
+      "samples/intake-starter/frontend/package-lock.json",
+      "samples/intake-starter/frontend/package.json",
+      "samples/intake-starter/frontend/playwright.config.mjs",
+      "samples/intake-starter/frontend/src/App.jsx",
+      "samples/intake-starter/frontend/src/main.jsx",
+      "samples/intake-starter/frontend/tests/e2e/intake.spec.js",
+      "samples/intake-starter/frontend/vite.config.js",
+      "samples/intake-starter/jira/SAT-0.json",
+      "samples/intake-starter/verification/SAT-0/FRAMEWORK_PROPOSAL.md",
+      "samples/intake-starter/verification/SAT-0/VERIFICATION_PLAN.md",
+      "samples/intake-starter/verification/SAT-0/VERIFICATION_REPORT.md",
+      "samples/intake-starter/verification/SAT-0/evidence.json",
+      "samples/intake-starter/verification/SAT-0/findings.json",
+      "samples/intake-starter/verification/SAT-0/framework-proposal.json",
+      "samples/intake-starter/verification/SAT-0/gate1-clarifications.md",
+      "samples/intake-starter/verification/SAT-0/gate1-findings.json",
+      "samples/intake-starter/verification/SAT-0/gate1-status.json",
+      "samples/intake-starter/verification/SAT-0/plan.json",
+      "samples/intake-starter/verification/SAT-0/repo-inventory.json",
+      "samples/intake-starter/verification/SAT-0/report.json",
+      "samples/intake-starter/verification/SAT-0/story.json",
+      "samples/intake-starter/verify.config.json",
+      "tests/verifykit/fixtures/saturday-raw/backend/pom.xml",
+      "tests/verifykit/fixtures/saturday-raw/frontend/package.json",
+      "tests/verifykit/test_intent003.py"
+    ],
+    "protected_source_changed": [],
+    "committed_tests_changed": []
+  },
+  "started": "2026-11-21T16:44:54Z",
+  "finished": "2026-11-21T16:45:01Z",
+  "target": {
+    "BASE_URL": ""
+  },
+  "unpromoted": {
+    "policy": "executed-unpromoted",
+    "files": [
+      "backend/src/test/java/com/example/intake/IntakeApiTest.java",
+      "frontend/tests/e2e/intake.spec.js"
+    ]
+  },
+  "suites": {
+    "maven-surefire:backend": {
+      "status": "ran",
+      "reason": "",
+      "exit_code": 0,
+      "cases": 4,
+      "log": "verification/SAT-0/runs/20261121T164454Z/maven-surefire:backend.log",
+      "error": false,
+      "command": "mvn -B test",
+      "cwd": "backend",
+      "framework": "maven-surefire",
+      "env": {
+        "BASE_URL": ""
+      },
+      "unpromoted": [
+        "backend/src/test/java/com/example/intake/IntakeApiTest.java"
+      ],
+      "withheld": []
+    },
+    "playwright:frontend": {
+      "status": "ran",
+      "reason": "",
+      "exit_code": 0,
+      "cases": 2,
+      "log": "verification/SAT-0/runs/20261121T164454Z/playwright:frontend.log",
+      "error": false,
+      "command": "npx playwright test",
+      "cwd": "frontend",
+      "framework": "playwright",
+      "env": {
+        "BASE_URL": "",
+        "PW_CHANNEL": ""
+      },
+      "unpromoted": [
+        "frontend/tests/e2e/intake.spec.js"
+      ],
+      "withheld": []
+    }
+  },
+  "coverage": [
+    {
+      "id": "AC-1",
+      "text": "POST /api/intakes with a client name, a project type (ECOMMERCE, WEBSITE or API) and a description of at least 20 characters returns 201 with a reference like INT-1001 and status RECEIVED",
+      "clarified_as": "Reference format: 'INT-' then digits (INT-1001 is the first). All three project types accepted.",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [],
+      "tests": [
+        {
+          "suite": "maven-surefire:backend",
+          "project": "",
+          "name": "SAT-0 AC-1 valid intake returns 201 with an INT- reference and status RECEIVED",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unpromoted"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "pass",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-2",
+      "text": "A description shorter than 20 characters returns 400 with the error \"Describe what you want in at least 20 characters\"",
+      "clarified_as": "Under 20 = 19 or fewer characters after trimming; exactly 20 is accepted.",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [],
+      "tests": [
+        {
+          "suite": "maven-surefire:backend",
+          "project": "",
+          "name": "SAT-0 AC-2 description under 20 characters returns 400 with the message",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unpromoted"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "pass",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-3",
+      "text": "GET /api/intakes/{reference} returns the submitted intake, and an unknown reference returns 404",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [],
+      "tests": [
+        {
+          "suite": "maven-surefire:backend",
+          "project": "",
+          "name": "SAT-0 AC-3 a submitted intake reads back by reference and an unknown one is 404",
+          "status": "pass",
+          "message": "",
+          "attachments": [],
+          "origin": "unpromoted"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "pass",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-4",
+      "text": "On the intake page, submitting a valid form shows \"Your reference is INT-\" followed by the number",
+      "clarified_as": "",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [],
+      "tests": [
+        {
+          "suite": "playwright:frontend",
+          "project": "desktop",
+          "name": "SAT-0 AC-4 a valid intake shows its reference number",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SAT-0/runs/20261121T164454Z/playwright:frontend/artifacts/reports/e2e-artifacts/intake-SAT-0-AC-4-a-valid-intake-shows-its-reference-number-desktop/test-finished-1.png"
+          ],
+          "origin": "unpromoted"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "pass",
+      "evidence_basis": "unreviewed"
+    },
+    {
+      "id": "AC-5",
+      "text": "On the intake page, a description shorter than 20 characters shows the error message and keeps what the client typed",
+      "clarified_as": "'Keeps what the client typed' = name, type and description fields still hold the entered values after the error.",
+      "disposition": "verify",
+      "reason": "",
+      "open_questions": [],
+      "tests": [
+        {
+          "suite": "playwright:frontend",
+          "project": "desktop",
+          "name": "SAT-0 AC-5 a short description shows the error and keeps what was typed",
+          "status": "pass",
+          "message": "",
+          "attachments": [
+            "verification/SAT-0/runs/20261121T164454Z/playwright:frontend/artifacts/reports/e2e-artifacts/intake-SAT-0-AC-5-a-short--1f27b-or-and-keeps-what-was-typed-desktop/test-finished-1.png"
+          ],
+          "origin": "unpromoted"
+        }
+      ],
+      "missing_suites": [],
+      "blocked_suites": [],
+      "withheld_suites": [],
+      "status": "pass",
+      "evidence_basis": "unreviewed"
+    }
+  ],
+  "unplanned_ac_tags": [],
+  "gate1": {
+    "questions": 0,
+    "answered": 0,
+    "open": [],
+    "passed": true,
+    "open_by_ac": {},
+    "story_level_open": [],
+    "open_detail": []
+  },
+  "regression": {
+    "total": 1,
+    "passed": 1,
+    "failed": []
+  },
+  "cases": [
+    {
+      "suite": "maven-surefire:backend",
+      "project": "",
+      "name": "SAT-0 AC-3 a submitted intake reads back by reference and an unknown one is 404",
+      "classname": "com.example.intake.IntakeApiTest",
+      "time_s": 0.065,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unpromoted",
+      "ac": [
+        "AC-3"
+      ]
+    },
+    {
+      "suite": "maven-surefire:backend",
+      "project": "",
+      "name": "SAT-0 AC-1 valid intake returns 201 with an INT- reference and status RECEIVED",
+      "classname": "com.example.intake.IntakeApiTest",
+      "time_s": 0.005,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unpromoted",
+      "ac": [
+        "AC-1"
+      ]
+    },
+    {
+      "suite": "maven-surefire:backend",
+      "project": "",
+      "name": "SAT-0 AC-2 description under 20 characters returns 400 with the message",
+      "classname": "com.example.intake.IntakeApiTest",
+      "time_s": 0.002,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "unpromoted",
+      "ac": [
+        "AC-2"
+      ]
+    },
+    {
+      "suite": "maven-surefire:backend",
+      "project": "",
+      "name": "contextLoads",
+      "classname": "com.example.intake.IntakeApplicationTests",
+      "time_s": 0.304,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [],
+      "origin": "committed",
+      "ac": []
+    },
+    {
+      "suite": "playwright:frontend",
+      "project": "desktop",
+      "name": "SAT-0 AC-4 a valid intake shows its reference number",
+      "classname": "intake.spec.js",
+      "time_s": 0.428,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [
+        "verification/SAT-0/runs/20261121T164454Z/playwright:frontend/artifacts/reports/e2e-artifacts/intake-SAT-0-AC-4-a-valid-intake-shows-its-reference-number-desktop/test-finished-1.png"
+      ],
+      "origin": "unpromoted",
+      "ac": [
+        "AC-4"
+      ]
+    },
+    {
+      "suite": "playwright:frontend",
+      "project": "desktop",
+      "name": "SAT-0 AC-5 a short description shows the error and keeps what was typed",
+      "classname": "intake.spec.js",
+      "time_s": 0.209,
+      "status": "pass",
+      "message": "",
+      "details": "",
+      "attachments": [
+        "verification/SAT-0/runs/20261121T164454Z/playwright:frontend/artifacts/reports/e2e-artifacts/intake-SAT-0-AC-5-a-short--1f27b-or-and-keeps-what-was-typed-desktop/test-finished-1.png"
+      ],
+      "origin": "unpromoted",
+      "ac": [
+        "AC-5"
+      ]
+    }
+  ]
+}

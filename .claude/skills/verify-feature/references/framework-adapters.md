@@ -2,6 +2,8 @@
 
 verify.py does not ship a test framework and never installs one. A suite in
 `verify.config.json` is the command the team already runs, plus where its JUnit XML lands.
+`init` finds projects in subfolders too (`backend/pom.xml`, `frontend/package.json`) and
+proposes one suite per project with that folder as `cwd`.
 
 ```json
 "e2e": {
@@ -33,17 +35,45 @@ the test name.
 |---|---|
 | Playwright | reporter `['junit', { outputFile: 'reports/e2e-junit.xml' }]` in the config, or `PLAYWRIGHT_JUNIT_OUTPUT_NAME` with `--reporter=junit`. Screenshots appear as `[[ATTACHMENT|...]]` and are linked as evidence. |
 | node:test (Node 20+) | `node --test --test-reporter=junit --test-reporter-destination=reports/api-junit.xml` (add a second `spec` reporter to stdout for readable logs) |
-| Jest | `jest-junit` reporter (`--reporters=default --reporters=jest-junit`) |
+| Jest | `jest-junit` reporter: add `jest-junit` as a dev dependency (with the team's agreement), run `jest --ci --reporters=default --reporters=jest-junit`, and set `JEST_JUNIT_OUTPUT_FILE=reports/jest-junit.xml` in the suite's `env` |
+| Mocha | `mocha --reporter mocha-junit-reporter --reporter-options mochaFile=reports/mocha-junit.xml` (`mocha-junit-reporter` dev dependency) |
 | Vitest | `--reporter=junit --outputFile=reports/vitest-junit.xml` |
 | Cypress | `--reporter junit --reporter-options mochaFile=reports/cypress-[hash].xml` |
 | pytest | `--junitxml=reports/pytest-junit.xml` |
-| Maven | Surefire writes `target/surefire-reports/TEST-*.xml` by default |
+| Python `unittest` | run it through pytest, which collects `unittest.TestCase` classes unchanged: `python3 -m pytest --junitxml=reports/pytest-junit.xml`. pytest is the runner only; the tests stay `unittest`. |
+| Maven | Surefire writes `target/surefire-reports/TEST-*.xml` by default. For JUnit 5 `@DisplayName` tags, add the `usePhrasedTestCaseMethodName` reporter (see `ac-tagging.md`) |
 | Gradle | `build/test-results/test/*.xml` by default |
 | Go | `gotestsum --junitfile reports/go-junit.xml` |
 | .NET | `dotnet test --logger junit` (JunitXml.TestLogger) |
 
 If the team's framework can't emit JUnit XML, add a reporter in *their* project with their
 agreement. Don't add a parallel framework.
+
+## When a project has no test framework
+
+Use the team's framework whenever there is one; never add a second one or replace one. Only
+when a project has none is a default proposed, and only these:
+
+| Project | Default | What the proposal adds |
+|---|---|---|
+| Web front end (React, Vue, Vite, ...) | Playwright | `playwright.config.mjs` with a JUnit reporter and a `webServer` that starts the UI and, when a Spring Boot `pom.xml` is in the repo, the API too; `@playwright/test` dev dependency; a `playwright:<folder>` suite |
+| Python | pytest | `pytest.ini`, `pytest` in `requirements-dev.txt`, a `pytest:<folder>` suite |
+| Maven + JUnit 5 | (keeps JUnit) | the Surefire reporter block that keeps `@DisplayName` tags |
+
+Vitest is the documented option for React component tests (`--reporter=junit`); it is not
+proposed automatically.
+
+```bash
+python3 $V init                                   # notes what is missing; writes no build file
+python3 $V frameworks SAT-1 --propose             # verification/SAT-1/FRAMEWORK_PROPOSAL.md
+python3 $V frameworks SAT-1 --approve --by "Name" # a person, after reading the proposal
+python3 $V frameworks SAT-1 --apply               # exactly the approved changes; installs nothing
+cd frontend && npm install && npx playwright install chromium
+```
+
+The approval (name, time and a hash of the proposal) is kept in
+`verification/<KEY>/framework-proposal.json`. If the proposal changes after approval, `--apply`
+refuses. `--apply` never overwrites an existing file. Claude never runs `--approve`.
 
 ## Targeting an environment
 

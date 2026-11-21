@@ -1,0 +1,70 @@
+{
+  "output_dir": "verification",
+  "jira": {
+    "adapter": "local",
+    "path": "jira"
+  },
+  "environments": {
+    "local": {
+      "BASE_URL": "",
+      "allow_shared_data_writes": true
+    },
+    "dev": {
+      "BASE_URL": "${DEV_BASE_URL}"
+    }
+  },
+  "guardrails": {
+    "allowed_commands": [
+      "npm",
+      "npx",
+      "node",
+      "pytest",
+      "python3",
+      "mvn",
+      "gradle",
+      "./gradlew",
+      "go",
+      "gotestsum",
+      "dotnet"
+    ],
+    "deny_url_patterns": [
+      "(^|[./-])prod([./-]|$)",
+      "production"
+    ],
+    "protected_paths": [],
+    "max_runtime_seconds": 900
+  },
+  "suites": {
+    "maven-surefire:backend": {
+      "framework": "maven-surefire",
+      "cwd": "backend",
+      "command": "mvn -B test",
+      "junit": [
+        "target/surefire-reports/TEST-*.xml"
+      ],
+      "artifacts": [],
+      "env": {},
+      "test_paths": [
+        "backend"
+      ],
+      "_review": "Suggested. Confirm before use. pom.xml lacks usePhrasedTestCaseMethodName=true: @DisplayName AC tags will be lost. See the ACTION NEEDED note from init, or ac-tagging.md."
+    },
+    "playwright:frontend": {
+      "framework": "playwright",
+      "cwd": "frontend",
+      "command": "npx playwright test",
+      "junit": [
+        "reports/e2e-junit.xml"
+      ],
+      "artifacts": [
+        "reports/e2e-artifacts/**/*.png"
+      ],
+      "env": {
+        "PW_CHANNEL": "${PW_CHANNEL}"
+      },
+      "test_paths": [
+        "frontend/tests/e2e"
+      ]
+    }
+  }
+}

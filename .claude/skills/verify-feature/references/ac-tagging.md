@@ -11,8 +11,33 @@ Put both in the title:
 | Playwright / Jest / Vitest / Mocha | `test('SHOP-142 AC-3 rejects an unknown code with a message', ...)` |
 | node:test | `test('SHOP-142 AC-2 SAVE10 takes 10% off', ...)` |
 | pytest | `def test_shop142_ac2_save10_takes_ten_percent():` → also `@pytest.mark.parametrize(ids=["SHOP-142 AC-2"])`, or name the class `TestSHOP142_AC2` — the classname is searched too |
-| JUnit 5 | `@DisplayName("SHOP-142 AC-2 SAVE10 takes 10% off")` |
+| JUnit 5 (Maven) | `@DisplayName("SHOP-142 AC-2 SAVE10 takes 10% off")`, **and** the Surefire reporter below in `pom.xml` |
+| JUnit 5 (no build change) | put the AC in the class name: `CheckoutAC2Test`, `Shop142_AC2_Test` (the classname is searched too) |
 | Cucumber | Scenario name `SHOP-142 AC-2 ...` |
+
+### JUnit 5 on Maven: `@DisplayName` needs one `pom.xml` block
+
+By default Maven Surefire writes the **method name** to its XML (`name="submits"`), not the
+`@DisplayName`, so the AC tag never reaches the evidence and the test counts as untagged
+(measured 2026-11-21: JDK 21, Maven 3.9.14, Surefire 3.5.2, JUnit 5.11.4). With this block in
+`<build><plugins>` (Surefire 3.0.0-M4 or later; Spring Boot 3 parents qualify) the XML carries
+the display name and the tag is read:
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-surefire-plugin</artifactId>
+  <configuration>
+    <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
+      <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
+    </statelessTestsetReporter>
+  </configuration>
+</plugin>
+```
+
+`verify.py init` reports when it is missing and does not edit `pom.xml`. `verify.py frameworks
+<KEY> --propose` offers it; it is added only after a named person approves. Gradle: not yet
+measured.
 
 One test may cover several ACs: `SHOP-142 AC-2 AC-5 applies SAVE10 on a phone`.
 

@@ -40,6 +40,12 @@ V="<this skill's base directory>/scripts/verify.py"
 - `verify.config.json` must exist at the root. If not, run `python3 $V init`, show the
   person the suggested suites, and wait for them to confirm the commands. Never guess a
   test command and run it.
+- If `init` says a project has **no test framework** (a fresh React front end, a Python
+  service) or that a Maven `pom.xml` will drop `@DisplayName` tags, run
+  `python3 $V frameworks <KEY> --propose` and show the person `FRAMEWORK_PROPOSAL.md`. Only
+  Playwright (web) and pytest (Python) are ever proposed, never next to an existing framework.
+  A named person approves (`--approve --by "Name"`); never run that yourself. After approval,
+  `--apply`, then install with the printed command. Until then, test what has a framework.
 - Read `references/guardrails.md`. Never point a run at production, never put secrets in
   files, never install packages or change CI without asking.
 - **Real Jira** (`references/jira.md`): the `cloud` adapter reads `JIRA_BASE_URL`,
