@@ -1,41 +1,19 @@
 {
   "story": "IDS-3",
-  "run_id": "20261121T150027Z",
+  "run_id": "20261121T161053Z",
   "mode": "interactive",
   "environment": "local",
-  "git_sha": "b26d598",
+  "git_sha": "ff9196d",
   "working_tree": {
     "clean": false,
     "changed": [
-      ".claude-plugin/marketplace.json",
-      ".claude-plugin/plugin.json",
-      ".claude/skills/clarify-story/SKILL.md",
-      ".claude/skills/promote-tests/SKILL.md",
-      ".claude/skills/verify-feature/SKILL.md",
-      ".claude/skills/verify-feature/references/jira.md",
-      ".claude/skills/verify-feature/scripts/verifykit/config_init.py",
-      ".claude/skills/verify-feature/scripts/verifykit/evidence.py",
-      ".claude/skills/verify-feature/scripts/verifykit/gaps.py",
-      ".claude/skills/verify-feature/scripts/verifykit/jira.py",
-      ".claude/skills/verify-feature/scripts/verifykit/plan.py",
-      ".claude/skills/verify-feature/scripts/verifykit/report.py",
-      ".claude/skills/verify-feature/scripts/verifykit/runner.py",
-      ".claude/skills/verify-feature/scripts/verifykit/story.py",
-      ".claude/skills/verify-feature/scripts/verifykit/util.py",
-      "README.md",
-      "install-plugin.md",
-      "intent/current-feature.md",
-      "jira/README.md",
-      "tests/ids3/test_ids3_jira_integration.py",
-      ".claude/.claude-plugin/plugin.json",
-      "intent/INTENT-002-real-jira-plugin.md",
-      "tests/verifykit/test_intent002.py"
+      ".gitignore"
     ],
     "protected_source_changed": [],
     "committed_tests_changed": []
   },
-  "started": "2026-11-21T15:00:27Z",
-  "finished": "2026-11-21T15:00:39Z",
+  "started": "2026-11-21T16:10:53Z",
+  "finished": "2026-11-21T16:11:05Z",
   "target": {
     "BASE_URL": ""
   },
@@ -51,7 +29,7 @@
       "reason": "",
       "exit_code": 0,
       "cases": 25,
-      "log": "verification/IDS-3/runs/20261121T150027Z/harness.log",
+      "log": "verification/IDS-3/runs/20261121T161053Z/harness.log",
       "error": false,
       "command": "python3 -m pytest tests/ids3 -q -p no:cacheprovider --junitxml=reports/harness-junit.xml",
       "cwd": ".",
@@ -78,7 +56,7 @@
       "tests": [
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_cloud_adapter_reports_an_unknown_key_as_an_error",
           "status": "pass",
           "message": "",
@@ -87,7 +65,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_cloud_adapter_requests_the_issue_by_key_with_basic_auth",
           "status": "pass",
           "message": "",
@@ -96,7 +74,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_local_adapter_returns_the_real_story_by_key",
           "status": "pass",
           "message": "",
@@ -105,7 +83,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_malformed_key_is_rejected_before_any_lookup",
           "status": "pass",
           "message": "",
@@ -114,9 +92,9 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_live_cloud_adapter_pulls_ids3_with_eight_criteria",
-          "status": "skip",
+          "status": "pass",
           "message": "",
           "attachments": [],
           "origin": "unknown"
@@ -140,16 +118,16 @@
       "tests": [
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_live_cloud_adapter_pulls_ids3_with_eight_criteria",
-          "status": "skip",
+          "status": "pass",
           "message": "",
           "attachments": [],
           "origin": "unknown"
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_criteria_extracted_from_rest_v2_wiki_markup",
           "status": "pass",
           "message": "",
@@ -158,7 +136,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_description_is_kept_verbatim",
           "status": "pass",
           "message": "",
@@ -167,7 +145,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_eight_criteria_extracted_from_the_real_description",
           "status": "pass",
           "message": "",
@@ -193,7 +171,7 @@
       "tests": [
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_gate1_flags_a_story_without_criteria",
           "status": "pass",
           "message": "",
@@ -202,7 +180,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_plan_check_fails_when_the_story_has_no_criteria",
           "status": "pass",
           "message": "",
@@ -211,7 +189,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_run_refuses_to_execute_without_criteria",
           "status": "pass",
           "message": "",
@@ -237,7 +215,7 @@
       "tests": [
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_documented_class_name_tag_is_recognised",
           "status": "pass",
           "message": "",
@@ -246,7 +224,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_tagged_test_names_map_to_their_criteria",
           "status": "pass",
           "message": "",
@@ -255,7 +233,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_the_ids3_plan_covers_every_criterion_and_validates",
           "status": "pass",
           "message": "",
@@ -281,7 +259,7 @@
       "tests": [
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_cloud_adapter_normalises_the_same_response_identically",
           "status": "pass",
           "message": "",
@@ -290,7 +268,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_gate1_questions_are_identical_on_every_run",
           "status": "pass",
           "message": "",
@@ -299,7 +277,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_pulling_the_same_story_twice_gives_identical_criteria",
           "status": "pass",
           "message": "",
@@ -325,7 +303,7 @@
       "tests": [
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_a_guardrail_violation_marks_the_suite_blocked_not_failed",
           "status": "pass",
           "message": "",
@@ -334,7 +312,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_junit_cases_are_classified_pass_fail_skip",
           "status": "pass",
           "message": "",
@@ -343,7 +321,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_report_shows_all_four_outcomes",
           "status": "pass",
           "message": "",
@@ -369,7 +347,7 @@
       "tests": [
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_approval_without_a_named_person_is_refused",
           "status": "pass",
           "message": "",
@@ -378,7 +356,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_cloud_adapter_posts_the_comment_to_the_originating_issue",
           "status": "pass",
           "message": "",
@@ -387,7 +365,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_local_adapter_appends_the_comment_to_the_story",
           "status": "pass",
           "message": "",
@@ -413,7 +391,7 @@
       "tests": [
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_existing_engine_suite_passes",
           "status": "pass",
           "message": "",
@@ -422,7 +400,7 @@
         },
         {
           "suite": "harness",
-          "project": "vm",
+          "project": "marks-MacBook-Air.local",
           "name": "test_simulated_shop142_still_pulls_its_criteria",
           "status": "pass",
           "message": "",
@@ -571,10 +549,10 @@
   "cases": [
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_cloud_adapter_reports_an_unknown_key_as_an_error",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC1",
-      "time_s": 0.524,
+      "time_s": 0.516,
       "status": "pass",
       "message": "",
       "details": "",
@@ -586,10 +564,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_cloud_adapter_requests_the_issue_by_key_with_basic_auth",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC1",
-      "time_s": 0.504,
+      "time_s": 0.509,
       "status": "pass",
       "message": "",
       "details": "",
@@ -601,10 +579,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_local_adapter_returns_the_real_story_by_key",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC1",
-      "time_s": 0.503,
+      "time_s": 0.507,
       "status": "pass",
       "message": "",
       "details": "",
@@ -616,10 +594,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_malformed_key_is_rejected_before_any_lookup",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC1",
-      "time_s": 0.503,
+      "time_s": 0.508,
       "status": "pass",
       "message": "",
       "details": "",
@@ -631,11 +609,11 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_live_cloud_adapter_pulls_ids3_with_eight_criteria",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC1_AC2_Live",
-      "time_s": 0.001,
-      "status": "skip",
+      "time_s": 0.508,
+      "status": "pass",
       "message": "",
       "details": "",
       "attachments": [],
@@ -647,10 +625,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_criteria_extracted_from_rest_v2_wiki_markup",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC2",
-      "time_s": 0.504,
+      "time_s": 0.509,
       "status": "pass",
       "message": "",
       "details": "",
@@ -662,10 +640,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_description_is_kept_verbatim",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC2",
-      "time_s": 0.504,
+      "time_s": 0.508,
       "status": "pass",
       "message": "",
       "details": "",
@@ -677,10 +655,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_eight_criteria_extracted_from_the_real_description",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC2",
-      "time_s": 0.503,
+      "time_s": 0.507,
       "status": "pass",
       "message": "",
       "details": "",
@@ -692,10 +670,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_gate1_flags_a_story_without_criteria",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC3",
-      "time_s": 0.503,
+      "time_s": 0.507,
       "status": "pass",
       "message": "",
       "details": "",
@@ -707,10 +685,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_plan_check_fails_when_the_story_has_no_criteria",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC3",
-      "time_s": 0.503,
+      "time_s": 0.509,
       "status": "pass",
       "message": "",
       "details": "",
@@ -722,10 +700,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_run_refuses_to_execute_without_criteria",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC3",
-      "time_s": 0.503,
+      "time_s": 0.508,
       "status": "pass",
       "message": "",
       "details": "",
@@ -737,10 +715,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_documented_class_name_tag_is_recognised",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC4",
-      "time_s": 0.0,
+      "time_s": 0.001,
       "status": "pass",
       "message": "",
       "details": "",
@@ -752,7 +730,7 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_tagged_test_names_map_to_their_criteria",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC4",
       "time_s": 0.0,
@@ -767,10 +745,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_the_ids3_plan_covers_every_criterion_and_validates",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC4",
-      "time_s": 0.002,
+      "time_s": 0.003,
       "status": "pass",
       "message": "",
       "details": "",
@@ -782,10 +760,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_cloud_adapter_normalises_the_same_response_identically",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC5",
-      "time_s": 0.504,
+      "time_s": 0.509,
       "status": "pass",
       "message": "",
       "details": "",
@@ -797,10 +775,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_gate1_questions_are_identical_on_every_run",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC5",
-      "time_s": 0.503,
+      "time_s": 0.508,
       "status": "pass",
       "message": "",
       "details": "",
@@ -812,10 +790,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_pulling_the_same_story_twice_gives_identical_criteria",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC5",
-      "time_s": 0.504,
+      "time_s": 0.508,
       "status": "pass",
       "message": "",
       "details": "",
@@ -827,7 +805,7 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_a_guardrail_violation_marks_the_suite_blocked_not_failed",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC6",
       "time_s": 0.001,
@@ -842,7 +820,7 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_junit_cases_are_classified_pass_fail_skip",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC6",
       "time_s": 0.003,
@@ -857,10 +835,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_report_shows_all_four_outcomes",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC6",
-      "time_s": 0.0,
+      "time_s": 0.001,
       "status": "pass",
       "message": "",
       "details": "",
@@ -872,10 +850,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_approval_without_a_named_person_is_refused",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC7",
-      "time_s": 0.503,
+      "time_s": 0.507,
       "status": "pass",
       "message": "",
       "details": "",
@@ -887,10 +865,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_cloud_adapter_posts_the_comment_to_the_originating_issue",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC7",
-      "time_s": 0.504,
+      "time_s": 0.51,
       "status": "pass",
       "message": "",
       "details": "",
@@ -902,10 +880,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_local_adapter_appends_the_comment_to_the_story",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC7",
-      "time_s": 0.503,
+      "time_s": 0.508,
       "status": "pass",
       "message": "",
       "details": "",
@@ -917,10 +895,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_existing_engine_suite_passes",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC8",
-      "time_s": 3.506,
+      "time_s": 2.511,
       "status": "pass",
       "message": "",
       "details": "",
@@ -932,10 +910,10 @@
     },
     {
       "suite": "harness",
-      "project": "vm",
+      "project": "marks-MacBook-Air.local",
       "name": "test_simulated_shop142_still_pulls_its_criteria",
       "classname": "tests.ids3.test_ids3_jira_integration.TestIDS3_AC8",
-      "time_s": 0.504,
+      "time_s": 0.507,
       "status": "pass",
       "message": "",
       "details": "",
