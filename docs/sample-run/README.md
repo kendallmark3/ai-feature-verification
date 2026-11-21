@@ -4,6 +4,11 @@ What one full pass of the loop produced on 2026-11-19, kept so you can see the o
 without running anything. **The PO answers and the Gate 2 reviewer are simulated** and
 labelled that way in the files.
 
+This run predates INTENT-001, so it stops at each gate; the current skill runs straight
+through and records open items as exceptions. For a run with real product-owner answers, see
+`verification/SHOP-142/`. Those answers differ from the simulated ones here (expired codes
+accepted, letter case left as accepted risk), so that run finds no defects.
+
 | File | Step |
 |---|---|
 | `story.json` | 1 · story pulled from `jira/SHOP-142.json`, AC IDs assigned |

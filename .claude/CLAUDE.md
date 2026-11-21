@@ -57,6 +57,7 @@ The core split: **Claude plans and writes; deterministic stdlib Python executes 
 - Verdict exit codes from `report`/`all`: 0 VERIFIED, 3 INCOMPLETE, 4 NOT VERIFIED.
 - Guardrails (`references/guardrails.md`): commands run without a shell and must start with an allow-listed word; URLs matching `prod`/`production` are refused; secret-like config keys must be `${ENV_VAR}`; `writes_shared_data` suites need `allow_shared_data_writes` on the environment. A per-suite violation BLOCKS that suite only and the rest still run. Don't edit guardrails or CI workflows without asking.
 - Output goes to `verification/<KEY>/` (commit plan, Gate 1 file, report; `runs/` is gitignored). `docs/sample-run/SHOP-142/` is a complete reference run.
+- The `.claude/` folder is the shipped `ai-feature-verification` plugin (manifest `.claude/.claude-plugin/plugin.json`, marketplace `.claude-plugin/marketplace.json`). Installed, it lives in the plugin cache, not the user's repo, so skills must reach the engine via `<this skill's base directory>`, never a repo-relative `.claude/...` path. Check with `claude plugin validate .claude`.
 - The engine must stay Python standard library only (no pip). Never add a test framework to a target repo; use the one it has.
 
 Leftovers from the intent-drive-starter template (Progressive Intent loop): `intent/`, `hooks/` (a plugin `PreToolUse` hook on Edit/Write runs `pre-implement-hook.sh`), root `skills/`, `agents/`, `context/`, `templates/`, `.claude-plugin/`.

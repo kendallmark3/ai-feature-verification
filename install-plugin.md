@@ -20,7 +20,18 @@ claude plugin install ai-feature-verification@ai-feature-verification
 ```
 
 Start a new Claude Code session, then check that `claude plugin list` shows
-`ai-feature-verification@ai-feature-verification` as `enabled`.
+`ai-feature-verification@ai-feature-verification` as `✔ enabled`, and that
+`claude plugin details ai-feature-verification@ai-feature-verification` lists 3 skills:
+`clarify-story`, `promote-tests`, `verify-feature`.
+
+Already inside a Claude Code session? The same two steps as slash commands:
+
+```text
+/plugin marketplace add kendallmark3/ai-feature-verification
+/plugin install ai-feature-verification@ai-feature-verification
+```
+
+It installs at user scope, so it works in every repo you open on that machine.
 
 ## Connect your Jira (once per machine)
 
@@ -48,10 +59,17 @@ In your repository:
 
 > Verify IDS-5.
 
+or `/ai-feature-verification:verify-feature IDS-5`.
+
 The first time, Claude runs `init`, which finds your test frameworks and writes
 `verify.config.json` (with the real-Jira block when `JIRA_BASE_URL` is set). It shows you
-the suggested test commands and waits for you to confirm them. After that it runs the whole
-loop on its own and reports back.
+the suggested test commands and waits for you to confirm them. Check that every suite you
+actually run is listed and add any it missed: detection is a starting point, and a test
+command hidden behind an npm script (for example `node --test` in `npm run test:api`) may not
+be found. After that it runs the whole loop on its own and reports back.
+
+No Jira yet? Put a story at `jira/<KEY>.json` in your repo and keep the `local` adapter;
+`jira/SHOP-142.json` in this repo shows the format.
 
 ### Write stories it can test
 
@@ -69,15 +87,25 @@ characters. A story with no criteria stops at Gate 1, and nothing runs.
 
 ## Skills
 
-| Skill | When |
+| Skill | Slash command | When |
+|---|---|---|
+| `verify-feature` | `/ai-feature-verification:verify-feature <KEY>` | "verify IDS-5", "is this story done?", "test this ticket" |
+| `clarify-story` | `/ai-feature-verification:clarify-story <KEY>` | "is this story ready / testable?" (Gate 1) |
+| `promote-tests` | `/ai-feature-verification:promote-tests <KEY>` | "review the generated tests" (Gate 2) |
+
+## If something doesn't work
+
+| Symptom | Fix |
 |---|---|
-| `verify-feature` | "verify IDS-5", "is this story done?", "test this ticket" |
-| `clarify-story` | "is this story ready / testable?" (Gate 1) |
-| `promote-tests` | "review the generated tests" (Gate 2) |
+| The skills don't show up | Start a new Claude Code session after installing; check `claude plugin list` |
+| Jira can't be reached, or `init` writes the `local` adapter | The `JIRA_*` variables aren't in Claude Code's environment: export them in your shell profile, open a new terminal, start `claude` from it |
+| Playwright: `Executable doesn't exist ... chrome-headless-shell` | Install the browser in your repo (`npx playwright install chromium`), or set `channel: 'chrome'` in your Playwright config to use your installed Chrome |
+| A suite runs but shows no results | Its `junit` path in `verify.config.json` doesn't match where the framework writes JUnit XML |
 
 ## Update or remove
 
 ```bash
-claude plugin marketplace update ai-feature-verification
+claude plugin marketplace update ai-feature-verification          # fetch the latest version
+claude plugin update ai-feature-verification@ai-feature-verification
 claude plugin uninstall ai-feature-verification@ai-feature-verification
 ```
