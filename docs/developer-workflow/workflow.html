@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Story Verification Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one wide three-lane diagram (you / plugin / outputs), then setup, verdicts and phrases as plain reference blocks. */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --fg: #17202c; --muted: #5a6575; --line: #c9d0da;
+  --you: #2457d6; --you-soft: #e8eefc; --auto-soft: #eef1f5; --out-soft: #f9fafb;
+  --ok: #157a46; --warn: #a15c00; --bad: #b42318;
+  --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11151b; --surface: #1a2029; --fg: #e6eaf0; --muted: #9aa5b4; --line: #364151;
+  --you: #7ea2ff; --you-soft: #1b2540; --auto-soft: #171d25; --out-soft: #141920;
+  --ok: #4cc48a; --warn: #f0a83c; --bad: #ff7b6e; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11151b; --surface: #1a2029; --fg: #e6eaf0; --muted: #9aa5b4; --line: #364151;
+  --you: #7ea2ff; --you-soft: #1b2540; --auto-soft: #171d25; --out-soft: #141920;
+  --ok: #4cc48a; --warn: #f0a83c; --bad: #ff7b6e; color-scheme: dark }
+
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 56px; }
+main { max-width: 1240px; margin: 0 auto; display: grid; gap: 36px; }
+h1, h2 { font-family: var(--display); text-wrap: balance; margin: 0; }
+h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.01em; }
+h2 { font-size: 19px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+header { display: grid; gap: 8px; }
+.lede { color: var(--muted); }
+code, .cmd { font-family: var(--mono); font-size: 13px; }
+
+figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; }
+.scroll { overflow-x: auto; }
+svg { display: block; width: 100%; min-width: 900px; height: auto; font-family: var(--body); }
+figcaption { color: var(--muted); font-size: 14px; max-width: 90ch; }
+
+/* SVG parts, coloured from the tokens so both themes work */
+.lane-you { fill: var(--you-soft); } .lane-auto { fill: var(--auto-soft); } .lane-out { fill: var(--out-soft); stroke: var(--line); stroke-dasharray: 4 4; }
+.lane-label { fill: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; }
+.box { fill: var(--surface); stroke: var(--line); stroke-width: 1.2; }
+.box-you { fill: var(--surface); stroke: var(--you); stroke-width: 1.6; }
+.box-out { fill: var(--surface); stroke: var(--line); stroke-dasharray: 3 3; }
+.t { fill: var(--fg); font-size: 13px; font-weight: 600; }
+.s { fill: var(--muted); font-size: 11px; }
+.m { fill: var(--muted); font-size: 10.5px; font-family: var(--mono); }
+.edge { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+.edge-dash { stroke: var(--muted); stroke-width: 1.2; fill: none; stroke-dasharray: 4 3; }
+.edge-you { stroke: var(--you); stroke-width: 2; fill: none; }
+.head { fill: var(--muted); } .head-you { fill: var(--you); }
+.lbl { fill: var(--muted); font-size: 11px; } .lbl-you { fill: var(--you); font-size: 12px; font-weight: 600; }
+.v-ok { fill: var(--ok); font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; }
+.v-warn { fill: var(--warn); font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; }
+.v-bad { fill: var(--bad); font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+section { display: grid; gap: 12px; align-content: start; min-width: 0; }
+pre { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font-family: var(--mono); font-size: 13px; line-height: 1.6; }
+.c { color: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+.pill { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.03em; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.p-ok { color: var(--ok); } .p-warn { color: var(--warn); } .p-bad { color: var(--bad); }
+ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.say { font-style: italic; }
+</style>
+</head>
+<body>
+
+<main>
+  <header>
+    <h1>Story Verification Loop</h1>
+    <p class="lede">For developers using the <code>ai-feature-verification</code> Claude Code plugin: how a Jira story goes from "I built it" to "verified and approved". Claude runs each pass from start to finish without stopping. You read the report, act on it, and ask for another pass until the verdict is VERIFIED.</p>
+  </header>
+
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 1240 560" role="img" aria-label="Workflow: you install the plugin, connect your Jira key and ask Claude to verify a story. The plugin then pulls the story, finds gaps, plans, writes tests, runs your suites and writes a report, all without stopping. You read the verdict: fix code or tests, answer questions, or promote tests, then ask to verify again; when the verdict is VERIFIED you approve the story.">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0,0 L10,5 L0,10 z"/></marker>
+        <marker id="ahy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-you" d="M0,0 L10,5 L0,10 z"/></marker>
+      </defs>
+
+      <!-- lanes -->
+      <rect class="lane-you" x="0" y="0" width="1240" height="250" rx="8"/>
+      <rect class="lane-auto" x="0" y="262" width="1240" height="150" rx="8"/>
+      <rect class="lane-out" x="0.5" y="424.5" width="1239" height="128" rx="8"/>
+      <text class="lane-label" x="16" y="22">YOU</text>
+      <text class="lane-label" x="16" y="284">CLAUDE + PLUGIN · ONE PASS, NO STOPS</text>
+      <text class="lane-label" x="16" y="446">WRITTEN TO YOUR REPO (verification/PROJ-12/) AND JIRA</text>
+
+      <!-- one-time setup -->
+      <rect class="box-you" x="30" y="40" width="190" height="44" rx="6"/>
+      <text class="t" x="125" y="60" text-anchor="middle">Install the plugin</text>
+      <text class="s" x="125" y="75" text-anchor="middle">once per machine</text>
+      <rect class="box-you" x="30" y="108" width="190" height="44" rx="6"/>
+      <text class="t" x="125" y="128" text-anchor="middle">Connect your Jira key</text>
+      <text class="s" x="125" y="143" text-anchor="middle">email + API token</text>
+      <rect class="box-you" x="30" y="176" width="190" height="44" rx="6"/>
+      <text class="t" x="125" y="196" text-anchor="middle">"Verify PROJ-12"</text>
+      <text class="s" x="125" y="211" text-anchor="middle">in your repo</text>
+      <line class="edge" x1="125" y1="84" x2="125" y2="106" marker-end="url(#ah)"/>
+      <line class="edge" x1="125" y1="152" x2="125" y2="174" marker-end="url(#ah)"/>
+
+      <!-- start path into the run (shared with the loop) -->
+      <path class="edge-you" d="M220 198 H325"/>
+      <text class="lbl" x="335" y="236">first pass also asks you to confirm your test commands</text>
+
+      <!-- responses to the report -->
+      <rect class="box-you" x="560" y="70" width="150" height="58" rx="6"/>
+      <text class="t" x="635" y="94" text-anchor="middle">Fix code or test</text>
+      <text class="v-bad" x="635" y="114" text-anchor="middle">NOT VERIFIED</text>
+      <rect class="box-you" x="726" y="70" width="150" height="58" rx="6"/>
+      <text class="t" x="801" y="94" text-anchor="middle">Answer questions</text>
+      <text class="v-warn" x="801" y="114" text-anchor="middle">INCOMPLETE · GATE 1</text>
+      <rect class="box-you" x="892" y="70" width="150" height="58" rx="6"/>
+      <text class="t" x="967" y="94" text-anchor="middle">Review + promote tests</text>
+      <text class="v-warn" x="967" y="114" text-anchor="middle">INCOMPLETE · GATE 2</text>
+      <rect class="box-you" x="1080" y="70" width="150" height="58" rx="6"/>
+      <text class="t" x="1155" y="94" text-anchor="middle">Approve the story</text>
+      <text class="v-ok" x="1155" y="114" text-anchor="middle">VERIFIED · GATE 3</text>
+
+      <rect class="box-you" x="1080" y="180" width="150" height="44" rx="6"/>
+      <text class="t" x="1155" y="200" text-anchor="middle">Read the report</text>
+      <text class="s" x="1155" y="215" text-anchor="middle">verdict + findings</text>
+
+      <!-- verdict fan-out -->
+      <line class="edge" x1="1155" y1="180" x2="1155" y2="131" marker-end="url(#ah)"/>
+      <path class="edge" d="M1155 155 H635"/>
+      <line class="edge" x1="635" y1="155" x2="635" y2="131" marker-end="url(#ah)"/>
+      <line class="edge" x1="801" y1="155" x2="801" y2="131" marker-end="url(#ah)"/>
+      <line class="edge" x1="967" y1="155" x2="967" y2="131" marker-end="url(#ah)"/>
+      <text class="lbl" x="1072" y="170" text-anchor="end">by verdict</text>
+
+      <!-- the loop: verify again -->
+      <path class="edge-you" d="M635 70 V44"/>
+      <path class="edge-you" d="M801 70 V44"/>
+      <path class="edge-you" d="M967 70 V44 H325 V300" marker-end="url(#ahy)"/>
+      <text class="lbl-you" x="646" y="36" text-anchor="middle">"Verify PROJ-12 again"  (after promoting: a pipeline run)</text>
+
+      <!-- the automatic pass -->
+      <rect class="box" x="250" y="304" width="150" height="60" rx="6"/>
+      <text class="t" x="325" y="330" text-anchor="middle">Pull the story</text>
+      <text class="s" x="325" y="348" text-anchor="middle">criteria → AC-1, AC-2…</text>
+      <rect class="box" x="416" y="304" width="150" height="60" rx="6"/>
+      <text class="t" x="491" y="330" text-anchor="middle">Find gaps</text>
+      <text class="s" x="491" y="348" text-anchor="middle">vague or missing rules</text>
+      <rect class="box" x="582" y="304" width="150" height="60" rx="6"/>
+      <text class="t" x="657" y="330" text-anchor="middle">Plan</text>
+      <text class="s" x="657" y="348" text-anchor="middle">AC → test → evidence</text>
+      <rect class="box" x="748" y="304" width="150" height="60" rx="6"/>
+      <text class="t" x="823" y="330" text-anchor="middle">Write tests</text>
+      <text class="s" x="823" y="348" text-anchor="middle">in your framework</text>
+      <rect class="box" x="914" y="304" width="150" height="60" rx="6"/>
+      <text class="t" x="989" y="330" text-anchor="middle">Run your suites</text>
+      <text class="s" x="989" y="348" text-anchor="middle">your own commands</text>
+      <rect class="box" x="1080" y="304" width="150" height="60" rx="6"/>
+      <text class="t" x="1155" y="330" text-anchor="middle">Report</text>
+      <text class="s" x="1155" y="348" text-anchor="middle">verdict per criterion</text>
+      <line class="edge" x1="400" y1="334" x2="414" y2="334" marker-end="url(#ah)"/>
+      <line class="edge" x1="566" y1="334" x2="580" y2="334" marker-end="url(#ah)"/>
+      <line class="edge" x1="732" y1="334" x2="746" y2="334" marker-end="url(#ah)"/>
+      <line class="edge" x1="898" y1="334" x2="912" y2="334" marker-end="url(#ah)"/>
+      <line class="edge" x1="1064" y1="334" x2="1078" y2="334" marker-end="url(#ah)"/>
+      <line class="edge" x1="1155" y1="304" x2="1155" y2="226" marker-end="url(#ah)"/>
+
+      <!-- outputs -->
+      <rect class="box-out" x="250" y="462" width="150" height="56" rx="6"/>
+      <text class="t" x="325" y="485" text-anchor="middle">Jira PROJ-12</text>
+      <text class="s" x="325" y="503" text-anchor="middle">results comment on OK</text>
+      <rect class="box-out" x="416" y="462" width="150" height="56" rx="6"/>
+      <text class="t" x="491" y="485" text-anchor="middle">Open questions</text>
+      <text class="m" x="491" y="503" text-anchor="middle">gate1-clarifications.md</text>
+      <rect class="box-out" x="582" y="462" width="150" height="56" rx="6"/>
+      <text class="t" x="657" y="485" text-anchor="middle">The plan</text>
+      <text class="m" x="657" y="503" text-anchor="middle">VERIFICATION_PLAN.md</text>
+      <rect class="box-out" x="748" y="462" width="150" height="56" rx="6"/>
+      <text class="t" x="823" y="485" text-anchor="middle">New test files</text>
+      <text class="m" x="823" y="503" text-anchor="middle">marked @ai-proposed</text>
+      <rect class="box-out" x="914" y="462" width="150" height="56" rx="6"/>
+      <text class="t" x="989" y="485" text-anchor="middle">Evidence</text>
+      <text class="m" x="989" y="503" text-anchor="middle">JUnit · screenshots</text>
+      <rect class="box-out" x="1080" y="462" width="150" height="56" rx="6"/>
+      <text class="t" x="1155" y="485" text-anchor="middle">The report</text>
+      <text class="m" x="1155" y="503" text-anchor="middle">REPORT.md · findings</text>
+      <line class="edge-dash" x1="325" y1="460" x2="325" y2="366" marker-end="url(#ah)"/>
+      <text class="lbl" x="333" y="420">reads</text>
+      <line class="edge-dash" x1="491" y1="364" x2="491" y2="460" marker-end="url(#ah)"/>
+      <text class="lbl" x="499" y="420">writes</text>
+      <line class="edge-dash" x1="657" y1="364" x2="657" y2="460" marker-end="url(#ah)"/>
+      <line class="edge-dash" x1="823" y1="364" x2="823" y2="460" marker-end="url(#ah)"/>
+      <line class="edge-dash" x1="989" y1="364" x2="989" y2="460" marker-end="url(#ah)"/>
+      <line class="edge-dash" x1="1155" y1="364" x2="1155" y2="460" marker-end="url(#ah)"/>
+    </svg>
+    </div>
+    <figcaption>Blue is you; grey is automatic. Each pass runs every test it is allowed to and never waits on you. Open questions mark only their own criteria UNRESOLVED, and failures come back as findings. You answer, fix or promote, then ask for another pass. The loop ends when a pipeline run of reviewed tests on committed code gives VERIFIED, and you approve.</figcaption>
+  </figure>
+
+  <div class="grid">
+    <section>
+      <h2>Once per machine</h2>
+<pre><span class="c"># 1 · install</span>
+claude plugin marketplace add kendallmark3/ai-feature-verification
+claude plugin install ai-feature-verification@ai-feature-verification
+
+<span class="c"># 2 · your Jira key (shell profile, never a committed file)</span>
+export JIRA_BASE_URL="https://your-site.atlassian.net"
+export JIRA_EMAIL="the email of the account that made the token"
+export JIRA_API_TOKEN="…"</pre>
+      <p>Use <b>Create API token</b>, not the scoped kind. Then open a new terminal and start <code>claude</code> in your repo. The install guide has a one-line check that confirms Jira accepts the key.</p>
+    </section>
+
+    <section>
+      <h2>What you say to Claude</h2>
+      <div class="tablewrap"><table>
+        <tr><th>When</th><th>Say</th></tr>
+        <tr><td>Start</td><td class="say">"Verify PROJ-12"</td></tr>
+        <tr><td>Questions</td><td class="say">"Ask me the PROJ-12 questions"</td></tr>
+        <tr><td>After a fix</td><td class="say">"Verify PROJ-12 again"</td></tr>
+        <tr><td>Tests reviewed</td><td class="say">"Promote the PROJ-12 tests, I'm &lt;name&gt;"</td></tr>
+        <tr><td>Final run</td><td class="say">"Run PROJ-12 in pipeline mode"</td></tr>
+        <tr><td>Done</td><td class="say">"Post results to PROJ-12" · "Approve PROJ-12, I'm &lt;name&gt;"</td></tr>
+      </table></div>
+    </section>
+  </div>
+
+  <section>
+    <h2>Reading the verdict</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Verdict</th><th>What it means</th><th>What you do next</th></tr>
+      <tr>
+        <td><span class="pill p-bad">NOT VERIFIED</span></td>
+        <td>A test failed: one of the new tests, or one of your existing regression tests.</td>
+        <td><ul>
+          <li><b>Confirmed failure</b> (reviewed test): the feature is wrong. Fix the code.</li>
+          <li><b>Suspected defect</b> (unreviewed test): check the test first; it may be the test that's wrong.</li>
+          <li><b>Requirement ambiguity</b> (open question on that criterion): answer the question; the "right" result isn't decided yet.</li>
+        </ul></td>
+      </tr>
+      <tr>
+        <td><span class="pill p-warn">INCOMPLETE</span></td>
+        <td>Nothing failed, but something couldn't be shown yet. The report lists why.</td>
+        <td><ul>
+          <li><b>Open questions:</b> answer them in chat, on the <code>Answer:</code> lines, or by fixing the criteria in Jira.</li>
+          <li><b>Tests still @ai-proposed:</b> read them and promote them (Gate 2).</li>
+          <li><b>Interactive evidence only:</b> commit, then do a pipeline run.</li>
+          <li><b>Not verifiable</b> (e.g. "should be fast" with no number): give a number, or accept the risk.</li>
+        </ul></td>
+      </tr>
+      <tr>
+        <td><span class="pill p-ok">VERIFIED</span></td>
+        <td>Every criterion in scope has passing evidence from a pipeline run of reviewed tests on committed code.</td>
+        <td>Post the results to the story if you want, and approve it (Gate 3). Approval is always a person's decision.</td>
+      </tr>
+    </table></div>
+  </section>
+</main>
+</body>
+</html>

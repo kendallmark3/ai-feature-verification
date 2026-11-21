@@ -58,6 +58,9 @@ and removing: [install-plugin.md](install-plugin.md).
 | `ai-feature-verification:clarify-story` | "is this story ready / testable?" (Gate 1) |
 | `ai-feature-verification:promote-tests` | "review the generated tests" (Gate 2) |
 
+How a pass works, what each verdict asks of you, and the fix-and-verify-again loop:
+[docs/developer-workflow/](docs/developer-workflow/README.md) (diagram in `workflow.html`).
+
 To try it on the demo shop in this repo instead, see [Run it locally](#run-it-locally).
 
 ## What's in here
@@ -70,6 +73,7 @@ To try it on the demo shop in this repo instead, see [Run it locally](#run-it-lo
 | `.claude/.claude-plugin/plugin.json` | Plugin manifest. The plugin is the `.claude/` folder: the three skills above |
 | `.claude-plugin/marketplace.json` | Marketplace entry that makes `claude plugin install` work from this repo |
 | `install-plugin.md` | Install guide for people using the plugin on their own repos |
+| `docs/developer-workflow/` | The developer workflow: diagram (`workflow.html`) and a step-by-step explanation |
 | `verify.config.json` | Your suites (the commands you already run), environments, guardrails, Jira adapter |
 | `jira/SHOP-142.json` | Simulated Jira story. Deliberately ordinary, not cooked |
 | `jira/IDS-3.json`, `tests/ids3/` | A real Jira Cloud story (snapshot) and the tests the harness ran against its own Jira integration (EXPERIMENT-001) |
