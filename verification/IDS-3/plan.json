@@ -1,0 +1,7 @@
+{
+  "story": "IDS-3",
+  "summary": "Here\u2019s our first Jira story, ready to paste into your project.  Story: Integrate AI Test Harness with Jira  Story Type: Story Priority: High Epic: AI Test Harness Labels: jira-integration, test-automation, intent-driven-engineering  User Story  As a QA en",
+  "created": "2026-11-21T14:40:22Z",
+  "tagging": "Every test that verifies a criterion names it in its title, e.g. 'IDS-3 AC-1 ...'",
+  "acs": []
+}

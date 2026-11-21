@@ -1,0 +1,28 @@
+{
+  "questions": 2,
+  "answered": 0,
+  "open": [
+    "Q-1",
+    "Q-2"
+  ],
+  "passed": false,
+  "open_by_ac": {},
+  "story_level_open": [
+    "Q-1",
+    "Q-2"
+  ],
+  "open_detail": [
+    {
+      "id": "Q-1",
+      "acs": [],
+      "topic": "STORY \u00b7 NO_ACCEPTANCE_CRITERIA",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-2",
+      "acs": [],
+      "topic": "STORY \u00b7 NO_DESCRIPTION",
+      "owner": "Mark Kendall"
+    }
+  ]
+}
