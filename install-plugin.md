@@ -46,6 +46,30 @@ It installs at user scope, so it works in every repo you open on that machine.
 
 3. Open a new terminal and start Claude Code from it, so it sees the variables.
 
+Rather keep them per project? Put the same three lines (without `export`) in a `.env` file at
+your repo root, **add `.env` to `.gitignore` first**, and load it before starting Claude Code:
+`set -a; . ./.env; set +a; claude`.
+
+**Get these right, or every call fails:**
+
+- `JIRA_EMAIL` must be the email of the Atlassian account that **created the token**. A token
+  only works with its own account's email, not with another address you also use.
+- Use **Create API token**, not "Create API token with scopes". Scoped tokens don't work
+  against your site URL.
+- That account must be able to open the story in the browser.
+
+**Check the connection** before verifying anything (prints your name, never the token):
+
+```bash
+python3 -c "import os,base64,json,urllib.request as u;r=u.Request(os.environ['JIRA_BASE_URL'].rstrip('/')+'/rest/api/2/myself',headers={'Authorization':'Basic '+base64.b64encode((os.environ['JIRA_EMAIL']+':'+os.environ['JIRA_API_TOKEN']).encode()).decode()});print('OK, logged in as',json.load(u.urlopen(r))['displayName'])"
+```
+
+`OK, logged in as …` means you're set. `HTTP Error 401` means the email and token don't
+belong together, or the token was revoked or has expired. Note that Jira answers a request
+that isn't logged in with **404** "issue does not exist or you do not have permission" for
+any issue, so a 404 on a story you can see in the browser almost always means the login, not
+the story, is the problem.
+
 The engine reads them from the environment at run time. `verify.config.json` only ever holds
 `${JIRA_API_TOKEN}`-style references, and the engine refuses to run if a literal secret is
 written there.
@@ -98,6 +122,7 @@ characters. A story with no criteria stops at Gate 1, and nothing runs.
 | Symptom | Fix |
 |---|---|
 | The skills don't show up | Start a new Claude Code session after installing; check `claude plugin list` |
+| Jira says 401, or 404 on a story you can open in the browser | The email isn't the token's account, or the token is scoped, revoked or expired. Run the connection check under [Connect your Jira](#connect-your-jira-once-per-machine) |
 | Jira can't be reached, or `init` writes the `local` adapter | The `JIRA_*` variables aren't in Claude Code's environment: export them in your shell profile, open a new terminal, start `claude` from it |
 | Playwright: `Executable doesn't exist ... chrome-headless-shell` | Install the browser in your repo (`npx playwright install chromium`), or set `channel: 'chrome'` in your Playwright config to use your installed Chrome |
 | A suite runs but shows no results | Its `junit` path in `verify.config.json` doesn't match where the framework writes JUnit XML |

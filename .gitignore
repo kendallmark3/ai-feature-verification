@@ -6,3 +6,4 @@ demo-app/test-results/
 __pycache__/
 verification/*/runs/
 reports/
+.env
