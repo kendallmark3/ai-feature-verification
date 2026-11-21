@@ -29,6 +29,14 @@
       "artifacts": ["reports/e2e-artifacts/**/*.png", "reports/e2e-artifacts/**/*.zip"],
       "env": { "PW_CHANNEL": "${PW_CHANNEL}" },
       "test_paths": ["demo-app/tests/e2e"]
+    },
+    "harness": {
+      "framework": "pytest",
+      "cwd": ".",
+      "command": "python3 -m pytest tests/ids3 -q -p no:cacheprovider --junitxml=reports/harness-junit.xml",
+      "junit": ["reports/harness-junit.xml"],
+      "artifacts": [],
+      "test_paths": ["tests/ids3"]
     }
   }
 }

@@ -3,10 +3,10 @@
   "type": "Story",
   "status": "In Progress",
   "summary": "Here’s our first Jira story, ready to paste into your project.  Story: Integrate AI Test Harness with Jira  Story Type: Story Priority: High Epic: AI Test Harness Labels: jira-integration, test-automation, intent-driven-engineering  User Story  As a QA en",
-  "description": "",
+  "description": "## Acceptance Criteria\n\n1. The harness retrieves a real Jira story using its issue key.\n2. Story descriptions and acceptance criteria are extracted correctly.\n3. Missing acceptance criteria prevent test execution.\n4. Test plans map test cases to acceptance criteria.\n5. Jira integration tests produce deterministic results.\n6. Verification reports distinguish passed, failed, skipped, and blocked tests.\n7. Authorized verification results can be posted to Jira.\n8. Existing simulated-Jira tests remain operational.\n\n",
   "acceptance_criteria": [],
   "labels": [],
   "reporter": "Mark Kendall",
-  "_source": "Snapshot of the live issue retrieved through the Atlassian MCP server (getJiraIssue, site intentdrivenengineering.atlassian.net, 2026-11-21). Fields copied verbatim; description and acceptance criteria are empty in Jira.",
+  "_source": "Snapshot of the live issue retrieved through the Atlassian MCP server (getJiraIssue, site intentdrivenengineering.atlassian.net, updated 2026-11-21T08:46:23-0600). Fields copied verbatim. Acceptance criteria live in Description.",
   "comments": []
 }

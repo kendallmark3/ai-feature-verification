@@ -10,21 +10,91 @@ them with IDs `Q-AI-n`.
 
 Check with: `python3 .claude/skills/verify-feature/scripts/verify.py gate1 IDS-3 --check`
 
-## Q-1 · STORY · NO_ACCEPTANCE_CRITERIA
+## Q-1 · AC-1 · NO_OBSERVABLE_OUTCOME
 
-> Here’s our first Jira story, ready to paste into your project.  Story: Integrate AI Test Harness with Jira  Story Type: Story Priority: High Epic: AI Test Harness Labels: jira-integration, test-automation, intent-driven-engineering  User Story  As a QA en
+> The harness retrieves a real Jira story using its issue key.
 
 Owner: Mark Kendall
 
-Question: There are no acceptance criteria. What must be true for this story to be done?
+Question: What does the user or caller observe when this is met (a message, a value, a status)?
 
 Answer: 
 
-## Q-2 · STORY · NO_DESCRIPTION
+## Q-2 · AC-2 · VAGUE_TERM
+
+> Story descriptions and acceptance criteria are extracted correctly.
 
 Owner: Mark Kendall
 
-Question: The story has no description. Who is this for and why?
+Question: 'correctly' can't be tested as written. What exact, observable result counts as passing?
+
+Answer: 
+
+## Q-3 · AC-3 · NO_OBSERVABLE_OUTCOME
+
+> Missing acceptance criteria prevent test execution.
+
+Owner: Mark Kendall
+
+Question: What does the user or caller observe when this is met (a message, a value, a status)?
+
+Answer: 
+
+## Q-4 · AC-4 · NO_OBSERVABLE_OUTCOME
+
+> Test plans map test cases to acceptance criteria.
+
+Owner: Mark Kendall
+
+Question: What does the user or caller observe when this is met (a message, a value, a status)?
+
+Answer: 
+
+## Q-5 · AC-5 · NO_OBSERVABLE_OUTCOME
+
+> Jira integration tests produce deterministic results.
+
+Owner: Mark Kendall
+
+Question: What does the user or caller observe when this is met (a message, a value, a status)?
+
+Answer: 
+
+## Q-6 · AC-6 · NO_OBSERVABLE_OUTCOME
+
+> Verification reports distinguish passed, failed, skipped, and blocked tests.
+
+Owner: Mark Kendall
+
+Question: What does the user or caller observe when this is met (a message, a value, a status)?
+
+Answer: 
+
+## Q-7 · AC-7 · NO_OBSERVABLE_OUTCOME
+
+> Authorized verification results can be posted to Jira.
+
+Owner: Mark Kendall
+
+Question: What does the user or caller observe when this is met (a message, a value, a status)?
+
+Answer: 
+
+## Q-8 · AC-8 · NO_OBSERVABLE_OUTCOME
+
+> Existing simulated-Jira tests remain operational.
+
+Owner: Mark Kendall
+
+Question: What does the user or caller observe when this is met (a message, a value, a status)?
+
+Answer: 
+
+## Q-9 · STORY · NO_EXAMPLES
+
+Owner: Mark Kendall
+
+Question: No criterion has a concrete value or example. Can you give at least one worked example?
 
 Answer: 
 
@@ -36,6 +106,6 @@ Answer:
 
 Owner: Mark Kendall
 
-Question: The full story text looks like it was pasted into Summary and cut off at Jira's 255-character limit, which is why Description and the acceptance criteria are empty. Can the story text move into Description, with a short Summary ("Integrate AI Test Harness with Jira") and the acceptance criteria as a list under an "Acceptance Criteria" heading?
+Question: The story text was pasted into Summary and cut at Jira's 255-character limit. Shorten Summary to "Integrate AI Test Harness with Jira" and move the user story into Description?
 
 Answer: 

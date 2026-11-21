@@ -1,27 +1,124 @@
 {
-  "questions": 2,
+  "questions": 10,
   "answered": 0,
   "open": [
     "Q-1",
-    "Q-2"
+    "Q-2",
+    "Q-3",
+    "Q-4",
+    "Q-5",
+    "Q-6",
+    "Q-7",
+    "Q-8",
+    "Q-9",
+    "Q-AI-1"
   ],
   "passed": false,
-  "open_by_ac": {},
+  "open_by_ac": {
+    "AC-1": [
+      "Q-1"
+    ],
+    "AC-2": [
+      "Q-2"
+    ],
+    "AC-3": [
+      "Q-3"
+    ],
+    "AC-4": [
+      "Q-4"
+    ],
+    "AC-5": [
+      "Q-5"
+    ],
+    "AC-6": [
+      "Q-6"
+    ],
+    "AC-7": [
+      "Q-7"
+    ],
+    "AC-8": [
+      "Q-8"
+    ]
+  },
   "story_level_open": [
-    "Q-1",
-    "Q-2"
+    "Q-9",
+    "Q-AI-1"
   ],
   "open_detail": [
     {
       "id": "Q-1",
-      "acs": [],
-      "topic": "STORY \u00b7 NO_ACCEPTANCE_CRITERIA",
+      "acs": [
+        "AC-1"
+      ],
+      "topic": "AC-1 \u00b7 NO_OBSERVABLE_OUTCOME",
       "owner": "Mark Kendall"
     },
     {
       "id": "Q-2",
+      "acs": [
+        "AC-2"
+      ],
+      "topic": "AC-2 \u00b7 VAGUE_TERM",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-3",
+      "acs": [
+        "AC-3"
+      ],
+      "topic": "AC-3 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-4",
+      "acs": [
+        "AC-4"
+      ],
+      "topic": "AC-4 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-5",
+      "acs": [
+        "AC-5"
+      ],
+      "topic": "AC-5 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-6",
+      "acs": [
+        "AC-6"
+      ],
+      "topic": "AC-6 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-7",
+      "acs": [
+        "AC-7"
+      ],
+      "topic": "AC-7 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-8",
+      "acs": [
+        "AC-8"
+      ],
+      "topic": "AC-8 \u00b7 NO_OBSERVABLE_OUTCOME",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-9",
       "acs": [],
-      "topic": "STORY \u00b7 NO_DESCRIPTION",
+      "topic": "STORY \u00b7 NO_EXAMPLES",
+      "owner": "Mark Kendall"
+    },
+    {
+      "id": "Q-AI-1",
+      "acs": [],
+      "topic": "STORY \u00b7 SUMMARY_TRUNCATED",
       "owner": "Mark Kendall"
     }
   ]
