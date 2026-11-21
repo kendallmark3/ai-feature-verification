@@ -28,6 +28,38 @@ is never treated as one.
 
 Full diagram: [docs/architecture.md](docs/architecture.md).
 
+## Install (Claude Code plugin)
+
+This repo is a Claude Code plugin and its own marketplace. Install it once per machine, and
+every repo you open in Claude Code gets an AI feature-verification tester:
+
+```bash
+claude plugin marketplace add kendallmark3/ai-feature-verification
+claude plugin install ai-feature-verification@ai-feature-verification
+```
+
+Start a new Claude Code session, then check that `claude plugin list` shows
+`ai-feature-verification@ai-feature-verification` as `✔ enabled`. Already inside a session?
+`/plugin marketplace add kendallmark3/ai-feature-verification` then
+`/plugin install ai-feature-verification@ai-feature-verification` does the same.
+
+Then, in your own repo:
+
+> Verify PROJ-12.
+
+or `/ai-feature-verification:verify-feature PROJ-12`. You need Python 3.10+ (nothing to pip
+install) and tests that write JUnit XML. For real Jira, export `JIRA_BASE_URL`, `JIRA_EMAIL`
+and `JIRA_API_TOKEN` in your shell profile first. Full guide, including Jira setup, updating
+and removing: [install-plugin.md](install-plugin.md).
+
+| Skill | Ask for it with |
+|---|---|
+| `ai-feature-verification:verify-feature` | "verify PROJ-12", "is this story done?", "test this ticket" |
+| `ai-feature-verification:clarify-story` | "is this story ready / testable?" (Gate 1) |
+| `ai-feature-verification:promote-tests` | "review the generated tests" (Gate 2) |
+
+To try it on the demo shop in this repo instead, see [Run it locally](#run-it-locally).
+
 ## What's in here
 
 | Path | What |
@@ -35,11 +67,16 @@ Full diagram: [docs/architecture.md](docs/architecture.md).
 | `.claude/skills/verify-feature/` | The main skill: `SKILL.md`, `scripts/verify.py` + `verifykit/` (Python stdlib only), `references/`, `assets/` |
 | `.claude/skills/clarify-story/` | Gate 1 skill: record gaps and who owns each answer, without holding up testing |
 | `.claude/skills/promote-tests/` | Gate 2 skill: review brief for AI-proposed tests |
+| `.claude/.claude-plugin/plugin.json` | Plugin manifest. The plugin is the `.claude/` folder: the three skills above |
+| `.claude-plugin/marketplace.json` | Marketplace entry that makes `claude plugin install` work from this repo |
+| `install-plugin.md` | Install guide for people using the plugin on their own repos |
 | `verify.config.json` | Your suites (the commands you already run), environments, guardrails, Jira adapter |
 | `jira/SHOP-142.json` | Simulated Jira story. Deliberately ordinary, not cooked |
 | `jira/IDS-3.json`, `tests/ids3/` | A real Jira Cloud story (snapshot) and the tests the harness ran against its own Jira integration (EXPERIMENT-001) |
 | `demo-app/` | React + Node.js shop to verify against. node:test (API) + Playwright (desktop + mobile) |
 | `docs/sample-run/SHOP-142/` | A complete run: questions, plan, tests, logs, screenshots, report |
+| `verification/SHOP-142/`, `verification/IDS-3/` | Real runs: SHOP-142 against the demo app, IDS-3 against a real Jira story |
+| `docs/validation/INTENT-001/` | Validation evidence for the autonomous (no-approval-stops) behaviour |
 | `tests/verifykit/` | Unit tests for the engine (`python3 -m unittest discover -s tests/verifykit`) |
 | `.github/workflows/verify.yml` | Pipeline mode in GitHub Actions |
 
@@ -66,6 +103,11 @@ UNRESOLVED), tests waiting for review (**Gate 2**), anything blocked and why, an
 acceptance decision (**Gate 3**).
 
 ### Or drive the engine by hand
+
+From a clone of this repo the engine is at `.claude/skills/verify-feature/scripts/verify.py`.
+With the plugin installed it is at
+`~/.claude/plugins/cache/ai-feature-verification/ai-feature-verification/<version>/skills/verify-feature/scripts/verify.py`.
+Run it from the root of the repo you are verifying.
 
 ```bash
 V=.claude/skills/verify-feature/scripts/verify.py
@@ -107,19 +149,13 @@ meaning. Validation evidence: `docs/validation/INTENT-001/`.
 
 ## Using it on another repo
 
-Install it as a Claude Code plugin and point it at your Jira (full guide: [install-plugin.md](install-plugin.md)):
-
-```bash
-claude plugin marketplace add kendallmark3/ai-feature-verification
-claude plugin install ai-feature-verification@ai-feature-verification
-export JIRA_BASE_URL="https://your-site.atlassian.net" JIRA_EMAIL="you@example.com" JIRA_API_TOKEN="…"
-```
-
-Then, in your repo: "Verify PROJ-12". The first run writes `verify.config.json` from the
-frameworks it finds (pytest, Jest, Vitest, Playwright, Cypress, Maven, Gradle, Go, .NET) and
-waits for you to confirm each suite's command. Tag tests with `<KEY> AC-n` in their titles,
-or name the class `Test..._ACn`. The plugin is the `.claude/` folder of this repo; the
-marketplace entry is `.claude-plugin/marketplace.json`.
+[Install the plugin](#install-claude-code-plugin), then in your repo: "Verify PROJ-12". The
+first run writes `verify.config.json` from the frameworks it finds (pytest, Jest, Vitest,
+Playwright, Cypress, Maven, Gradle, Go, .NET) and waits for you to confirm each suite's
+command. Check that every suite you run is there: detection is a starting point (on this
+repo's demo app it finds Playwright but not the node:test suite behind `npm run test:api`),
+so add any it missed. Tag tests with `<KEY> AC-n` in their titles, or name the class
+`Test..._ACn`.
 
 ## Deploying the demo to AWS (optional)
 
