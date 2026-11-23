@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for hooks/pre-implement.sh and hooks/pre-implement-hook.sh. Run from anywhere: bash tests/pre-implement.test.sh
+# Tests for hooks/pre-implement.sh. Run from anywhere: bash tests/pre-implement.test.sh
 set -uo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -91,34 +91,7 @@ Make failures obvious.
 EOF
 expect pass "an appended delta keeps the intent sufficient" "$tmp/delta.md"
 
-# --- hooks/pre-implement-hook.sh: the Claude Code PreToolUse wrapper ---
-gate="$root/hooks/pre-implement-hook.sh"
-
-expect_gate() {
-  local want="$1" label="$2" project="$3" target="$4" got=0
-  printf '{"tool_name":"Write","tool_input":{"file_path":"%s","content":"x"}}' "$target" |
-    CLAUDE_PROJECT_DIR="$project" bash "$gate" >"$tmp/out" 2>&1 || got=$?
-  if [ "$got" -eq "$want" ]; then echo "ok   - $label"
-  else echo "FAIL - $label (exit $got, wanted $want)"; sed 's/^/       /' "$tmp/out"; failures=$((failures + 1))
-  fi
-}
-
-mkdir -p "$tmp/no-intent" "$tmp/blank/intent" "$tmp/ready/intent"
-cp "$root/templates/feature-template.md" "$tmp/blank/intent/current-feature.md"
-cp "$tmp/new.md" "$tmp/ready/intent/current-feature.md"
-
-expect_gate 0 "hook leaves projects without an intent file alone" "$tmp/no-intent" "$tmp/no-intent/app.py"
-expect_gate 2 "hook blocks code edits while the intent is blank" "$tmp/blank" "$tmp/blank/src/app.py"
-expect_gate 0 "hook never blocks Markdown, so the intent can be written" "$tmp/blank" "$tmp/blank/intent/current-feature.md"
-expect_gate 0 "hook allows code edits once the intent is sufficient" "$tmp/ready" "$tmp/ready/src/app.py"
-
-mkdir -p "$tmp/starter/intent" "$tmp/starter/.claude-plugin" "$tmp/other-plugin/intent" "$tmp/other-plugin/.claude-plugin"
-cp "$root/templates/feature-template.md" "$tmp/starter/intent/current-feature.md"
-cp "$root/templates/feature-template.md" "$tmp/other-plugin/intent/current-feature.md"
-cp "$root/.claude-plugin/plugin.json" "$tmp/starter/.claude-plugin/plugin.json"
-echo '{ "name": "some-other-plugin" }' >"$tmp/other-plugin/.claude-plugin/plugin.json"
-expect_gate 0 "hook skips the starter's own repository" "$tmp/starter" "$tmp/starter/hooks/x.sh"
-expect_gate 2 "hook still gates other plugin repositories" "$tmp/other-plugin" "$tmp/other-plugin/src/app.py"
+# The PreToolUse wrapper (pre-implement-hook.sh) ships with the intent-drive-starter plugin and is tested there.
 
 if [ "$failures" -ne 0 ]; then
   echo "$failures test(s) failed"
